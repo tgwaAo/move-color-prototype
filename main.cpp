@@ -6,6 +6,7 @@
 
 #include "ParticleWeighting.h"
 #include "Calibrate.h"
+#include "CircleHandler.h"
 
 using namespace std;
 using namespace cv;
@@ -96,10 +97,10 @@ int main()
 
     int key;
     Point target(300,200);
-    uint8_t target_radius = 40;
+    uint8_t targetRadius = 40;
     bool goodAreaBright;
     bool goodAreaDark;
-    bool hit;
+//    bool hit;
     bool run = true;
     Mat hsv;
     Mat frame;
@@ -111,24 +112,24 @@ int main()
     uint8_t corner2Center = MAX_DISTANCE/2;
     std::random_device rd;
     std::mt19937 eng(rd());
-    std::uniform_int_distribution<uint16_t> randomUpDown(target_radius,HEIGHT-target_radius);
-    std::uniform_int_distribution<uint16_t> randomLeftRight(target_radius,WIDTH-target_radius);
+    std::uniform_int_distribution<uint16_t> randomUpDown(targetRadius,HEIGHT-targetRadius);
+    std::uniform_int_distribution<uint16_t> randomLeftRight(targetRadius,WIDTH-targetRadius);
     cv::Mat mirror;
-    
+
     /********************************************************
      * Timer stuff.
      * *****************************************************/
-//    const uint8_t minTimePassed = 10;
-//    float leftSeconds;
-//    std::vector<float> stateTimes(3,2);
-//    CircleHandler posHandler(10, targetRadius, stateTimes, 1, 1, WIDTH, HEIGHT);
-//
-//    for (uint8_t i = 0; i < stateTimes.size(); ++i)
-//        stateTimes[i] = 4;
-//
-//    CircleHandler negHandler(10, targetRadius, stateTimes, 2, 2, WIDTH, HEIGHT);
-//
-//    clock_t timeStart = clock();
+    const uint8_t minTimePassed = 10;
+    float leftSeconds;
+    std::vector<float> stateTimes(3,2);
+    CircleHandler posHandler(10, targetRadius, stateTimes, 1, 1, WIDTH, HEIGHT);
+
+    for (uint8_t i = 0; i < stateTimes.size(); ++i)
+        stateTimes[i] = 4;
+
+    CircleHandler negHandler(10, targetRadius, stateTimes, 2, 2, WIDTH, HEIGHT);
+
+    clock_t timeStart = clock();
 
 
     while (run) {
@@ -136,9 +137,9 @@ int main()
         cv::flip(frame,mirror,1);
         cvtColor(mirror,hsv,COLOR_BGR2HSV);
         pixelPtr_hsv= (uint8_t*)hsv.data;
-        
-//        posHandler.updateCircles(img);
-//        negHandler.updateCircles(img);
+
+        posHandler.updateCircles(mirror);
+        negHandler.updateCircles(mirror);
 
         for (int i = 0; i < HEIGHT/MAX_DISTANCE; ++i) {
             for (int j = 0; j < WIDTH/MAX_DISTANCE; ++j) {
@@ -148,38 +149,55 @@ int main()
                     color = GOOD_COLOR;
                     line(mirror,Point(j*MAX_DISTANCE+corner2Center,i*MAX_DISTANCE+corner2Center),
                          Point(j*MAX_DISTANCE+corner2Center,i*MAX_DISTANCE+corner2Center),color,10,10);
-                    hit = check_hit(j*MAX_DISTANCE+corner2Center, i*MAX_DISTANCE+corner2Center, target, target_radius);
+//                    hit = check_hit(j*MAX_DISTANCE+corner2Center, i*MAX_DISTANCE+corner2Center, target, targetRadius);
+                    hits += posHandler.checkHit(j*MAX_DISTANCE+corner2Center,i*MAX_DISTANCE+corner2Center);
+                    hits -= negHandler.checkHit(j*MAX_DISTANCE+corner2Center,i*MAX_DISTANCE+corner2Center);
+//                    if (hit) {
+//                        ++hits;
+//                        target.x = randomLeftRight(eng);
+//                        target.y = randomUpDown(eng);
+//                    }
+                }
+            }
+        }
 
-                    if (hit) {
-                        ++hits;
-                        target.x = randomLeftRight(eng);
-                        target.y = randomUpDown(eng);
+//        circle(mirror,target,targetRadius,BAD_COLOR,-1);
+        putText(mirror,"Hits= " + to_string(hits),Point(10,mirror.rows-10),FONT_HERSHEY_SIMPLEX,1.2,Scalar(255,255,0));
+
+        if (cv::getWindowProperty(TITLE,cv::WND_PROP_VISIBLE)) {
+            cv::imshow(TITLE,mirror);
+            key = cv::waitKey(1);
+
+            if (key == 27) // esc
+                break;
+            else if (key == 99) { // 'c'
+                calibrate(cap, TITLE, WIDTH, HEIGHT,settings_filename,
+                          hsvBright, factorsBright, hsvDark, factorsDark);
+                for (int i = 0; i < HEIGHT/MAX_DISTANCE; ++i) {
+                    for (int j = 0; j < WIDTH/MAX_DISTANCE; ++j) {
+                        weightingMatrixBright[i][j].setHsv(hsvBright);
+                        weightingMatrixBright[i][j].setFactors(factorsBright);
+                        weightingMatrixDark[i][j].setHsv(hsvDark);
+                        weightingMatrixDark[i][j].setFactors(factorsDark);
                     }
                 }
             }
         }
 
-        circle(mirror,target,target_radius,BAD_COLOR,-1);
-        putText(mirror,"Hits= " + to_string(hits),Point(10,mirror.rows-10),FONT_HERSHEY_SIMPLEX,1.2,Scalar(255,255,0));
-        imshow(TITLE,mirror);
+        leftSeconds = minTimePassed - (float)(clock() - timeStart)/CLOCKS_PER_SEC;
 
-        // keys
-        key = waitKey(1);
-
-        if (key == 99) { // 'c'
-            calibrate(cap, TITLE, WIDTH, HEIGHT,settings_filename,
-                      hsvBright, factorsBright, hsvDark, factorsDark);
-            for (int i = 0; i < HEIGHT/MAX_DISTANCE; ++i) {
-                for (int j = 0; j < WIDTH/MAX_DISTANCE; ++j) {
-                    weightingMatrixBright[i][j].setHsv(hsvBright);
-                    weightingMatrixBright[i][j].setFactors(factorsBright);
-                    weightingMatrixDark[i][j].setHsv(hsvDark);
-                    weightingMatrixDark[i][j].setFactors(factorsDark);
-                }
-            }
-        } else if (key == 27) { // esc
+        if (leftSeconds <= 0)
             break;
-        }
+    }
+
+    cv::putText(mirror, "Finished",cv::Point(20,mirror.rows/2),cv::FONT_HERSHEY_SIMPLEX,1.2,cv::Scalar(255,255,0));
+    cv::imshow(TITLE,mirror);
+    while (true) {
+        if (cv::getWindowProperty(TITLE,cv::WND_PROP_VISIBLE)) {
+            if (cv::waitKey(100) != -1)
+                break;
+        } else
+            break;
     }
 
     destroyAllWindows();
@@ -187,12 +205,11 @@ int main()
     return 0;
 }
 
-bool check_hit(int is_x, int is_y, Point goal, uint8_t goal_radius)
-{
-    double dist = sqrt( pow(is_x-goal.x,2)+pow(is_y-goal.y,2) ) ;
-
-    if (dist <= goal_radius)
-        return true;
-    else
-        return false;
-}
+//    bool check_hit(int is_x, int is_y, Point goal, uint8_t goal_radius) {
+//        double dist = sqrt( pow(is_x-goal.x,2)+pow(is_y-goal.y,2) ) ;
+//
+//        if (dist <= goal_radius)
+//            return true;
+//        else
+//            return false;
+//    }
