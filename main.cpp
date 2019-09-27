@@ -62,7 +62,6 @@ int main()
 
         settings_file.close();
     } else {
-//        return -2;
         calibrate(cap, TITLE, WIDTH, HEIGHT,settings_filename,
                   hsvBright, factorsBright, hsvDark, factorsDark);
     }
@@ -97,10 +96,9 @@ int main()
 
     int key;
     Point target(300,200);
-    uint8_t targetRadius = 40;
+    uint8_t targetRadius = 30;
     bool goodAreaBright;
     bool goodAreaDark;
-//    bool hit;
     bool run = true;
     Mat hsv;
     Mat frame;
@@ -117,21 +115,23 @@ int main()
     cv::Mat mirror;
 
     /********************************************************
-     * Timer stuff.
+     * Circle and timer stuff. (Circles have timers)
      * *****************************************************/
-    const uint8_t minTimePassed = 10;
+    const uint8_t minTimePassed = 60;
     float leftSeconds;
-    std::vector<float> stateTimes(3,2);
-    CircleHandler posHandler(10, targetRadius, stateTimes, 1, 1, WIDTH, HEIGHT);
+    std::vector<float> stateTimes(3,5);
+    CircleHandler posHandler(5, targetRadius, stateTimes, 1, 1, WIDTH, HEIGHT);
 
     for (uint8_t i = 0; i < stateTimes.size(); ++i)
-        stateTimes[i] = 4;
+        stateTimes[i] = 10;
 
-    CircleHandler negHandler(10, targetRadius, stateTimes, 2, 2, WIDTH, HEIGHT);
+    CircleHandler negHandler(15, targetRadius, stateTimes, 2, 2, WIDTH, HEIGHT);
 
     clock_t timeStart = clock();
 
-
+    /*******************************************************
+     * Let the game start.
+     * ****************************************************/
     while (run) {
         cap >> frame;
         cv::flip(frame,mirror,1);
@@ -149,19 +149,12 @@ int main()
                     color = GOOD_COLOR;
                     line(mirror,Point(j*MAX_DISTANCE+corner2Center,i*MAX_DISTANCE+corner2Center),
                          Point(j*MAX_DISTANCE+corner2Center,i*MAX_DISTANCE+corner2Center),color,10,10);
-//                    hit = check_hit(j*MAX_DISTANCE+corner2Center, i*MAX_DISTANCE+corner2Center, target, targetRadius);
                     hits += posHandler.checkHit(j*MAX_DISTANCE+corner2Center,i*MAX_DISTANCE+corner2Center);
                     hits -= negHandler.checkHit(j*MAX_DISTANCE+corner2Center,i*MAX_DISTANCE+corner2Center);
-//                    if (hit) {
-//                        ++hits;
-//                        target.x = randomLeftRight(eng);
-//                        target.y = randomUpDown(eng);
-//                    }
                 }
             }
         }
 
-//        circle(mirror,target,targetRadius,BAD_COLOR,-1);
         putText(mirror,"Hits= " + to_string(hits),Point(10,mirror.rows-10),FONT_HERSHEY_SIMPLEX,1.2,Scalar(255,255,0));
 
         if (cv::getWindowProperty(TITLE,cv::WND_PROP_VISIBLE)) {
@@ -204,12 +197,3 @@ int main()
 
     return 0;
 }
-
-//    bool check_hit(int is_x, int is_y, Point goal, uint8_t goal_radius) {
-//        double dist = sqrt( pow(is_x-goal.x,2)+pow(is_y-goal.y,2) ) ;
-//
-//        if (dist <= goal_radius)
-//            return true;
-//        else
-//            return false;
-//    }
