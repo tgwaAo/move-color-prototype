@@ -1,23 +1,13 @@
 #include "ParticleWeighting.h"
 
-uint32_t ParticleWeighting::getIdx_end_rep() const
+void ParticleWeighting::setSumWeights(const uint32_t& sum_weights)
+{
+    this->sum_weights = sum_weights;
+}
+
+uint32_t ParticleWeighting::getSumWeights() const
 {
     return sum_weights;
-}
-
-void ParticleWeighting::setIdx_end_rep(const uint32_t &value)
-{
-    sum_weights = value;
-}
-
-int16_t ParticleWeighting::getMax_distance() const
-{
-    return max_distance;
-}
-
-void ParticleWeighting::setMax_distance(const int16_t &value)
-{
-    max_distance = value;
 }
 
 uint16_t ParticleWeighting::getMax_weight() const
@@ -153,7 +143,7 @@ ParticleWeighting::ParticleWeighting(const uint16_t &num_particles_, const doubl
     update();
 }
 
-uint32_t ParticleWeighting::predict_weighting(const uint8_t *pixelPtr)
+uint32_t ParticleWeighting::calculateSumWeights(const uint8_t *pixelPtr)
 {
     int16_t v_h;
     int16_t v_s;
@@ -195,7 +185,7 @@ void ParticleWeighting::update()
 
 bool ParticleWeighting::is_color(const uint8_t *pixelPtr)
 {
-    if (predict_weighting(pixelPtr) < bound)
+    if (calculateSumWeights(pixelPtr) < bound)
         return false;
     else
         return true;

@@ -64,10 +64,10 @@ int main()
     } else {
         calibrate(cap, TITLE, WIDTH, HEIGHT,settings_filename,
                   hsvBright, factorsBright, hsvDark, factorsDark);
+                  
+                  ParticleWeighting(NUM_PARTICLES,0,10,0,10,
+                                      MAX_WEIGHT,WIDTH,NUM_PARTICLES*MAX_WEIGHT*4/10, factorsBright,hsvBright))
     }
-
-
-
 
     //particle filter
     uint16_t mat_size = HEIGHT/MAX_DISTANCE;

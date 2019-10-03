@@ -2,12 +2,26 @@
 * Take picture after a short time,
 * drag and drop over it and calibrate.
 */
+
 #include "Calibrate.h"
 
-std::vector<cv::Point> square_points;
-cv::Mat mirror;
 
-void calibrate(cv::VideoCapture &cap, const std::string &title, const double &WIDTH, const double &HEIGHT,
+Calibrator::Calibrator()
+{
+    // do stuff
+}
+
+Calibrator::Calibrator(const ParticleWeighting &pw)
+{
+    // better but jet undone
+}
+
+Calibrator::~Calibrator()
+{
+    // do not forget delete!!
+}
+
+void Calibrator::calibrate(cv::VideoCapture &cap, const std::string &title, const double &WIDTH, const double &HEIGHT,
                const std::string &settings_filename,
                std::vector<uint16_t> &hsvBright, std::vector<double> &factorsBright,
                std::vector<uint16_t> &hsvDark, std::vector<double> &factorsDark)
@@ -19,14 +33,13 @@ void calibrate(cv::VideoCapture &cap, const std::string &title, const double &WI
     clock_t timeStart = clock();
     int8_t leftSeconds = minTimePassed - (float)(clock() - timeStart)/CLOCKS_PER_SEC;
     cv::Mat mirror_copy;
-    cv::Scalar textColor(255,255,0);
 
     while (leftSeconds > 0) {
         cap >> mirror_copy;
         cv::flip(mirror_copy,mirror,1);
         leftSeconds = minTimePassed - (float)(clock() - timeStart)/CLOCKS_PER_SEC;
         cv::putText(mirror,"Countdown= " + std::to_string(leftSeconds),
-                    cv::Point(10,mirror.rows-10),cv::FONT_HERSHEY_SIMPLEX,1.2,cv::Scalar(255,255,0));
+                    cv::Point(10,mirror.rows-10),cv::FONT_HERSHEY_SIMPLEX,1.2,textColor,2);
         cv::imshow(title,mirror);
         cv::waitKey(1);
     }
@@ -40,7 +53,7 @@ void calibrate(cv::VideoCapture &cap, const std::string &title, const double &WI
     cv::setMouseCallback(title,click_and_crop);
 
     cv::putText(mirror,"Select ONLY good color",cv::Point(10,mirror.rows-10),
-                cv::FONT_HERSHEY_SIMPLEX,1.2,cv::Scalar(255,255,0),2);
+                cv::FONT_HERSHEY_SIMPLEX,1.2,textColor,2);
     int key;
     std::vector<cv::Point> true_positive_square;
 
@@ -156,9 +169,11 @@ void calibrate(cv::VideoCapture &cap, const std::string &title, const double &WI
     mirror_copy.copyTo(mirror);
     cv::Mat hsv;
     cv::cvtColor(mirror,hsv,cv::COLOR_BGR2HSV);
-    uint8_t *hsv_ptr = (uint8_t*)hsv.data;
-    const uint8_t hsvChannels = hsv.channels();
+    *hsv_ptr = (uint8_t*)hsv.data;
+    hsvChannels = hsv.channels();
 
+
+////////////////to be in separate method
     for (int col = 0; col < mirror.cols; col+=step_x) {
         // Above square
         for (int row = 0; row < smallest_y; row+=step_y) {
@@ -200,7 +215,7 @@ void calibrate(cv::VideoCapture &cap, const std::string &title, const double &WI
     // split values into bright and dark, and fill matrices
     uint64_t goodValuesStart = counter;
     counter = 0;
-    std::vector<Matrix8u> allGoodValues(numAllGoodValues,Matrix8u(1,hsvChannels));
+    allGoodValues.resize(numAllGoodValues,Matrix8u(1,hsvChannels));
     // Get all good values
     for (int row = g_smallest_y; row < g_biggest_y; row += POS_DIST) {
         for (int col = g_smallest_x; col < g_biggest_x; col += POS_DIST) {
@@ -282,6 +297,8 @@ void calibrate(cv::VideoCapture &cap, const std::string &title, const double &WI
     /***************************************************************
      * Visualisation of bright color search and optional save.
      * ************************************************************/
+     
+     ///////////////combine them ////////////////////////////7
     mirror_copy.copyTo(mirror);
     bool shouldSaveBright =  visualize(mirror,title,badColor,goodColorBright,
                                        hsvBrightFirstWritten,factorsBrightFirstWritten,
@@ -323,14 +340,14 @@ void calibrate(cv::VideoCapture &cap, const std::string &title, const double &WI
 }
 
 
-int median(Eigen::VectorXi &v)
+int Calibrator::median(Eigen::VectorXi &v)
 {
     size_t n = v.size() / 2;
     std::nth_element(v.data(), v.data()+n, v.data()+v.size());
     return v(n);
 }
 
-void click_and_crop(int event, int x, int y, int flags, void *userdata)
+void Calibrator::click_and_crop(int event, int x, int y, int flags, void *userdata)
 {
     if (event == cv::EVENT_LBUTTONDOWN) {
         square_points.push_back(cv::Point(x,y));
@@ -340,7 +357,7 @@ void click_and_crop(int event, int x, int y, int flags, void *userdata)
     }
 }
 
-void fill_matrix(Matrix8u &mx,const uint8_t &hsvChannels, const int &hsvCols, uint8_t *hsv_ptr,
+void Calibrator::fill_matrix(Matrix8u &mx,const uint8_t &hsvChannels, const int &hsvCols, uint8_t *hsv_ptr,
                  const int &row, const int &col, uint64_t &counter)
 {
     mx(counter,0) = hsv_ptr[row*hsvCols*hsvChannels+col*hsvChannels];
@@ -348,7 +365,7 @@ void fill_matrix(Matrix8u &mx,const uint8_t &hsvChannels, const int &hsvCols, ui
     mx(counter,2) = hsv_ptr[row*hsvCols*hsvChannels+col*hsvChannels+2];
 }
 
-void find_minmax_xy(const std::vector<cv::Point> &square, uint16_t &smallest_x,
+void Calibrator::find_minmax_xy(const std::vector<cv::Point> &square, uint16_t &smallest_x,
                     uint16_t &biggest_x, uint16_t &smallest_y, uint16_t &biggest_y)
 {
     if (square[0].x < square[1].x) {
@@ -368,12 +385,12 @@ void find_minmax_xy(const std::vector<cv::Point> &square, uint16_t &smallest_x,
     }
 }
 
-double get_trust(const double &v,const double &factor)
+double Calibrator::get_trust(const double &v,const double &factor)
 {
     return (1/(1+factor*v));
 }
 
-double getPrediction(std::vector<uint16_t> &hsvBrightOrDark,
+double Calibrator::getPrediction(std::vector<uint16_t> &hsvBrightOrDark,
                      std::vector<double> &factors, const uint8_t *hsv_ptr,
                      const uint16_t &row, const uint16_t &col,
                      const uint8_t &channels, const int &hsv_cols)
@@ -384,12 +401,12 @@ double getPrediction(std::vector<uint16_t> &hsvBrightOrDark,
     return get_trust(pow(v_h,2)*factors[0] + pow(v_s,2)*factors[1] + pow(v_v,2)*factors[2],1);
 }
 
-bool compare_head(const Matrix8u& lhs, const Matrix8u& rhs)
+bool Calibrator::compare_head(const Matrix8u& lhs, const Matrix8u& rhs)
 {
     return lhs(0,2) < rhs(0,2);
 }
 
-void getMedianValues(std::vector<uint16_t> &hsvBrightOrDark,
+void Calibrator::getMedianValues(std::vector<uint16_t> &hsvBrightOrDark,
                      const Matrix8u &hsvValues,const uint64_t &startIdx,const uint64_t &endIdx)
 {
     Eigen::VectorXi colorVec(endIdx-startIdx);
@@ -413,7 +430,7 @@ void getMedianValues(std::vector<uint16_t> &hsvBrightOrDark,
     hsvBrightOrDark[2] = median(colorVec);
 }
 
-void preparedCalibration(const std::vector<uint16_t> &hsvBrightOrDark,
+void Calibrator::preparedCalibration(const std::vector<uint16_t> &hsvBrightOrDark,
                          std::vector<double> &factorsBrightOrDark,uint16_t &iter,
                          const Matrix8u &hsvValues, const double &factorsStart,
                          const Eigen::VectorXd &results,const double &minErrorBound,
@@ -464,7 +481,7 @@ void preparedCalibration(const std::vector<uint16_t> &hsvBrightOrDark,
 }
 
 
-bool visualize(cv::Mat &mirror, const std::string title,const cv::Scalar &badColor,
+bool Calibrator::visualize(cv::Mat &mirror, const std::string title,const cv::Scalar &badColor,
                const cv::Scalar &goodColor,std::vector<uint16_t> &hsv,
                std::vector<double> &factors,const uint8_t *hsv_ptr,
                std::vector<cv::Point> squareAllGoodValues,
@@ -526,7 +543,7 @@ bool visualize(cv::Mat &mirror, const std::string title,const cv::Scalar &badCol
         return false;
 }
 
-void visualizePoint(cv::Mat &mirror,const double &prediction,
+void Calibrator::visualizePoint(cv::Mat &mirror,const double &prediction,
                     const double &bound,const int &row,const int &col,
                     const cv::Scalar &badColor,const cv::Scalar &goodColor,
                     uint64_t &falsePositive)
@@ -539,7 +556,7 @@ void visualizePoint(cv::Mat &mirror,const double &prediction,
     }
 }
 
-uint64_t getError(const std::vector<uint16_t> &hsv,const std::vector<double> &factors,
+uint64_t Calibrator::getError(const std::vector<uint16_t> &hsv,const std::vector<double> &factors,
                   const Matrix8u &hsvValues,const uint64_t &startGoodValues)
 {
     uint64_t falsePositives = 0;
