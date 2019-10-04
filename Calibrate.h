@@ -29,8 +29,8 @@ private:
     uint8_t textThickness = 2;
     uint8_t NEG_DIST = 2; // for 480*640
     uint8_t POS_DIST = 1;
-    Matrix8u hsvValuesBright(numAllBrightAndDark,3); // better heap
-    Matrix8u hsvValuesDark(numAllBrightAndDark,3); // better heap
+    Matrix8u hsvValuesBright; // (numAllBrightAndDark,3); // better heap
+    Matrix8u hsvValuesDark; //(numAllBrightAndDark,3); // better heap
     cv::Scalar badColor(0,0,255);
     cv::Scalar goodColorBright(255,0,0);
     cv::Scalar goodColorDark(0,255,0);
@@ -82,6 +82,7 @@ public:
                         const cv::Scalar &badColor,const cv::Scalar &goodColor,uint64_t &falsePositive);
     uint64_t getError(const std::vector<uint16_t> &hsv,const std::vector<double> &factors,
                       const Matrix8u &hsvValues,const uint64_t &startGoodValues);
+    void fillAllBadMatrices();
 };
 
 #endif

@@ -160,12 +160,9 @@ void Calibrator::calibrate(cv::VideoCapture &cap, const std::string &title, cons
     /**************************************************************
      * Fill matrices for a database for calculation.
      * ***********************************************************/
-    Matrix8u hsvValuesBright(numAllBrightAndDark,3);
-    Matrix8u hsvValuesDark(numAllBrightAndDark,3);
+    hsvValuesBright = Matrix8u(numAllBrightAndDark,3);
+    hsvValuesDark = Matrix8u(numAllBrightAndDark,3);
     uint64_t counter = 0;
-    cv::Scalar badColor(0,0,255);
-    cv::Scalar goodColorBright(255,0,0);
-    cv::Scalar goodColorDark(0,255,0);
     mirror_copy.copyTo(mirror);
     cv::Mat hsv;
     cv::cvtColor(mirror,hsv,cv::COLOR_BGR2HSV);
