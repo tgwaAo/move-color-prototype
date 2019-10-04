@@ -5,7 +5,7 @@
 #include <random>
 
 #include "ParticleWeighting.h"
-#include "Calibrator.h"
+#include "CalibrationHandler.h"
 #include "CircleHandler.h"
 
 using namespace std;
