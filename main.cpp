@@ -5,7 +5,7 @@
 #include <random>
 
 #include "ParticleWeighting.h"
-#include "Calibrate.h"
+#include "Calibrator.h"
 #include "CircleHandler.h"
 
 using namespace std;
@@ -19,6 +19,7 @@ const uint8_t MAX_WEIGHT = 30;
 const uint8_t MAX_DISTANCE = 10;
 
 bool check_hit(int is_x, int is_y, Point goal, uint8_t goal_radius);
+cv::Mat photoWithTimer();
 
 int main()
 {
@@ -62,11 +63,15 @@ int main()
 
         settings_file.close();
     } else {
-        calibrate(cap, TITLE, WIDTH, HEIGHT,settings_filename,
-                  hsvBright, factorsBright, hsvDark, factorsDark);
-                  
-                  ParticleWeighting(NUM_PARTICLES,0,10,0,10,
-                                      MAX_WEIGHT,WIDTH,NUM_PARTICLES*MAX_WEIGHT*4/10, factorsBright,hsvBright))
+
+        cv::Mat image;
+        photoWithTimer(cap, image)
+
+//        calibrate(cap, TITLE, WIDTH, HEIGHT,settings_filename,
+//                  hsvBright, factorsBright, hsvDark, factorsDark);
+
+        ParticleWeighting(NUM_PARTICLES,0,10,0,10,
+                          MAX_WEIGHT,WIDTH,NUM_PARTICLES*MAX_WEIGHT*4/10, factorsBright,hsvBright))
     }
 
     //particle filter
@@ -196,4 +201,30 @@ int main()
     destroyAllWindows();
 
     return 0;
+}
+
+cv::Mat photoWithTimer(const cv::VideoCapture &cap, cv::Mat &mirror)
+{
+    /***********************************************************
+    *  Wait a few seconds to give the user time to get in position.
+    * ********************************************************/
+    const uint8_t minTimePassed = 5;
+    clock_t timeStart = clock();
+    int8_t leftSeconds = minTimePassed - (float)(clock() - timeStart)/CLOCKS_PER_SEC;
+    cv::Mat frame;
+
+    while (leftSeconds > 0) {
+        cap >> frame;
+        cv::flip(frame,mirror,1);
+        leftSeconds = minTimePassed - (float)(clock() - timeStart)/CLOCKS_PER_SEC;
+        cv::putText(mirror,"Countdown= " + std::to_string(leftSeconds),
+                    cv::Point(10,mirror.rows-10),cv::FONT_HERSHEY_SIMPLEX,1.2,textColor,2);
+        cv::imshow(title,mirror);
+        cv::waitKey(1);
+    }
+
+    cap >> frame;
+    cv::flip(frame,mirror,1);
+
+    return mirror;
 }
