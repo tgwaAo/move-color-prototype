@@ -19,7 +19,7 @@ const uint8_t MAX_WEIGHT = 30;
 const uint8_t MAX_DISTANCE = 10;
 
 bool check_hit(int is_x, int is_y, Point goal, uint8_t goal_radius);
-cv::Mat photoWithTimer();
+cv::Mat photoWithTimer(const cv::VideoCapture &cap, cv::Mat image);
 
 int main()
 {
@@ -65,16 +65,31 @@ int main()
     } else {
 
         cv::Mat image;
-        photoWithTimer(cap, image)
+        photoWithTimer(cap, image);
 
-//        calibrate(cap, TITLE, WIDTH, HEIGHT,settings_filename,
-//                  hsvBright, factorsBright, hsvDark, factorsDark);
+        CalibrationHandler calibrator(TITLE);
+        calibrator.calibrate(image, hsvBright, factorsBright, hsvDark, factorsDark);
+        
+        std::ofstream save_file;
+        save_file.open(settings_filename);
 
-        ParticleWeighting(NUM_PARTICLES,0,10,0,10,
-                          MAX_WEIGHT,WIDTH,NUM_PARTICLES*MAX_WEIGHT*4/10, factorsBright,hsvBright))
+        save_file << unsigned(hsvBright[0]) << std::endl;
+        save_file << unsigned(hsvBright[1]) << std::endl;
+        save_file << unsigned(hsvBright[2]) << std::endl;
+        save_file << factorsBright[0] << std::endl;
+        save_file << factorsBright[1]<< std::endl;
+        save_file << factorsBright[2] << std::endl;
+        save_file << unsigned(hsvDark[0]) << std::endl;
+        save_file << unsigned(hsvDark[1]) << std::endl;
+        save_file << unsigned(hsvDark[2]) << std::endl;
+        save_file << factorsDark[0] << std::endl;
+        save_file << factorsDark[1]<< std::endl;
+        save_file << factorsDark[2] << std::endl;
+
+        save_file.close();
+        std::cout << "Saved" << std::endl;
     }
 
-    //particle filter
     uint16_t mat_size = HEIGHT/MAX_DISTANCE;
     vector<vector<ParticleWeighting> > weightingMatrixBright(mat_size,
             vector<ParticleWeighting>(WIDTH/MAX_DISTANCE,ParticleWeighting(NUM_PARTICLES,0,10,0,10,
