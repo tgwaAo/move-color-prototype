@@ -19,7 +19,7 @@ const uint8_t MAX_WEIGHT = 30;
 const uint8_t MAX_DISTANCE = 10;
 
 bool check_hit(int is_x, int is_y, Point goal, uint8_t goal_radius);
-cv::Mat photoWithTimer(const cv::VideoCapture &cap, cv::Mat image);
+void photoWithTimer(cv::VideoCapture &cap, cv::Mat &image, const std::string &title);
 
 int main()
 {
@@ -43,6 +43,8 @@ int main()
 
     struct stat buffer;
     bool exists = stat (settings_filename.c_str(), &buffer) == 0;
+    CalibrationHandler calibrator(TITLE);
+    cv::Mat image;
 
     if(exists) {
         ifstream settings_file;
@@ -63,13 +65,9 @@ int main()
 
         settings_file.close();
     } else {
-
-        cv::Mat image;
-        photoWithTimer(cap, image);
-
-        CalibrationHandler calibrator(TITLE);
+        photoWithTimer(cap, image, TITLE);
         calibrator.calibrate(image, hsvBright, factorsBright, hsvDark, factorsDark);
-        
+
         std::ofstream save_file;
         save_file.open(settings_filename);
 
@@ -184,8 +182,9 @@ int main()
             if (key == 27) // esc
                 break;
             else if (key == 99) { // 'c'
-                calibrate(cap, TITLE, WIDTH, HEIGHT,settings_filename,
-                          hsvBright, factorsBright, hsvDark, factorsDark);
+                photoWithTimer(cap, image, TITLE);
+                calibrator.calibrate(image,hsvBright,factorsBright,hsvDark,factorsDark);
+
                 for (int i = 0; i < HEIGHT/MAX_DISTANCE; ++i) {
                     for (int j = 0; j < WIDTH/MAX_DISTANCE; ++j) {
                         weightingMatrixBright[i][j].setHsv(hsvBright);
@@ -218,7 +217,7 @@ int main()
     return 0;
 }
 
-cv::Mat photoWithTimer(const cv::VideoCapture &cap, cv::Mat &mirror)
+void photoWithTimer(cv::VideoCapture &cap, cv::Mat &image, const std::string &title)
 {
     /***********************************************************
     *  Wait a few seconds to give the user time to get in position.
@@ -230,16 +229,14 @@ cv::Mat photoWithTimer(const cv::VideoCapture &cap, cv::Mat &mirror)
 
     while (leftSeconds > 0) {
         cap >> frame;
-        cv::flip(frame,mirror,1);
+        cv::flip(frame,image,1);
         leftSeconds = minTimePassed - (float)(clock() - timeStart)/CLOCKS_PER_SEC;
-        cv::putText(mirror,"Countdown= " + std::to_string(leftSeconds),
-                    cv::Point(10,mirror.rows-10),cv::FONT_HERSHEY_SIMPLEX,1.2,textColor,2);
-        cv::imshow(title,mirror);
+        cv::putText(image,"Countdown= " + std::to_string(leftSeconds),
+                    cv::Point(10,image.rows-10),cv::FONT_HERSHEY_SIMPLEX,1.2,Scalar(255,255,0),2);
+        cv::imshow(title,image);
         cv::waitKey(1);
     }
 
     cap >> frame;
-    cv::flip(frame,mirror,1);
-
-    return mirror;
+    cv::flip(frame,image,1);
 }

@@ -17,6 +17,8 @@
 
 typedef Eigen::Matrix<uint8_t, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> Matrix8u;
 
+bool compareBrightness(const Matrix8u &lhs, const Matrix8u &rhs);
+
 class CalibrationHandler
 {
 private:
@@ -44,9 +46,9 @@ private:
     Eigen::VectorXd results;
     std::vector<Matrix8u> allGoodValues;
 
-    double startValueFactors = 0.0005;
-    double minError = 50;
-    uint16_t maxIteration = 100;
+    double startValueFactors;
+    double minError;
+    uint16_t maxIteration;
 
     Eigen::Vector3i hsvBright_;
     Eigen::Vector3i hsvDark_;
@@ -64,27 +66,24 @@ public:
                    std::vector<uint16_t> &hsvBright, std::vector<double> &factorsBright,
                    std::vector<uint16_t> &hsvDark, std::vector<double> &factorsDark);
     int median(Eigen::VectorXi &v);
-    static void click_and_crop(int event, int x, int y,
-                               int flags, void *userdata);
-                               // declare local click_and_crop
+    // declare local click_and_crop
     void find_minmax_xy(const std::vector<cv::Point> &square,
                         uint16_t &smallest_x, uint16_t &biggest_x, uint16_t &smallest_y, uint16_t &biggest_y);
     double get_trust(const double &v,const double &factor);
-    double getPrediction(std::vector<uint16_t> &hsvBrightOrDark,
-                         std::vector<double> &factors, const uint8_t *hsvPtr,
-                         const uint16_t &row, const uint16_t &col,
-                         const uint8_t &channels, const int &hsv_cols);
-    bool compareBrightness(const Matrix8u& lhs, const Matrix8u& rhs);
+    double getPrediction(const uint16_t &row, const uint16_t &col);
     void getMedianValues(const uint64_t &startIdx,const uint64_t &endIdx);
-    void calculate(const Eigen::Vector3d &hsvBrightOrDark, const Eigen::Vector3d &x0,
+    void calculate(const Eigen::Vector3i &hsvBrightOrDark, Eigen::Vector3d &x0,
                    const Matrix8u &hsvValues, const Eigen::VectorXd &results,
-                   const std::string description, const uint64_t &startGoodValues);
+                   const std::string &description, const uint64_t &startGoodValues);
     bool visualizeResult();
-    uint64_t getError(const std::vector<uint16_t> &hsv,const std::vector<double> &factors,
-                      const Matrix8u &hsvValues,const uint64_t &startGoodValues);
+    uint64_t getError(const Eigen::Vector3i &hsv,const Eigen::Vector3d &factors,
+             const Matrix8u &hsvValues,const uint64_t &startGoodValues);
     void fillAllBadMatrices(const uint16_t &hsvCols, const uint16_t &row,
                             const uint16_t &col, uint64_t &counter);
     void addNegativePoint(const uint16_t &row, const uint16_t &col, uint64_t &falsePositive);
+    void clickAndCrop(int event, int x, int y);
+    static void click_and_crop(int event, int x, int y,
+                               int flags, void *userdata);
 };
 
 #endif
