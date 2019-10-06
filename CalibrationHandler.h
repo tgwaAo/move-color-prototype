@@ -17,7 +17,7 @@
 
 typedef Eigen::Matrix<uint8_t, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> Matrix8u;
 
-bool compareBrightness(const Matrix8u &lhs, const Matrix8u &rhs);
+//bool compareBrightness(const Matrix8u &lhs, const Matrix8u &rhs);
 
 class CalibrationHandler
 {

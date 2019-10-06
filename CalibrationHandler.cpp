@@ -17,7 +17,7 @@ CalibrationHandler::CalibrationHandler(std::string title, uint16_t distanceText2
     factorsBright_ = {1000000,1000000,1000000};
     factorsDark_ = {1000000,1000000,1000000};
 
-    *hsvPtr = 0;
+    hsvPtr = 0;
 
     negDist = 2;
     posDist = 1;
@@ -225,7 +225,10 @@ void CalibrationHandler::calibrate(cv::Mat img,
     cv::imshow(title_,mirror);
     cv::waitKey(1); // Needed to show img.
 
-    std::sort(allGoodValues.begin(), allGoodValues.end(), &compareBrightness);
+//    std::sort(allGoodValues.begin(), allGoodValues.end(), &compareBrightness);
+    std::sort(allGoodValues.begin(), allGoodValues.end(),[](const Matrix8u& lhs, const Matrix8u& rhs) {
+        return lhs(0,2) < rhs(0,2);
+    });
     counter = goodValuesStart;
     results = Eigen::VectorXd(numAllBrightAndDark);
 
@@ -441,7 +444,7 @@ void CalibrationHandler::calculate(const Eigen::Vector3i &hsvBrightOrDark, Eigen
         if (dx(1) < 0) dx(1) *= -1;
         if (dx(2) < 0) dx(2) *= -1;
 
-  
+
         if (getError(hsvBrightOrDark,x0,hsvValues,startGoodValues) < minError) {
             break;
         }
@@ -556,7 +559,7 @@ void CalibrationHandler::addNegativePoint(const uint16_t &row, const uint16_t &c
     }
 }
 
-bool compareBrightness(const Matrix8u& lhs, const Matrix8u& rhs)
-{
-    return lhs(0,2) < rhs(0,2);
-}
+//bool compareBrightness(const Matrix8u& lhs, const Matrix8u& rhs)
+//{
+//    return lhs(0,2) < rhs(0,2);
+//}
