@@ -135,6 +135,7 @@ ParticleWeighting::ParticleWeighting(const uint16_t &num_particles_, const doubl
     val = hsvBest[2];
     cols = cols_;
     bound = bound_;
+    hsvChannels = 3;
 
     particles_x.resize(num_particles_);
     particles_y.resize(num_particles_);
@@ -153,9 +154,9 @@ uint32_t ParticleWeighting::calculateSumWeights(const uint8_t *pixelPtr)
 
     for (int i = 0; i < particles_x.size(); ++i) {
         //        calculate probability of being correct
-        v_h =  hue - pixelPtr[particles_y[i]*cols*channels + particles_x[i]*channels + 0];
-        v_s =  sat - pixelPtr[particles_y[i]*cols*channels + particles_x[i]*channels + 1];
-        v_v =  val - pixelPtr[particles_y[i]*cols*channels + particles_x[i]*channels + 2];
+        v_h =  hue - pixelPtr[particles_y[i]*cols*hsvChannels + particles_x[i]*hsvChannels + 0];
+        v_s =  sat - pixelPtr[particles_y[i]*cols*hsvChannels + particles_x[i]*hsvChannels + 1];
+        v_v =  val - pixelPtr[particles_y[i]*cols*hsvChannels + particles_x[i]*hsvChannels + 2];
 
         prediction = 1 / (1 + pow(v_h,2)*factor_h + pow(v_s,2)*factor_s+ pow(v_v,2)*factor_v);
 
@@ -202,7 +203,7 @@ std::vector<uint16_t> ParticleWeighting::getHsv() const
 
 bool ParticleWeighting::setHsv(const std::vector<uint16_t> &hsv)
 {
-    if (hsv.size() == channels) {
+    if (hsv.size() == hsvChannels) {
         hue = hsv[0];
         sat = hsv[1];
         val = hsv[2];
@@ -223,7 +224,7 @@ std::vector<double> ParticleWeighting::getFactors() const
 
 bool ParticleWeighting::setFactors(std::vector<double> &factors)
 {
-    if (factors.size() == channels) {
+    if (factors.size() == hsvChannels) {
         factor_h = factors[0];
         factor_s = factors[1];
         factor_v = factors[2];

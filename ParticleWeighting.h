@@ -8,31 +8,14 @@
 #ifndef PARTICLE_WEIGHTING_H
 #define PARTICLE_WEIGHTING_H
 
+
 #include <vector>
 #include <cstdint>
 #include <math.h>
 
+
 class ParticleWeighting
 {
-    std::vector<uint16_t> particles_x;
-    std::vector<uint16_t> particles_y;
-    std::vector<uint16_t> particles_w;
-    uint32_t bound;
-    uint32_t sum_weights;
-    uint16_t max_weight;
-    uint16_t min_width;
-    uint16_t min_height;
-    uint16_t max_width;
-    uint16_t max_height;
-    uint16_t hue;
-    uint16_t sat;
-    uint16_t val;
-    double factor_h;
-    double factor_s;
-    double factor_v;
-    uint16_t cols;
-    uint8_t channels = 3;
-
 public:
     /**
      * @brief Constructs a continuous matrix of particles in given area
@@ -256,6 +239,24 @@ public:
      * @return Returns true, if input vector has a length of 3.
      */
     bool setFactors(std::vector<double> &factors);
+    std::vector<uint16_t> particles_x;
+    std::vector<uint16_t> particles_y;
+    std::vector<uint16_t> particles_w;
+    uint32_t bound;
+    uint32_t sum_weights;
+    uint16_t max_weight;
+    uint16_t min_width;
+    uint16_t min_height;
+    uint16_t max_width;
+    uint16_t max_height;
+    uint16_t hue;
+    uint16_t sat;
+    uint16_t val;
+    double factor_h;
+    double factor_s;
+    double factor_v;
+    uint16_t cols;
+    uint8_t hsvChannels;
 };
 
 #endif // PARTICLE_WEIGHTING_H

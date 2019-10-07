@@ -24,6 +24,34 @@ typedef Eigen::Matrix<uint8_t, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> 
 
 class CalibrationHandler
 {
+public:
+    CalibrationHandler(std::string title = "Calibration", uint16_t distanceText2Border = 10,
+                       uint8_t font = cv::FONT_HERSHEY_SIMPLEX, float textScale = 1.2,
+                       cv::Scalar textColor = cv::Scalar(255,255,0), uint8_t textThickness = 2);
+    ~CalibrationHandler();
+
+    void calibrate(cv::Mat img,
+                   std::vector<uint16_t> &hsvBright, std::vector<double> &factorsBright,
+                   std::vector<uint16_t> &hsvDark, std::vector<double> &factorsDark);
+    int median(Eigen::VectorXi &v);
+    // declare local click_and_crop
+    void find_minmax_xy(const std::vector<cv::Point> &square,
+                        uint16_t &smallest_x, uint16_t &biggest_x, uint16_t &smallest_y, uint16_t &biggest_y);
+    double get_trust(const double &v,const double &factor);
+    double getPrediction(const uint16_t &row, const uint16_t &col);
+    void getMedianValues(const uint64_t &startIdx,const uint64_t &endIdx);
+    void calculate(const Eigen::Vector3i &hsvBrightOrDark, Eigen::Vector3d &x0,
+                   const Matrix8u &hsvValues, const Eigen::VectorXd &results,
+                   const std::string &description, const uint64_t &startGoodValues);
+    bool visualizeResult();
+    uint64_t getError(const Eigen::Vector3i &hsv,const Eigen::Vector3d &factors,
+                      const Matrix8u &hsvValues,const uint64_t &startGoodValues);
+    void fillAllBadMatrices(const uint16_t &hsvCols, const uint16_t &row,
+                            const uint16_t &col, uint64_t &counter);
+    void addNegativePoint(const uint16_t &row, const uint16_t &col, uint64_t &falsePositive);
+    void clickAndCrop(int event, int x, int y);
+    static void click_and_crop(int event, int x, int y,
+                               int flags, void *userdata);
 private:
     std::vector<cv::Point> square_points;
 
@@ -59,34 +87,6 @@ private:
     Eigen::Vector3d factorsDark_;
 
 
-public:
-    CalibrationHandler(std::string title = "Calibration", uint16_t distanceText2Border = 10,
-                       uint8_t font = cv::FONT_HERSHEY_SIMPLEX, float textScale = 1.2,
-                       cv::Scalar textColor = cv::Scalar(255,255,0), uint8_t textThickness = 2);
-    ~CalibrationHandler();
-
-    void calibrate(cv::Mat img,
-                   std::vector<uint16_t> &hsvBright, std::vector<double> &factorsBright,
-                   std::vector<uint16_t> &hsvDark, std::vector<double> &factorsDark);
-    int median(Eigen::VectorXi &v);
-    // declare local click_and_crop
-    void find_minmax_xy(const std::vector<cv::Point> &square,
-                        uint16_t &smallest_x, uint16_t &biggest_x, uint16_t &smallest_y, uint16_t &biggest_y);
-    double get_trust(const double &v,const double &factor);
-    double getPrediction(const uint16_t &row, const uint16_t &col);
-    void getMedianValues(const uint64_t &startIdx,const uint64_t &endIdx);
-    void calculate(const Eigen::Vector3i &hsvBrightOrDark, Eigen::Vector3d &x0,
-                   const Matrix8u &hsvValues, const Eigen::VectorXd &results,
-                   const std::string &description, const uint64_t &startGoodValues);
-    bool visualizeResult();
-    uint64_t getError(const Eigen::Vector3i &hsv,const Eigen::Vector3d &factors,
-                      const Matrix8u &hsvValues,const uint64_t &startGoodValues);
-    void fillAllBadMatrices(const uint16_t &hsvCols, const uint16_t &row,
-                            const uint16_t &col, uint64_t &counter);
-    void addNegativePoint(const uint16_t &row, const uint16_t &col, uint64_t &falsePositive);
-    void clickAndCrop(int event, int x, int y);
-    static void click_and_crop(int event, int x, int y,
-                               int flags, void *userdata);
 };
 
-#endif
+#endif //CALIBRATOR_H

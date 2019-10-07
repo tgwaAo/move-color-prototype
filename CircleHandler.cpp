@@ -1,5 +1,10 @@
 #include "CircleHandler.h"
 
+CircleHandler::CircleHandler()
+{
+    CircleHandler(10, 10, std::vector<float>(3,3), 0, 1, 640, 480);
+}
+
 CircleHandler::CircleHandler(const uint8_t &numCircles, const uint8_t &radius_,
                              const std::vector<float> &circleTimeStates_,
                              const uint8_t &colorIdx_,

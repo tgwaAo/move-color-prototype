@@ -9,10 +9,10 @@
 #include <opencv2/opencv.hpp>
 #include <random>
 
-class updateCircles;
 class CircleHandler
 {
 public:
+    CircleHandler();
     CircleHandler(const uint8_t &numCircles, const uint8_t &radius_,
                   const std::vector<float> &circleTimeStates,
                   const uint8_t &colorIdx_,
