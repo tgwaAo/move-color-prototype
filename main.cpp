@@ -1,3 +1,11 @@
+/**
+* Start of a little game. The goal is to hit the bright
+* green circles and avoid the bright red circles.
+* The dark green and red circles are not active and
+* will turn bright later.
+*/
+
+
 #include <opencv2/opencv.hpp>
 #include <sstream>
 #include <sys/stat.h>
@@ -8,8 +16,10 @@
 #include "CalibrationHandler.h"
 #include "CircleHandler.h"
 
+
 using namespace std;
 using namespace cv;
+
 
 const string settings_filename = "hsv.txt";
 const uint16_t NUM_PARTICLES = 30;
@@ -18,8 +28,10 @@ const double HEIGHT = 480;
 const uint8_t MAX_WEIGHT = 30;
 const uint8_t MAX_DISTANCE = 10;
 
+
 bool check_hit(int is_x, int is_y, Point goal, uint8_t goal_radius);
 void photoWithTimer(cv::VideoCapture &cap, cv::Mat &image, const std::string &title);
+
 
 int main()
 {

@@ -1,3 +1,8 @@
+/**
+* Class to handle circles for little gameplay.
+*/
+
+
 #ifndef CIRCLEHANDLER_H
 #define CIRCLEHANDLER_H
 

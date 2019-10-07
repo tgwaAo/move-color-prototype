@@ -1,11 +1,13 @@
-#ifndef CALIBRATOR_H
-#define CALIBRATOR_H
-
 /**
 * Take picture after a short time,
 * drag and drop over it and calibrate using
 * Eigens BDCSVD.
 */
+
+
+#ifndef CALIBRATOR_H
+#define CALIBRATOR_H
+
 
 #include <opencv2/opencv.hpp>
 #include <math.h>
@@ -15,9 +17,10 @@
 
 #include "ParticleWeighting.h"
 
+
+// Define own matrix to save space
 typedef Eigen::Matrix<uint8_t, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> Matrix8u;
 
-//bool compareBrightness(const Matrix8u &lhs, const Matrix8u &rhs);
 
 class CalibrationHandler
 {
@@ -77,7 +80,7 @@ public:
                    const std::string &description, const uint64_t &startGoodValues);
     bool visualizeResult();
     uint64_t getError(const Eigen::Vector3i &hsv,const Eigen::Vector3d &factors,
-             const Matrix8u &hsvValues,const uint64_t &startGoodValues);
+                      const Matrix8u &hsvValues,const uint64_t &startGoodValues);
     void fillAllBadMatrices(const uint16_t &hsvCols, const uint16_t &row,
                             const uint16_t &col, uint64_t &counter);
     void addNegativePoint(const uint16_t &row, const uint16_t &col, uint64_t &falsePositive);

@@ -225,7 +225,6 @@ void CalibrationHandler::calibrate(cv::Mat img,
     cv::imshow(title_,mirror);
     cv::waitKey(1); // Needed to show img.
 
-//    std::sort(allGoodValues.begin(), allGoodValues.end(), &compareBrightness);
     std::sort(allGoodValues.begin(), allGoodValues.end(),[](const Matrix8u& lhs, const Matrix8u& rhs) {
         return lhs(0,2) < rhs(0,2);
     });
@@ -558,8 +557,3 @@ void CalibrationHandler::addNegativePoint(const uint16_t &row, const uint16_t &c
         ++falsePositive;
     }
 }
-
-//bool compareBrightness(const Matrix8u& lhs, const Matrix8u& rhs)
-//{
-//    return lhs(0,2) < rhs(0,2);
-//}
