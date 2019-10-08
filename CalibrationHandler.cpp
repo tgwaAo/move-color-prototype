@@ -1,4 +1,6 @@
 /**
+* CalibrationHandler.cpp 
+* 
 * Take picture after a short time,
 * drag and drop over it and calibrate.
 */
@@ -44,19 +46,17 @@ void CalibrationHandler::calibrate(cv::Mat img,
     /***************************************************************
      * Let user select positives.
      * ************************************************************/
-    cv::Mat mirror_copy;
-    img.copyTo(mirror_copy);
-    img.copyTo(mirror);
-    cv::setMouseCallback(title_, click_and_crop, this);
+    img.copyTo(imgCopy);
+    cv::setMouseCallback(title_, clickAndCrop, this);
 
-    cv::putText(mirror,"Select ONLY good color", cv::Point(distanceText2Border_,mirror.rows-distanceText2Border_),
+    cv::putText(imgCopy,"Select ONLY good color", cv::Point(distanceText2Border_,imgCopy.rows-distanceText2Border_),
                 font_, textScale_, textColor_, textThickness_);
     int key;
     std::vector<cv::Point> true_positive_square;
 
 
     while (true) {
-        cv::imshow(title_, mirror);
+        cv::imshow(title_, imgCopy);
         key = cv::waitKey(1);
 
         if (key == 114) { // r
@@ -65,11 +65,11 @@ void CalibrationHandler::calibrate(cv::Mat img,
             for (int i = 0; i < max_i; ++i) {
                 square_points.pop_back();
             }
-            mirror_copy.copyTo(mirror);
-            cv::putText(mirror,"Select ONLY good color",
-                        cv::Point(distanceText2Border_,mirror.rows-distanceText2Border_),
+            img.copyTo(imgCopy);
+            cv::putText(imgCopy,"Select ONLY good color",
+                        cv::Point(distanceText2Border_,imgCopy.rows-distanceText2Border_),
                         font_, textScale_, textColor_, textThickness_);
-            cv::imshow(title_, mirror);
+            cv::imshow(title_, imgCopy);
         } else if (key == 13 && square_points.size() == 2) { // enter
             true_positive_square = square_points;
             break;
@@ -83,13 +83,13 @@ void CalibrationHandler::calibrate(cv::Mat img,
      * ***************************************************************/
     square_points.pop_back();
     square_points.pop_back();
-    mirror_copy.copyTo(mirror);
-    cv::putText(mirror,"Select MORE than good color!",
-                cv::Point(distanceText2Border_,mirror.rows-distanceText2Border_),
+    img.copyTo(imgCopy);
+    cv::putText(imgCopy,"Select MORE than good color!",
+                cv::Point(distanceText2Border_,imgCopy.rows-distanceText2Border_),
                 font_, textScale_, textColor_, textThickness_);
 
     while (true) {
-        cv::imshow(title_, mirror);
+        cv::imshow(title_, imgCopy);
         key = cv::waitKey(1);
 
         if (key == 114) { // r
@@ -97,9 +97,9 @@ void CalibrationHandler::calibrate(cv::Mat img,
             for (int i = 0; i < max_i; ++i) {
                 square_points.pop_back();
             }
-            mirror_copy.copyTo(mirror);
-            cv::putText(mirror,"Select MORE than good color!",
-                        cv::Point(distanceText2Border_,mirror.rows-distanceText2Border_),
+            img.copyTo(imgCopy);
+            cv::putText(imgCopy,"Select MORE than good color!",
+                        cv::Point(distanceText2Border_,imgCopy.rows-distanceText2Border_),
                         font_, textScale_, textColor_, textThickness_);
         } else if (key == 13 && square_points.size() == 2) { // enter
             break;
@@ -111,25 +111,25 @@ void CalibrationHandler::calibrate(cv::Mat img,
     /*************************************************************
      * Calculate sizes for preallocation
      * **********************************************************/
-    mirror_copy.copyTo(mirror);
-    cv::putText(mirror,"Calibrating ...",
-                cv::Point(distanceText2Border_,mirror.rows-distanceText2Border_),
+    img.copyTo(imgCopy);
+    cv::putText(imgCopy,"Calibrating ...",
+                cv::Point(distanceText2Border_,imgCopy.rows-distanceText2Border_),
                 font_, textScale_, textColor_, textThickness_);
     uint16_t smallest_x, biggest_x, smallest_y, biggest_y;
 
-    find_minmax_xy(square_points, smallest_x, biggest_x, smallest_y, biggest_y);
+    findMinMaxXY(square_points, smallest_x, biggest_x, smallest_y, biggest_y);
     square_points[0].x = smallest_x;
     square_points[1].x = biggest_x;
     square_points[0].y = smallest_y;
     square_points[1].y = biggest_y;
 
     // Above square
-    uint16_t num_x = ceil(mirror.cols/negDist);
+    uint16_t num_x = ceil(imgCopy.cols/negDist);
     uint16_t num_y = ceil(smallest_y/(float)negDist);
     uint64_t numAllBrightAndDark = num_x*num_y;
 
     // Below square
-    num_y = ceil( (mirror.rows-biggest_y)/(float)negDist );
+    num_y = ceil( (imgCopy.rows-biggest_y)/(float)negDist );
     numAllBrightAndDark += num_x*num_y;
 
     // Left next to square
@@ -138,12 +138,12 @@ void CalibrationHandler::calibrate(cv::Mat img,
     numAllBrightAndDark += num_x*num_y;
 
     // Right next to square
-    num_x = ceil( (mirror.cols-biggest_x)/(float)negDist );
+    num_x = ceil( (imgCopy.cols-biggest_x)/(float)negDist );
     numAllBrightAndDark += num_x*num_y;
 
     // Only good values
     uint16_t g_smallest_x, g_smallest_y, g_biggest_x, g_biggest_y;
-    find_minmax_xy(true_positive_square, g_smallest_x, g_biggest_x, g_smallest_y, g_biggest_y);
+    findMinMaxXY(true_positive_square, g_smallest_x, g_biggest_x, g_smallest_y, g_biggest_y);
     true_positive_square[0].x = g_smallest_x;
     true_positive_square[1].x = g_biggest_x;
     true_positive_square[0].y = g_smallest_y;
@@ -163,32 +163,32 @@ void CalibrationHandler::calibrate(cv::Mat img,
     hsvValuesDark =  Matrix8u(numAllBrightAndDark,3);
 
     uint64_t counter = 0;
-    mirror_copy.copyTo(mirror);
+    img.copyTo(imgCopy);
     cv::Mat hsv;
-    cv::cvtColor(mirror,hsv,cv::COLOR_BGR2HSV);
+    cv::cvtColor(imgCopy,hsv,cv::COLOR_BGR2HSV);
     hsvPtr = (uint8_t*)hsv.data;
 
-    for (int col = 0; col < mirror.cols; col+=negDist) {
+    for (int col = 0; col < imgCopy.cols; col+=negDist) {
         // Above square
         for (int row = 0; row < smallest_y; row+=negDist) {
-            fillAllBadMatrices(mirror.cols, row, col, counter);
+            fillAllBadMatrices(imgCopy.cols, row, col, counter);
         }
 
         // Below square
-        for (int row = biggest_y; row < mirror.rows; row += negDist) {
-            fillAllBadMatrices(mirror.cols, row, col, counter);
+        for (int row = biggest_y; row < imgCopy.rows; row += negDist) {
+            fillAllBadMatrices(imgCopy.cols, row, col, counter);
         }
     }
 
     // Left next to square
     for (int row = smallest_y; row < biggest_y; row += negDist) {
         for (int col = 0; col < smallest_x; col += negDist) {
-            fillAllBadMatrices(mirror.cols, row, col, counter);
+            fillAllBadMatrices(imgCopy.cols, row, col, counter);
         }
 
         // Right next to square
-        for (int col = biggest_x; col < mirror.cols; col += negDist) {
-            fillAllBadMatrices(mirror.cols, row, col, counter);
+        for (int col = biggest_x; col < imgCopy.cols; col += negDist) {
+            fillAllBadMatrices(imgCopy.cols, row, col, counter);
         }
     }
 
@@ -200,7 +200,7 @@ void CalibrationHandler::calibrate(cv::Mat img,
     // Get all good values
     for (int row = g_smallest_y; row < g_biggest_y; row += posDist) {
         for (int col = g_smallest_x; col < g_biggest_x; col += posDist) {
-            line(mirror,cv::Point(col,row),cv::Point(col,row),goodColor);
+            line(imgCopy,cv::Point(col,row),cv::Point(col,row),goodColor);
             allGoodValues[counter](0,0) = hsvPtr[row*hsv.cols*hsv.channels()+col*hsv.channels()];
             allGoodValues[counter](0,1) = hsvPtr[row*hsv.cols*hsv.channels()+col*hsv.channels()+1];
             allGoodValues[counter](0,2) = hsvPtr[row*hsv.cols*hsv.channels()+col*hsv.channels()+2];
@@ -208,7 +208,7 @@ void CalibrationHandler::calibrate(cv::Mat img,
         }
     }
 
-    cv::imshow(title_,mirror);
+    cv::imshow(title_,imgCopy);
     key = cv::waitKey(0);
 
     if (key == 27 || key == 113) { // esc or q
@@ -219,10 +219,10 @@ void CalibrationHandler::calibrate(cv::Mat img,
      * Sort good values with respect to brightness.
      * Leave brightest and darkest values out and fill matrices.
      * *******************************************************************/
-    cv::putText(mirror,"Calculating ...",
-                cv::Point(distanceText2Border_,mirror.rows-distanceText2Border_),
+    cv::putText(imgCopy,"Calculating ...",
+                cv::Point(distanceText2Border_,imgCopy.rows-distanceText2Border_),
                 font_, textScale_, textColor_, textThickness_);
-    cv::imshow(title_,mirror);
+    cv::imshow(title_,imgCopy);
     cv::waitKey(1); // Needed to show img.
 
     std::sort(allGoodValues.begin(), allGoodValues.end(),[](const Matrix8u& lhs, const Matrix8u& rhs) {
@@ -272,7 +272,7 @@ void CalibrationHandler::calibrate(cv::Mat img,
      * Visualisation of bright color search and optional save.
      * ************************************************************/
 
-    mirror_copy.copyTo(mirror);
+    img.copyTo(imgCopy);
     bool acceptValues =  visualizeResult();
 
     if (acceptValues) {
@@ -301,7 +301,7 @@ int CalibrationHandler::median(Eigen::VectorXi &v)
     return v(n);
 }
 
-void CalibrationHandler::click_and_crop(int event, int x, int y, int flags, void *userdata)
+void CalibrationHandler::clickAndCrop(int event, int x, int y, int flags, void *userdata)
 {
     if (userdata != 0) {
         CalibrationHandler* handler = reinterpret_cast<CalibrationHandler*>(userdata);
@@ -315,50 +315,50 @@ void CalibrationHandler::clickAndCrop(int event, int x, int y)
         square_points.push_back(cv::Point(x,y));
     } else if (event == cv::EVENT_LBUTTONUP) {
         square_points.push_back(cv::Point(x,y));
-        rectangle(mirror,square_points[0],square_points[1],cv::Scalar(0,0,0),2);
+        rectangle(imgCopy,square_points[0],square_points[1],cv::Scalar(0,0,0),2);
     }
 }
 
 
-void CalibrationHandler::find_minmax_xy(const std::vector<cv::Point> &square, uint16_t &smallest_x,
-                                        uint16_t &biggest_x, uint16_t &smallest_y, uint16_t &biggest_y)
+void CalibrationHandler::findMinMaxXY(const std::vector<cv::Point> &square, uint16_t &smallestX,
+                                        uint16_t &biggestX, uint16_t &smallestY, uint16_t &biggestY)
 {
     if (square[0].x < square[1].x) {
-        smallest_x = square[0].x;
-        biggest_x = square[1].x;
+        smallestX = square[0].x;
+        biggestX = square[1].x;
     } else {
-        smallest_x = square[1].x;
-        biggest_x = square[0].x;
+        smallestX = square[1].x;
+        biggestX = square[0].x;
     }
 
     if (square[0].y < square[1].y) {
-        smallest_y = square[0].y;
-        biggest_y = square[1].y;
+        smallestY = square[0].y;
+        biggestY = square[1].y;
     } else {
-        smallest_y = square[1].y;
-        biggest_y = square[0].y;
+        smallestY = square[1].y;
+        biggestY = square[0].y;
     }
 }
 
-double CalibrationHandler::get_trust(const double &v,const double &factor)
+double CalibrationHandler::getProbability(const double &err2,const double &factor)
 {
-    return (1/(1+factor*v));
+    return (1/(1+factor*err2));
 }
 
 double CalibrationHandler::getPrediction(const uint16_t &row, const uint16_t &col)
 {
     if (hsvPtr != 0) {
 
-        int16_t v_h = hsvValuesBright(0) - hsvPtr[row*mirror.cols*hsvChannels + col*hsvChannels];
-        int16_t v_s = hsvValuesBright(1) - hsvPtr[row*mirror.cols*hsvChannels + col*hsvChannels + 1];
-        int16_t v_v = hsvValuesBright(2) - hsvPtr[row*mirror.cols*hsvChannels + col*hsvChannels + 2];
-        double trustBright = get_trust(pow(v_h,2)*factorsBright_(0) + pow(v_s,2)*factorsBright_(1)
+        int16_t v_h = hsvValuesBright(0) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels];
+        int16_t v_s = hsvValuesBright(1) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels + 1];
+        int16_t v_v = hsvValuesBright(2) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels + 2];
+        double trustBright = getProbability(pow(v_h,2)*factorsBright_(0) + pow(v_s,2)*factorsBright_(1)
                                        + pow(v_v,2)*factorsBright_(2),1);
 
-        v_h = hsvValuesDark(0) - hsvPtr[row*mirror.cols*hsvChannels + col*hsvChannels];
-        v_s = hsvValuesDark(1) - hsvPtr[row*mirror.cols*hsvChannels + col*hsvChannels + 1];
-        v_v = hsvValuesDark(2) - hsvPtr[row*mirror.cols*hsvChannels + col*hsvChannels + 2];
-        double trustDark = get_trust(pow(v_h,2)*factorsDark_(0) + pow(v_s,2)*factorsDark_(1)
+        v_h = hsvValuesDark(0) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels];
+        v_s = hsvValuesDark(1) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels + 1];
+        v_v = hsvValuesDark(2) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels + 2];
+        double trustDark = getProbability(pow(v_h,2)*factorsDark_(0) + pow(v_s,2)*factorsDark_(1)
                                      + pow(v_v,2)*factorsDark_(2),1);
 
         if (trustBright > trustDark)
@@ -459,14 +459,14 @@ bool CalibrationHandler::visualizeResult()
 {
     uint64_t falsePositives = 0;
 
-    for (uint16_t col = 0; col < mirror.cols; col += negDist) {
+    for (uint16_t col = 0; col < imgCopy.cols; col += negDist) {
         // Above
         for (uint16_t row = 0; row < square_points[0].y; row += negDist) {
             addNegativePoint(row, col, falsePositives);
         }
 
         // Below
-        for (int row = square_points[1].y; row < mirror.rows; row += negDist) {
+        for (int row = square_points[1].y; row < imgCopy.rows; row += negDist) {
             addNegativePoint(row, col, falsePositives);
         }
     }
@@ -478,7 +478,7 @@ bool CalibrationHandler::visualizeResult()
         }
 
         // Right
-        for (int col = square_points[1].x; col < mirror.cols; col += negDist) {
+        for (int col = square_points[1].x; col < imgCopy.cols; col += negDist) {
             addNegativePoint(row, col, falsePositives);
         }
     }
@@ -491,15 +491,15 @@ bool CalibrationHandler::visualizeResult()
             prediction = getPrediction(row,col);
 
             if (prediction < 0.5)
-                line(mirror,cv::Point(col,row),cv::Point(col,row),badColor);
+                line(imgCopy,cv::Point(col,row),cv::Point(col,row),badColor);
             else {
-                line(mirror,cv::Point(col,row),cv::Point(col,row),goodColor);
+                line(imgCopy,cv::Point(col,row),cv::Point(col,row),goodColor);
             }
         }
     }
 
     std::cout << "False positives in image = " << falsePositives << std::endl;
-    cv::imshow(title_,mirror);
+    cv::imshow(title_,imgCopy);
     int key = cv::waitKey(0);
 
     if (key == 115) // s
@@ -521,7 +521,7 @@ uint64_t CalibrationHandler::getError(const Eigen::Vector3i &hsv,const Eigen::Ve
         v_h = hsv(0) - hsvValues(i,0);
         v_s = hsv(1) - hsvValues(i,1);
         v_v = hsv(2) - hsvValues(i,2);
-        prediction = get_trust(pow(v_h,2)*factors(0) + pow(v_s,2)*factors(1) + pow(v_v,2)*factors(2),1);
+        prediction = getProbability(pow(v_h,2)*factors(0) + pow(v_s,2)*factors(1) + pow(v_v,2)*factors(2),1);
 
         if (prediction >= 0.5)
             ++falsePositives;
@@ -541,7 +541,7 @@ void CalibrationHandler::fillAllBadMatrices(const uint16_t &hsvCols, const uint1
     hsvValuesDark(counter,1) = hsvPtr[row*hsvCols*hsvChannels+col*hsvChannels+1];
     hsvValuesDark(counter,2) = hsvPtr[row*hsvCols*hsvChannels+col*hsvChannels+2];
 
-    cv::line(mirror,cv::Point(col,row),cv::Point(col,row),badColor);
+    cv::line(imgCopy,cv::Point(col,row),cv::Point(col,row),badColor);
     ++counter;
 
 }
@@ -551,9 +551,9 @@ void CalibrationHandler::addNegativePoint(const uint16_t &row, const uint16_t &c
     double prediction = getPrediction(row,col);
 
     if (prediction < 0.5)
-        line(mirror,cv::Point(col,row),cv::Point(col,row),badColor);
+        line(imgCopy,cv::Point(col,row),cv::Point(col,row),badColor);
     else {
-        line(mirror,cv::Point(col,row),cv::Point(col,row),goodColor);
+        line(imgCopy,cv::Point(col,row),cv::Point(col,row),goodColor);
         ++falsePositive;
     }
 }
