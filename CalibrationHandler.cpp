@@ -1,6 +1,6 @@
 /**
-* CalibrationHandler.cpp 
-* 
+* CalibrationHandler.cpp
+*
 * Take picture after a short time,
 * drag and drop over it and calibrate.
 */
@@ -244,7 +244,7 @@ void CalibrationHandler::calibrate(cv::Mat img,
     /**********************************************************
      * Find median values to have a refenrence color.
      * *******************************************************/
-    getMedianValues(goodValuesStart,counter);
+    getMedianValues(offsetBrightAndDark,numUpperAndLowerPart);
 
     std::cout << "Bright hsv= " << hsvBright_(0) << " "
               << hsvBright_(1) << " " << hsvBright_(2) << std::endl;
@@ -321,7 +321,7 @@ void CalibrationHandler::clickAndCrop(int event, int x, int y)
 
 
 void CalibrationHandler::findMinMaxXY(const std::vector<cv::Point> &square, uint16_t &smallestX,
-                                        uint16_t &biggestX, uint16_t &smallestY, uint16_t &biggestY)
+                                      uint16_t &biggestX, uint16_t &smallestY, uint16_t &biggestY)
 {
     if (square[0].x < square[1].x) {
         smallestX = square[0].x;
@@ -353,13 +353,13 @@ double CalibrationHandler::getPrediction(const uint16_t &row, const uint16_t &co
         int16_t v_s = hsvValuesBright(1) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels + 1];
         int16_t v_v = hsvValuesBright(2) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels + 2];
         double trustBright = getProbability(pow(v_h,2)*factorsBright_(0) + pow(v_s,2)*factorsBright_(1)
-                                       + pow(v_v,2)*factorsBright_(2),1);
+                                            + pow(v_v,2)*factorsBright_(2),1);
 
         v_h = hsvValuesDark(0) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels];
         v_s = hsvValuesDark(1) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels + 1];
         v_v = hsvValuesDark(2) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels + 2];
         double trustDark = getProbability(pow(v_h,2)*factorsDark_(0) + pow(v_s,2)*factorsDark_(1)
-                                     + pow(v_v,2)*factorsDark_(2),1);
+                                          + pow(v_v,2)*factorsDark_(2),1);
 
         if (trustBright > trustDark)
             return trustBright;
@@ -370,42 +370,48 @@ double CalibrationHandler::getPrediction(const uint16_t &row, const uint16_t &co
     }
 }
 
-void CalibrationHandler::getMedianValues(const uint64_t &startIdx,const uint64_t &endIdx)
+void CalibrationHandler::getMedianValues(const uint32_t &offset, const uint32_t &numElements)
 {
-    Eigen::VectorXi colorVec(endIdx-startIdx);
+    Eigen::VectorXi colorVec(numElements);
 
+    // Bright hue
     for (int i = 0; i < colorVec.size(); ++i) {
-        colorVec(i) = hsvValuesBright(i+startIdx,0);
+        colorVec(i) = allGoodValues[offset+i](0,0);
     }
 
     hsvBright_(0) = median(colorVec);
 
+    // Bright saturation
     for (int i = 0; i < colorVec.size(); ++i) {
-        colorVec(i) = hsvValuesBright(i+startIdx,1);
+        colorVec(i) = allGoodValues[offset+i](0,1);
     }
 
     hsvBright_(1) = median(colorVec);
 
+    // Bright value
     for (int i = 0; i < colorVec.size(); ++i) {
-        colorVec(i) = hsvValuesBright(i+startIdx,2);
+        colorVec(i) = allGoodValues[offset+i](0,2);
     }
 
     hsvBright_(2) = median(colorVec);
 
+    // Dark hue
     for (int i = 0; i < colorVec.size(); ++i) {
-        colorVec(i) = hsvValuesBright(i+startIdx,0);
+        colorVec(i) = allGoodValues[offset-i](0,0);
     }
 
     hsvDark_(0) = median(colorVec);
 
+    // Dark saturation
     for (int i = 0; i < colorVec.size(); ++i) {
-        colorVec(i) = hsvValuesBright(i+startIdx,1);
+        colorVec(i) = allGoodValues[offset-i](0,1);
     }
 
     hsvDark_(1) = median(colorVec);
 
+    // Dark value
     for (int i = 0; i < colorVec.size(); ++i) {
-        colorVec(i) = hsvValuesBright(i+startIdx,2);
+        colorVec(i) = allGoodValues[offset-i](0,2);
     }
 
     hsvDark_(2) = median(colorVec);
@@ -444,7 +450,7 @@ void CalibrationHandler::calculate(const Eigen::Vector3i &hsvBrightOrDark, Eigen
         if (dx(2) < 0) dx(2) *= -1;
 
 
-        if (getError(hsvBrightOrDark,x0,hsvValues,startGoodValues) < minError) {
+        if (getFalsePositives(hsvBrightOrDark,x0,hsvValues,startGoodValues) < minError) {
             break;
         }
 
@@ -508,7 +514,7 @@ bool CalibrationHandler::visualizeResult()
         return false;
 }
 
-uint64_t CalibrationHandler::getError(const Eigen::Vector3i &hsv,const Eigen::Vector3d &factors,
+uint64_t CalibrationHandler::getFalsePositives(const Eigen::Vector3i &hsv,const Eigen::Vector3d &factors,
                                       const Matrix8u &hsvValues,const uint64_t &startGoodValues)
 {
     uint64_t falsePositives = 0;

@@ -93,15 +93,43 @@ private:
     
     /**
      * @brief Calculation of bright and dark color values using median.
-     * @param startIdx 
-     * @param endIdx
+     * @param offset Offset of allGoodValues to only get bright or dark values.
+     * @param numElements Number of elements in bright or dark. Darkest and 
+     *                    brightest positive values are not used in any calculation.
      */
-    void getMedianValues(const uint64_t &startIdx,const uint64_t &endIdx);
+    void getMedianValues(const uint32_t &offset, const uint32_t &numElements);
+    
+    /**
+     * @brief Calculate factors to predict being searched color or not using eigens BDCSVD.
+     *        Result is returned, if number of false positives is lower than bound or 
+     *        max. iterations are reached.
+     * @param hsvBrightOrDark Hsv values of bright or dark color.
+     * @param x0 Calculated factors to create min. squared error with initialized start values.
+     * @param hsvValues Values used to calculate errors.
+     * @param results Expected results of equation A*x=l.
+     * @param description Text of bright or dark calculation.
+     * @param startGoodValues Index of begin of good values.
+     */
     void calculate(const Eigen::Vector3i &hsvBrightOrDark, Eigen::Vector3d &x0,
                    const Matrix8u &hsvValues, const Eigen::VectorXd &results,
                    const std::string &description, const uint64_t &startGoodValues);
+    
+    /**
+     * @brief Visualization of predicted result and user decision to accept new values
+     *        or decline.
+     * @return User decision, if values should be used or older values are kept.
+     */
     bool visualizeResult();
-    uint64_t getError(const Eigen::Vector3i &hsv,const Eigen::Vector3d &factors,
+    
+    /**
+     * @brief Calculate number of false positives. 
+     * @param hsv Ideal color.
+     * @param factors Factors multiplied by errors.
+     * @param hsvValues Matrix containing values for calculation.
+     * @param startGoodValues End of calculation. Only false positives are interesting.
+     * @return 
+     */
+    uint64_t getFalsePositives(const Eigen::Vector3i &hsv,const Eigen::Vector3d &factors,
                       const Matrix8u &hsvValues,const uint64_t &startGoodValues);
     void fillAllBadMatrices(const uint16_t &hsvCols, const uint16_t &row,
                             const uint16_t &col, uint64_t &counter);
@@ -109,6 +137,8 @@ private:
     void clickAndCrop(int event, int x, int y);
     static void clickAndCrop(int event, int x, int y, // Needed to use own clickAndCrop.
                                int flags, void *userdata);
+    
+    
     std::vector<cv::Point> square_points;
 
     uint8_t hsvChannels;
