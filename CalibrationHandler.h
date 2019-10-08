@@ -127,21 +127,53 @@ private:
      * @param factors Factors multiplied by errors.
      * @param hsvValues Matrix containing values for calculation.
      * @param startGoodValues End of calculation. Only false positives are interesting.
-     * @return 
+     * @return Number of false positives.
      */
     uint64_t getFalsePositives(const Eigen::Vector3i &hsv,const Eigen::Vector3d &factors,
                       const Matrix8u &hsvValues,const uint64_t &startGoodValues);
-    void fillAllBadMatrices(const uint16_t &hsvCols, const uint16_t &row,
+                      
+    /**
+     * @brief Fill bright and dark matrices with bad values.
+     * @param hsvCols Number of cols in image.
+     * @param row Number of row of pixel.
+     * @param col Number of column of pixel.
+     * @param counter Index in matrices to store pixel values.
+     */
+    void fillMatricesWithBadValues(const uint16_t &hsvCols, const uint16_t &row,
                             const uint16_t &col, uint64_t &counter);
-    void addNegativePoint(const uint16_t &row, const uint16_t &col, uint64_t &falsePositive);
+                            
+    /**
+     * @brief Add a point in image in bad color and increase false positives.
+     * @param row Row of point in image.
+     * @param col Column of point in image.
+     * @param falsePositives Number of false positives.
+     */
+    void addNegPointInImg(const uint16_t &row, const uint16_t &col, uint64_t &falsePositives);
+    
+    /**
+     * @brief Function to handle mouse callback in image.
+     * @param event Event of mouse.
+     * @param x X-coordinate in image.
+     * @param y Y-coordinate in image.
+     */
     void clickAndCrop(int event, int x, int y);
+    
+    /**
+     * @brief OpenCV can not handle a member function. This is a hack around to use member
+     *        variables in mouse callback.
+     * @param event Mouse event.
+     * @param x X-coordinate in image.
+     * @param y Y-coordinate in image.
+     * @param flags Keys used.
+     * @param userdata Additional data given in setMouseCallback.
+     */
     static void clickAndCrop(int event, int x, int y, // Needed to use own clickAndCrop.
                                int flags, void *userdata);
     
-    
-    std::vector<cv::Point> square_points;
 
-    uint8_t hsvChannels;
+    std::vector<cv::Point> square_points;     // Used for clickAndCrop
+
+    uint8_t hsvChannels; // Always 3!
 
     cv::Mat imgCopy;
     std::string title_;

@@ -171,24 +171,24 @@ void CalibrationHandler::calibrate(cv::Mat img,
     for (int col = 0; col < imgCopy.cols; col+=negDist) {
         // Above square
         for (int row = 0; row < smallest_y; row+=negDist) {
-            fillAllBadMatrices(imgCopy.cols, row, col, counter);
+            fillMatricesWithBadValues(imgCopy.cols, row, col, counter);
         }
 
         // Below square
         for (int row = biggest_y; row < imgCopy.rows; row += negDist) {
-            fillAllBadMatrices(imgCopy.cols, row, col, counter);
+            fillMatricesWithBadValues(imgCopy.cols, row, col, counter);
         }
     }
 
     // Left next to square
     for (int row = smallest_y; row < biggest_y; row += negDist) {
         for (int col = 0; col < smallest_x; col += negDist) {
-            fillAllBadMatrices(imgCopy.cols, row, col, counter);
+            fillMatricesWithBadValues(imgCopy.cols, row, col, counter);
         }
 
         // Right next to square
         for (int col = biggest_x; col < imgCopy.cols; col += negDist) {
-            fillAllBadMatrices(imgCopy.cols, row, col, counter);
+            fillMatricesWithBadValues(imgCopy.cols, row, col, counter);
         }
     }
 
@@ -468,24 +468,24 @@ bool CalibrationHandler::visualizeResult()
     for (uint16_t col = 0; col < imgCopy.cols; col += negDist) {
         // Above
         for (uint16_t row = 0; row < square_points[0].y; row += negDist) {
-            addNegativePoint(row, col, falsePositives);
+            addNegPointInImg(row, col, falsePositives);
         }
 
         // Below
         for (int row = square_points[1].y; row < imgCopy.rows; row += negDist) {
-            addNegativePoint(row, col, falsePositives);
+            addNegPointInImg(row, col, falsePositives);
         }
     }
 
     // Left
     for (int row = square_points[0].y; row < square_points[1].y; row += negDist) {
         for (int col = 0; col < square_points[0].x; col += negDist) {
-            addNegativePoint(row, col, falsePositives);
+            addNegPointInImg(row, col, falsePositives);
         }
 
         // Right
         for (int col = square_points[1].x; col < imgCopy.cols; col += negDist) {
-            addNegativePoint(row, col, falsePositives);
+            addNegPointInImg(row, col, falsePositives);
         }
     }
 
@@ -515,7 +515,7 @@ bool CalibrationHandler::visualizeResult()
 }
 
 uint64_t CalibrationHandler::getFalsePositives(const Eigen::Vector3i &hsv,const Eigen::Vector3d &factors,
-                                      const Matrix8u &hsvValues,const uint64_t &startGoodValues)
+        const Matrix8u &hsvValues,const uint64_t &startGoodValues)
 {
     uint64_t falsePositives = 0;
     double prediction;
@@ -536,7 +536,7 @@ uint64_t CalibrationHandler::getFalsePositives(const Eigen::Vector3i &hsv,const 
     return falsePositives;
 }
 
-void CalibrationHandler::fillAllBadMatrices(const uint16_t &hsvCols, const uint16_t &row,
+void CalibrationHandler::fillMatricesWithBadValues(const uint16_t &hsvCols, const uint16_t &row,
         const uint16_t &col, uint64_t &counter)
 {
     hsvValuesBright(counter,0) = hsvPtr[row*hsvCols*hsvChannels+col*hsvChannels];
@@ -552,7 +552,7 @@ void CalibrationHandler::fillAllBadMatrices(const uint16_t &hsvCols, const uint1
 
 }
 
-void CalibrationHandler::addNegativePoint(const uint16_t &row, const uint16_t &col, uint64_t &falsePositive)
+void CalibrationHandler::addNegPointInImg(const uint16_t &row, const uint16_t &col, uint64_t &falsePositives)
 {
     double prediction = getPrediction(row,col);
 
@@ -560,6 +560,6 @@ void CalibrationHandler::addNegativePoint(const uint16_t &row, const uint16_t &c
         line(imgCopy,cv::Point(col,row),cv::Point(col,row),badColor);
     else {
         line(imgCopy,cv::Point(col,row),cv::Point(col,row),goodColor);
-        ++falsePositive;
+        ++falsePositives;
     }
 }
