@@ -14,6 +14,13 @@
 #include <math.h>
 
 
+/**
+ * @class ParticleWeighting
+ * @author me
+ * @date 09/10/19
+ * @file ParticleWeighting.h
+ * @brief Decide, whether a color is in this area or not via particles.
+ */
 class ParticleWeighting
 {
 public:
@@ -80,67 +87,67 @@ public:
      * @brief Set sum of weights.
      * @param sum_weights New sum of weights.
      */
-    void setSumWeights(const uint32_t& sum_weights);
+    void setSumWeights(const uint32_t& sumWeights);
 
     /**
      * @brief Get weight of no error.
      * @return Weight of no error.
      */
-    uint16_t getMax_weight() const;
+    uint16_t getMaxWeight() const;
 
     /**
      * @brief Set maximum possible weight.
      * @param value Maximum possible weight.
      */
-    void setMax_weight(const uint16_t &value);
+    void setMaxWeight(const uint16_t &value);
 
     /**
      * @brief Get horizontal start of area.
      * @return Horizontal start of area.
      */
-    uint16_t getMin_width() const;
+    uint16_t getMinWidth() const;
 
     /**
      * @brief Set horizontal start of area.
      * @param value Horizontal start of area.
      */
-    void setMin_width(const uint16_t &value);
+    void setMinWidth(const uint16_t &value);
 
     /**
      * @brief Get vertical start of area.
      * @return Vertical start of area.
      */
-    uint16_t getMin_height() const;
+    uint16_t getMinHeight() const;
 
     /**
      * @brief Set vertical start of area.
      * @param value Vertical start of area.
      */
-    void setMin_height(const uint16_t &value);
+    void setMinHeight(const uint16_t &value);
 
     /**
      * @brief Get horizontal end of area.
      * @return Horizontal end of area.
      */
-    uint16_t getMax_width() const;
+    uint16_t getMaxWidth() const;
 
     /**
      * @brief Set horizontal end of area.
      * @param value Horizontal end of area.
      */
-    void setMax_width(const uint16_t &value);
+    void setMaxWidth(const uint16_t &value);
 
     /**
      * @brief Get vertical end of area.
      * @return Vertical end of area.
      */
-    uint16_t getMax_height() const;
+    uint16_t getMaxHeight() const;
 
     /**
      * @brief Set vertical end of area.
      * @param value Vertical end of area.
      */
-    void setMax_height(const uint16_t &value);
+    void setMaxHeight(const uint16_t &value);
 
     /**
      * @brief Get optimal hue.
@@ -182,37 +189,37 @@ public:
      * @brief Get factor multiplied by squared hue error.
      * @return Factor multiplied by squared hue error.
      */
-    double getFactor_h() const;
+    double getFactorH() const;
 
     /**
      * @brief Set factor multiplied by squared hue error.
      * @param value Factor multiplied by squared hue error.
      */
-    void setFactor_h(double value);
+    void setFactorH(double value);
 
     /**
      * @brief Get factor multiplied by squared saturation error.
      * @return Factor multiplied by squared saturation error.
      */
-    double getFactor_s() const;
+    double getFactorS() const;
 
     /**
      * @brief Set factor multiplied by squared saturation error.
      * @param value Factor multiplied by squared saturation error.
      */
-    void setFactor_s(double value);
+    void setFactorS(double value);
 
     /**
      * @brief Get factor multiplied by squared value error.
      * @return Factor multiplied by squared value error.
      */
-    double getFactor_v() const;
+    double getFactorV() const;
 
     /**
      * @brief Set factor multiplied by squared value error.
      * @param value Factor multiplied by squared value error.
      */
-    void setFactor_v(double value);
+    void setFactorV(double value);
 
     /**
      * @brief Get vector of optimal hsv values.
@@ -239,23 +246,25 @@ public:
      * @return Returns true, if input vector has a length of 3.
      */
     bool setFactors(std::vector<double> &factors);
-    std::vector<uint16_t> particles_x;
-    std::vector<uint16_t> particles_y;
-    std::vector<uint16_t> particles_w;
-    uint32_t bound;
-    uint32_t sum_weights;
-    uint16_t max_weight;
-    uint16_t min_width;
-    uint16_t min_height;
-    uint16_t max_width;
-    uint16_t max_height;
+    
+private:
+    std::vector<uint16_t> particlesX;
+    std::vector<uint16_t> particlesY;
+    std::vector<uint16_t> particlesW;
+    uint32_t bound_;
+    uint32_t sumWeights;
+    uint16_t maxWeight_;
+    uint16_t minWidth_;
+    uint16_t minHeight_;
+    uint16_t maxWidth_;
+    uint16_t maxHeight_;
+    uint16_t cols_;
     uint16_t hue;
     uint16_t sat;
     uint16_t val;
-    double factor_h;
-    double factor_s;
-    double factor_v;
-    uint16_t cols;
+    double factorH;
+    double factorS;
+    double factorV;
     uint8_t hsvChannels;
 };
 

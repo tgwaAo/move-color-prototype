@@ -2,13 +2,13 @@
 
 CircleHandler::CircleHandler()
 {
-    CircleHandler(10, 10, std::vector<float>(3,3), 0, 1, 640, 480);
+    CircleHandler(10, 10, std::vector<float>(3,3), 0, 640, 480);
 }
 
 CircleHandler::CircleHandler(const uint8_t &numCircles, const uint8_t &radius_,
                              const std::vector<float> &circleTimeStates_,
                              const uint8_t &colorIdx_,
-                             uint8_t status, const uint16_t width,
+                             const uint16_t width,
                              const uint16_t height)
 {
     std::random_device rd;
@@ -16,7 +16,7 @@ CircleHandler::CircleHandler(const uint8_t &numCircles, const uint8_t &radius_,
     randomLeftRight = std::uniform_int_distribution<uint16_t>(radius_, width - radius_);
     randomUpDown = std::uniform_int_distribution<uint16_t>(radius_, height - radius_);
 
-    allCircles.resize(numCircles,Circle {cv::Point(0,0),clock(),status});
+    allCircles.resize(numCircles,Circle {cv::Point(0,0),clock(),0});
 
     std::uniform_int_distribution<uint8_t> randomState(0,2);
     

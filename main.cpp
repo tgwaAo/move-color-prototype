@@ -110,16 +110,16 @@ int main()
 
     for (int i = 0; i < HEIGHT/MAX_DISTANCE; ++i) {
         for (int j = 0; j < WIDTH/MAX_DISTANCE; ++j) {
-            weightingMatrixBright[i][j].setMin_height(i*MAX_DISTANCE);
-            weightingMatrixBright[i][j].setMax_height((i+1)*MAX_DISTANCE);
-            weightingMatrixBright[i][j].setMin_width(j*MAX_DISTANCE);
-            weightingMatrixBright[i][j].setMax_width((j+1)*MAX_DISTANCE);
+            weightingMatrixBright[i][j].setMinHeight(i*MAX_DISTANCE);
+            weightingMatrixBright[i][j].setMaxHeight((i+1)*MAX_DISTANCE);
+            weightingMatrixBright[i][j].setMinWidth(j*MAX_DISTANCE);
+            weightingMatrixBright[i][j].setMaxWidth((j+1)*MAX_DISTANCE);
             weightingMatrixBright[i][j].update();
 
-            weightingMatrixDark[i][j].setMin_height(i*MAX_DISTANCE);
-            weightingMatrixDark[i][j].setMax_height((i+1)*MAX_DISTANCE);
-            weightingMatrixDark[i][j].setMin_width(j*MAX_DISTANCE);
-            weightingMatrixDark[i][j].setMax_width((j+1)*MAX_DISTANCE);
+            weightingMatrixDark[i][j].setMinHeight(i*MAX_DISTANCE);
+            weightingMatrixDark[i][j].setMaxHeight((i+1)*MAX_DISTANCE);
+            weightingMatrixDark[i][j].setMinWidth(j*MAX_DISTANCE);
+            weightingMatrixDark[i][j].setMaxWidth((j+1)*MAX_DISTANCE);
             weightingMatrixDark[i][j].update();
         }
     }
@@ -150,12 +150,12 @@ int main()
     const uint8_t minTimePassed = 60;
     float leftSeconds;
     std::vector<float> stateTimes(3,5);
-    CircleHandler posHandler(5, targetRadius, stateTimes, 1, 1, WIDTH, HEIGHT);
+    CircleHandler posHandler(5, targetRadius, stateTimes, 1, WIDTH, HEIGHT);
 
     for (uint8_t i = 0; i < stateTimes.size(); ++i)
         stateTimes[i] = 10;
 
-    CircleHandler negHandler(15, targetRadius, stateTimes, 2, 2, WIDTH, HEIGHT);
+    CircleHandler negHandler(15, targetRadius, stateTimes, 2, WIDTH, HEIGHT);
 
     clock_t timeStart = clock();
 
