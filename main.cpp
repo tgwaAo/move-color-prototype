@@ -28,14 +28,21 @@ const double HEIGHT = 480;
 const uint8_t MAX_WEIGHT = 30;
 const uint8_t MAX_DISTANCE = 10;
 
-
-bool check_hit(int is_x, int is_y, Point goal, uint8_t goal_radius);
+/**
+ * @brief Take a photo after 5 seconds.
+ * @param cap Camera to shot photo.
+ * @param image Image to save picture.
+ * @param title Title shown on conting down.
+ */
 void photoWithTimer(cv::VideoCapture &cap, cv::Mat &image, const std::string &title);
 
 
 int main()
 {
-    VideoCapture cap(1);
+    /*******************************************************************
+     * Set camera up and initialize variables.
+     * ****************************************************************/
+    VideoCapture cap(0);
 
     if (!cap.isOpened()) {
         return -1;
@@ -58,6 +65,9 @@ int main()
     CalibrationHandler calibrator(TITLE);
     cv::Mat image;
 
+    /*********************************************************************
+     * Load configuration or calibrate a new.
+     * ******************************************************************/
     if(exists) {
         ifstream settings_file;
         settings_file.open(settings_filename);
@@ -100,6 +110,9 @@ int main()
         std::cout << "Saved" << std::endl;
     }
 
+    /************************************************************
+     * Setup matrices to find colors.
+     * *********************************************************/
     uint16_t mat_size = HEIGHT/MAX_DISTANCE;
     vector<vector<ParticleWeighting> > weightingMatrixBright(mat_size,
             vector<ParticleWeighting>(WIDTH/MAX_DISTANCE,ParticleWeighting(NUM_PARTICLES,0,10,0,10,
@@ -124,12 +137,14 @@ int main()
         }
     }
 
+    /******************************************************************
+     * Define circle data.
+     * ***************************************************************/
     int key;
     Point target(300,200);
     uint8_t targetRadius = 30;
     bool goodAreaBright;
     bool goodAreaDark;
-    bool run = true;
     Mat hsv;
     Mat frame;
     uint8_t* pixelPtr_hsv;
@@ -149,7 +164,7 @@ int main()
      * *****************************************************/
     const uint8_t minTimePassed = 60;
     float leftSeconds;
-    std::vector<float> stateTimes(3,5);
+    std::vector<float> stateTimes(3,3);
     CircleHandler posHandler(5, targetRadius, stateTimes, 1, WIDTH, HEIGHT);
 
     for (uint8_t i = 0; i < stateTimes.size(); ++i)
@@ -162,7 +177,7 @@ int main()
     /*******************************************************
      * Let the game start.
      * ****************************************************/
-    while (run) {
+    while (true) {
         cap >> frame;
         cv::flip(frame,mirror,1);
         cvtColor(mirror,hsv,COLOR_BGR2HSV);
@@ -214,8 +229,10 @@ int main()
             break;
     }
 
+    // Show result.
     cv::putText(mirror, "Finished",cv::Point(20,mirror.rows/2),cv::FONT_HERSHEY_SIMPLEX,1.2,cv::Scalar(255,255,0));
     cv::imshow(TITLE,mirror);
+    
     while (true) {
         if (cv::getWindowProperty(TITLE,cv::WND_PROP_VISIBLE)) {
             if (cv::waitKey(100) != -1)
@@ -229,6 +246,7 @@ int main()
     return 0;
 }
 
+// Take photo after 5 seconds.
 void photoWithTimer(cv::VideoCapture &cap, cv::Mat &image, const std::string &title)
 {
     /***********************************************************
