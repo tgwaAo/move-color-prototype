@@ -165,12 +165,14 @@ int main()
     const uint8_t minTimePassed = 60;
     float leftSeconds;
     std::vector<float> stateTimes(3,3);
-    CircleHandler posHandler(5, targetRadius, stateTimes, 1, WIDTH, HEIGHT);
+    CircleHandler posHandler(7, targetRadius, stateTimes, 1, WIDTH, HEIGHT);
 
     for (uint8_t i = 0; i < stateTimes.size(); ++i)
         stateTimes[i] = 10;
 
-    CircleHandler negHandler(15, targetRadius, stateTimes, 2, WIDTH, HEIGHT);
+    targetRadius = 20;
+    
+    CircleHandler negHandler(10, targetRadius, stateTimes, 2, WIDTH, HEIGHT);
 
     clock_t timeStart = clock();
 
