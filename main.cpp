@@ -222,6 +222,9 @@ int main()
                         weightingMatrixDark[i][j].setFactors(factorsDark);
                     }
                 }
+                
+                timeStart = clock(); // New start of game timer.
+                hits = 0; // Reset points gained in game.
             }
         }
 
