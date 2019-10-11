@@ -53,15 +53,14 @@ int main()
     std::vector<double> factorsDark(3,1000000);
 
     struct stat buffer;
-    const std::string settings_filename = "hsv.txt";
-    bool exists = stat (settings_filename.c_str(), &buffer) == 0;
+    const std::string SETTINGS_FILENAME = "hsv.txt";
 
     /*********************************************************************
      * Load configuration or calibrate a new.
      * ******************************************************************/
-    if(exists) {
+    if(stat (SETTINGS_FILENAME.c_str(), &buffer) == 0) {
         std::ifstream settings_file;
-        settings_file.open(settings_filename);
+        settings_file.open(SETTINGS_FILENAME);
 
         settings_file >> hsvBright[0];
         settings_file >> hsvBright[1];
@@ -84,7 +83,7 @@ int main()
         calibrator.calibrate(image, hsvBright, factorsBright, hsvDark, factorsDark);
 
         std::ofstream save_file;
-        save_file.open(settings_filename);
+        save_file.open(SETTINGS_FILENAME);
 
         save_file << unsigned(hsvBright[0]) << std::endl;
         save_file << unsigned(hsvBright[1]) << std::endl;
@@ -234,8 +233,47 @@ int main()
             break;
     }
 
-    // Show result.
-    cv::putText(mirror, "Finished",cv::Point(20,mirror.rows/2),cv::FONT_HERSHEY_SIMPLEX,1.2,cv::Scalar(255,255,0));
+    /******************************************************
+     * Get actual highscore and show it.
+     * ***************************************************/
+    cv::putText(mirror, "Finished",cv::Point(20,mirror.rows/2),cv::FONT_HERSHEY_SIMPLEX,
+                1.2,cv::Scalar(255,255,0));
+
+    const std::string HIGHTSCORE_FILENAME = "highscore.txt";
+    uint8_t highscore;
+    bool alreadyExits = stat (HIGHTSCORE_FILENAME.c_str(), &buffer) == 0;
+
+    if (alreadyExits) {
+        std::ifstream readHighscoreFile;
+        readHighscoreFile.open(HIGHTSCORE_FILENAME);
+
+        readHighscoreFile >> highscore;
+
+        readHighscoreFile.close();
+
+        if (highscore < hits) {
+            highscore = hits;
+
+            std::ofstream writeHighscoreFile;
+            writeHighscoreFile.open(HIGHTSCORE_FILENAME);
+
+            writeHighscoreFile << hits;
+
+            writeHighscoreFile.close();
+        }
+    } else {
+        highscore = hits;
+
+        std::ofstream writeHighscoreFile;
+        writeHighscoreFile.open(HIGHTSCORE_FILENAME);
+
+        writeHighscoreFile << hits;
+
+        writeHighscoreFile.close();
+    }
+
+    cv::putText(mirror, "Highscore = " + std::to_string(highscore),cv::Point(20,30+mirror.rows/2),
+                cv::FONT_HERSHEY_SIMPLEX,1.2,cv::Scalar(255,255,0));
     cv::imshow(TITLE,mirror);
 
     while (true) {
