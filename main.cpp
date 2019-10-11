@@ -42,7 +42,7 @@ int main()
     /*******************************************************************
      * Set camera up and initialize variables.
      * ****************************************************************/
-    VideoCapture cap(0);
+    VideoCapture cap(1);
 
     if (!cap.isOpened()) {
         return -1;
@@ -62,8 +62,6 @@ int main()
 
     struct stat buffer;
     bool exists = stat (settings_filename.c_str(), &buffer) == 0;
-    CalibrationHandler calibrator(TITLE);
-    cv::Mat image;
 
     /*********************************************************************
      * Load configuration or calibrate a new.
@@ -87,7 +85,9 @@ int main()
 
         settings_file.close();
     } else {
+        cv::Mat image;
         photoWithTimer(cap, image, TITLE);
+        CalibrationHandler calibrator(TITLE);
         calibrator.calibrate(image, hsvBright, factorsBright, hsvDark, factorsDark);
 
         std::ofstream save_file;
@@ -140,30 +140,13 @@ int main()
     /******************************************************************
      * Define circle data.
      * ***************************************************************/
-    int key;
-    Point target(300,200);
     uint8_t targetRadius = 30;
-    bool goodAreaBright;
-    bool goodAreaDark;
-    Mat hsv;
-    Mat frame;
-    uint8_t* pixelPtr_hsv;
-    Scalar color;
-    Scalar BAD_COLOR(0,0,255);
-    Scalar GOOD_COLOR(255,0,0);
-    uint8_t hits = 0;
-    uint8_t corner2Center = MAX_DISTANCE/2;
-    std::random_device rd;
-    std::mt19937 eng(rd());
     std::uniform_int_distribution<uint16_t> randomUpDown(targetRadius,HEIGHT-targetRadius);
     std::uniform_int_distribution<uint16_t> randomLeftRight(targetRadius,WIDTH-targetRadius);
-    cv::Mat mirror;
 
     /********************************************************
      * Circle and timer stuff. (Circles have timers)
      * *****************************************************/
-    const uint8_t minTimePassed = 60;
-    float leftSeconds;
     std::vector<float> stateTimes(3,3);
     CircleHandler posHandler(7, targetRadius, stateTimes, 1, WIDTH, HEIGHT);
 
@@ -171,14 +154,33 @@ int main()
         stateTimes[i] = 10;
 
     targetRadius = 20;
-    
+
     CircleHandler negHandler(10, targetRadius, stateTimes, 2, WIDTH, HEIGHT);
 
-    clock_t timeStart = clock();
 
     /*******************************************************
      * Let the game start.
      * ****************************************************/
+    Mat frame;
+    cv::Mat mirror;
+    Mat hsv;
+    uint8_t* pixelPtr_hsv;
+    Scalar color;
+    Scalar BAD_COLOR(0,0,255);
+    Scalar GOOD_COLOR(255,0,0);
+    uint8_t corner2Center = MAX_DISTANCE/2;
+    std::random_device rd;
+    std::mt19937 eng(rd());
+
+    int key;
+    bool goodAreaBright;
+    bool goodAreaDark;
+
+    float leftSeconds;
+    const uint8_t gameTime = 60;
+    uint8_t hits = 0;
+    clock_t timeStart = clock();
+
     while (true) {
         cap >> frame;
         cv::flip(frame,mirror,1);
@@ -211,7 +213,9 @@ int main()
             if (key == 27) // esc
                 break;
             else if (key == 99) { // 'c'
+                cv::Mat image;
                 photoWithTimer(cap, image, TITLE);
+                CalibrationHandler calibrator(TITLE);
                 calibrator.calibrate(image,hsvBright,factorsBright,hsvDark,factorsDark);
 
                 for (int i = 0; i < HEIGHT/MAX_DISTANCE; ++i) {
@@ -222,13 +226,13 @@ int main()
                         weightingMatrixDark[i][j].setFactors(factorsDark);
                     }
                 }
-                
+
                 timeStart = clock(); // New start of game timer.
                 hits = 0; // Reset points gained in game.
             }
         }
 
-        leftSeconds = minTimePassed - (float)(clock() - timeStart)/CLOCKS_PER_SEC;
+        leftSeconds = gameTime - (float)(clock() - timeStart)/CLOCKS_PER_SEC;
 
         if (leftSeconds <= 0)
             break;
@@ -237,7 +241,7 @@ int main()
     // Show result.
     cv::putText(mirror, "Finished",cv::Point(20,mirror.rows/2),cv::FONT_HERSHEY_SIMPLEX,1.2,cv::Scalar(255,255,0));
     cv::imshow(TITLE,mirror);
-    
+
     while (true) {
         if (cv::getWindowProperty(TITLE,cv::WND_PROP_VISIBLE)) {
             if (cv::waitKey(100) != -1)
