@@ -79,13 +79,13 @@ private:
      */
     void newPos(uint8_t idx);
 
-    uint8_t radius;
-    uint8_t colorIdx;
-    std::mt19937 eng;
-    std::uniform_int_distribution<uint16_t> randomUpDown;
-    std::uniform_int_distribution<uint16_t> randomLeftRight;
+    uint8_t radius_;
+    uint8_t colorIdx_;
+    std::vector<float> circleTimeStates_;
     std::vector<Circle> allCircles;
-    std::vector<float> circleTimeStates;
+    std::mt19937 eng;
+    std::uniform_int_distribution<uint16_t> randomUpDownIdx;
+    std::uniform_int_distribution<uint16_t> randomLeftRightIdx;
 };
 
 #endif // CIRCLEHANDLER_H
