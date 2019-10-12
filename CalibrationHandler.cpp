@@ -228,9 +228,14 @@ void CalibrationHandler::calibrate(cv::Mat img,
     std::sort(allGoodValues.begin(), allGoodValues.end(),[](const Matrix8u& lhs, const Matrix8u& rhs) {
         return lhs(0,2) < rhs(0,2);
     });
+
+    // debugging
+    for (int i = 0; i < allGoodValues.size(); ++i) {
+        std::cout << unsigned(allGoodValues[i](0,0)) << unsigned(allGoodValues[i](0,1)) << unsigned(allGoodValues[i](0,2)) << std::endl;
+    }
+
     counter = goodValuesStart;
     results = Eigen::VectorXd(numAllBrightAndDark);
-
 
     for (uint32_t row = 0; row < numUpperAndLowerPart; ++row) {
         for (uint16_t m = 0; m < mult; ++m) {
@@ -244,6 +249,7 @@ void CalibrationHandler::calibrate(cv::Mat img,
     /**********************************************************
      * Find median values to have a refenrence color.
      * *******************************************************/
+    // Get median before multiplication would be better!
     getMedianValues(offsetBrightAndDark,numUpperAndLowerPart);
 
     std::cout << "Bright hsv= " << hsvBright_(0) << " "
@@ -260,13 +266,13 @@ void CalibrationHandler::calibrate(cv::Mat img,
     calculate(hsvBright_,factorsBright_, hsvValuesBright,
               results, "bright", goodValuesStart);
     std::cout << "Factors for bright = " << std::endl << factorsBright_(0)
-              << factorsBright_(1) << factorsBright_(2) << std::endl;
+              << " " << factorsBright_(1) << " " << factorsBright_(2) << std::endl;
 
     factorsDark_ = {startValueFactors,startValueFactors,startValueFactors};
     calculate(hsvDark_,factorsDark_,hsvValuesDark,
               results, "dark", goodValuesStart);
     std::cout << "Factors for dark = " << std::endl << factorsDark_(0)
-              << factorsDark_(1) << factorsDark_(2) << std::endl;
+              << " " << factorsDark_(1) << " " << factorsDark_(2) << std::endl;
 
     /***************************************************************
      * Visualisation of bright color search and optional save.
@@ -349,15 +355,20 @@ double CalibrationHandler::getPrediction(const uint16_t &row, const uint16_t &co
 {
     if (hsvPtr != 0) {
 
-        int16_t v_h = hsvValuesBright(0) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels];
-        int16_t v_s = hsvValuesBright(1) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels + 1];
-        int16_t v_v = hsvValuesBright(2) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels + 2];
+        int16_t v_h = hsvBright_(0) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels];
+        int16_t v_s = hsvBright_(1) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels + 1];
+        int16_t v_v = hsvBright_(2) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels + 2];
+        double test = pow(v_h,2)*factorsBright_(0) + pow(v_s,2)*factorsBright_(1)
+                      + pow(v_v,2)*factorsBright_(2);
         double trustBright = getProbability(pow(v_h,2)*factorsBright_(0) + pow(v_s,2)*factorsBright_(1)
                                             + pow(v_v,2)*factorsBright_(2),1);
 
-        v_h = hsvValuesDark(0) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels];
-        v_s = hsvValuesDark(1) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels + 1];
-        v_v = hsvValuesDark(2) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels + 2];
+        v_h = hsvDark_(0) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels];
+        v_s = hsvDark_(1) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels + 1];
+        v_v = hsvDark_(2) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels + 2];
+
+        double test1 = pow(v_h,2)*factorsDark_(0) + pow(v_s,2)*factorsDark_(1)
+                       + pow(v_v,2)*factorsDark_(2);
         double trustDark = getProbability(pow(v_h,2)*factorsDark_(0) + pow(v_s,2)*factorsDark_(1)
                                           + pow(v_v,2)*factorsDark_(2),1);
 
@@ -489,7 +500,7 @@ bool CalibrationHandler::visualizeResult()
         }
     }
 
-    // Good Values
+    // Good and more values
     double prediction;
 
     for (int col = square_points[0].x; col < square_points[1].x; col += posDist) {
