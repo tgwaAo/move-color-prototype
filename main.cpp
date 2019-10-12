@@ -25,6 +25,19 @@
  */
 void photoWithTimer(cv::VideoCapture &cap, cv::Mat &image, const std::string &title);
 
+/**
+ * @brief Save calibration in a txt file.
+ * @param filename Name of the calibration file.
+ * @param hsvBright Vector of bright optimal values.
+ * @param factorsBright Vector of bright factors.
+ * @param hsvDark Vector of dark optimal values.
+ * @param factorsDark Vector of dark factors.
+ */
+void saveCalibration(const std::string &filename,
+                     const std::vector<uint16_t> &hsvBright,
+                     const std::vector<double> &factorsBright,
+                     const std::vector<uint16_t> &hsvDark,
+                     const std::vector<double> &factorsDark);
 
 int main()
 {
@@ -81,25 +94,7 @@ int main()
         photoWithTimer(cap, image, TITLE);
         CalibrationHandler calibrator(TITLE);
         calibrator.calibrate(image, hsvBright, factorsBright, hsvDark, factorsDark);
-
-        std::ofstream save_file;
-        save_file.open(SETTINGS_FILENAME);
-
-        save_file << unsigned(hsvBright[0]) << std::endl;
-        save_file << unsigned(hsvBright[1]) << std::endl;
-        save_file << unsigned(hsvBright[2]) << std::endl;
-        save_file << factorsBright[0] << std::endl;
-        save_file << factorsBright[1]<< std::endl;
-        save_file << factorsBright[2] << std::endl;
-        save_file << unsigned(hsvDark[0]) << std::endl;
-        save_file << unsigned(hsvDark[1]) << std::endl;
-        save_file << unsigned(hsvDark[2]) << std::endl;
-        save_file << factorsDark[0] << std::endl;
-        save_file << factorsDark[1]<< std::endl;
-        save_file << factorsDark[2] << std::endl;
-
-        save_file.close();
-        std::cout << "Saved" << std::endl;
+        saveCalibration(SETTINGS_FILENAME, hsvBright,factorsBright,hsvDark,factorsDark);
     }
 
     /************************************************************
@@ -172,7 +167,7 @@ int main()
 
     float leftSeconds;
     const uint8_t gameTime = 60;
-    uint8_t hits = 0;
+    int16_t hits = 0;
     clock_t timeStart = clock();
 
     while (true) {
@@ -212,6 +207,7 @@ int main()
                 photoWithTimer(cap, image, TITLE);
                 CalibrationHandler calibrator(TITLE);
                 calibrator.calibrate(image,hsvBright,factorsBright,hsvDark,factorsDark);
+                saveCalibration(SETTINGS_FILENAME, hsvBright,factorsBright,hsvDark,factorsDark);
 
                 for (int i = 0; i < HEIGHT/MAX_DISTANCE; ++i) {
                     for (int j = 0; j < WIDTH/MAX_DISTANCE; ++j) {
@@ -240,7 +236,7 @@ int main()
                 1.2,cv::Scalar(255,255,0));
 
     const std::string HIGHTSCORE_FILENAME = "highscore.txt";
-    uint8_t highscore;
+    int16_t highscore;
     bool alreadyExits = stat (HIGHTSCORE_FILENAME.c_str(), &buffer) == 0;
 
     if (alreadyExits) {
@@ -312,4 +308,30 @@ void photoWithTimer(cv::VideoCapture &cap, cv::Mat &image, const std::string &ti
 
     cap >> frame;
     cv::flip(frame,image,1);
+}
+
+void saveCalibration(const std::string &filename,
+                     const std::vector<uint16_t> &hsvBright,
+                     const std::vector<double> &factorsBright,
+                     const std::vector<uint16_t> &hsvDark,
+                     const std::vector<double> &factorsDark)
+{
+    std::ofstream save_file;
+    save_file.open(filename);
+
+    save_file << unsigned(hsvBright[0]) << std::endl;
+    save_file << unsigned(hsvBright[1]) << std::endl;
+    save_file << unsigned(hsvBright[2]) << std::endl;
+    save_file << factorsBright[0] << std::endl;
+    save_file << factorsBright[1]<< std::endl;
+    save_file << factorsBright[2] << std::endl;
+    save_file << unsigned(hsvDark[0]) << std::endl;
+    save_file << unsigned(hsvDark[1]) << std::endl;
+    save_file << unsigned(hsvDark[2]) << std::endl;
+    save_file << factorsDark[0] << std::endl;
+    save_file << factorsDark[1]<< std::endl;
+    save_file << factorsDark[2] << std::endl;
+
+    save_file.close();
+    std::cout << "Saved" << std::endl;
 }
