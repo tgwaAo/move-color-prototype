@@ -123,7 +123,7 @@ int main()
         stateTimes[i] = 10;
 
     targetRadius = 20;
-    CircleHandler negHandler(10, targetRadius, stateTimes, 2, WIDTH, HEIGHT);
+    CircleHandler negHandler(14, targetRadius, stateTimes, 2, WIDTH, HEIGHT);
 
 
     /*******************************************************
