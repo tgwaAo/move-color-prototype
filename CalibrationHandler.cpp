@@ -14,10 +14,8 @@ CalibrationHandler::CalibrationHandler(std::string title, uint16_t distanceText2
       font_(font),textScale_(textScale), textColor_(textColor),
       textThickness_(textThickness)
 {
-    hsvBright_ = {0,0,0};
-    hsvDark_ = {0,0,0};
-    factorsBright_ = {1000000,1000000,1000000};
-    factorsDark_ = {1000000,1000000,1000000};
+    hsvColor_ = {0,0,0};
+    factorsColor_ = {1000000,1000000,1000000};
 
     hsvPtr = 0;
 
@@ -27,7 +25,7 @@ CalibrationHandler::CalibrationHandler(std::string title, uint16_t distanceText2
     badColor = cv::Scalar(0,0,255);
     goodColor = cv::Scalar(0,255,0);
 
-    startValueFactors = 0.0005;
+    startValueFactors = 0.0003;
     minError = 50;
     maxIteration = 100;
 
@@ -40,8 +38,8 @@ CalibrationHandler::~CalibrationHandler()
 }
 
 void CalibrationHandler::calibrate(cv::Mat img,
-                                   std::vector<uint16_t> &hsvBright, std::vector<double> &factorsBright,
-                                   std::vector<uint16_t> &hsvDark, std::vector<double> &factorsDark)
+                                   std::vector<uint16_t> &hsvColor,
+                                   std::vector<double> &factorsColor)
 {
     /***************************************************************
      * Let user select positives.
@@ -118,28 +116,24 @@ void CalibrationHandler::calibrate(cv::Mat img,
     uint16_t smallest_x, biggest_x, smallest_y, biggest_y;
 
     findMinMaxXY(square_points, smallest_x, biggest_x, smallest_y, biggest_y);
-    square_points[0].x = smallest_x;
-    square_points[1].x = biggest_x;
-    square_points[0].y = smallest_y;
-    square_points[1].y = biggest_y;
 
     // Above square
     uint16_t num_x = ceil(imgCopy.cols/negDist);
     uint16_t num_y = ceil(smallest_y/(float)negDist);
-    uint64_t numAllBrightAndDark = num_x*num_y;
+    uint64_t numAll = num_x*num_y;
 
     // Below square
     num_y = ceil( (imgCopy.rows-biggest_y)/(float)negDist );
-    numAllBrightAndDark += num_x*num_y;
+    numAll += num_x*num_y;
 
     // Left next to square
     num_x = ceil(smallest_x/(float)negDist);
     num_y = ceil( (biggest_y-smallest_y)/(float)negDist );
-    numAllBrightAndDark += num_x*num_y;
+    numAll += num_x*num_y;
 
     // Right next to square
     num_x = ceil( (imgCopy.cols-biggest_x)/(float)negDist );
-    numAllBrightAndDark += num_x*num_y;
+    numAll += num_x*num_y;
 
     // Only good values
     uint16_t g_smallest_x, g_smallest_y, g_biggest_x, g_biggest_y;
@@ -151,16 +145,13 @@ void CalibrationHandler::calibrate(cv::Mat img,
     num_x = ceil( (g_biggest_x-g_smallest_x)/(float)posDist);
     num_y = ceil((g_biggest_y-g_smallest_y )/(float)posDist);
     uint32_t numAllGoodValues = num_x*num_y;
-    uint32_t offsetBrightAndDark = numAllGoodValues/2;
-    uint32_t numUpperAndLowerPart = offsetBrightAndDark*0.8;
-    uint16_t mult = numAllBrightAndDark/(numUpperAndLowerPart);
-    numAllBrightAndDark += mult*numUpperAndLowerPart;
+    uint16_t mult = numAll/(numAllGoodValues);
+    numAll += mult*numAllGoodValues;
 
     /**************************************************************
      * Fill matrices with wrong colors and collect right colors.
      * ***********************************************************/
-    hsvValuesBright = Matrix8u(numAllBrightAndDark,3);
-    hsvValuesDark =  Matrix8u(numAllBrightAndDark,3);
+    hsvValues = Matrix8u(numAll,3);
 
     uint64_t counter = 0;
     img.copyTo(imgCopy);
@@ -192,19 +183,22 @@ void CalibrationHandler::calibrate(cv::Mat img,
         }
     }
 
-    // Collect right colors separately.
+    // Positive values
     uint64_t goodValuesStart = counter;
-    counter = 0;
-    allGoodValues.resize(numAllGoodValues,Matrix8u(1,hsvChannels));
+    results = Eigen::VectorXd(numAll);
+    findMinMaxXY(square_points, smallest_x, biggest_x, smallest_y, biggest_y);
 
-    // Get all good values
-    for (int row = g_smallest_y; row < g_biggest_y; row += posDist) {
-        for (int col = g_smallest_x; col < g_biggest_x; col += posDist) {
+    for (uint32_t col = smallest_x; col < biggest_x; ++col) {
+        for (uint32_t row = smallest_y; row < biggest_y; ++row) {
+            for (uint16_t m = 0; m < mult; ++m) {
+                hsvValues(counter, 0) = hsvPtr[row*imgCopy.cols*hsvChannels+col*hsvChannels];
+                hsvValues(counter, 1) = hsvPtr[row*imgCopy.cols*hsvChannels+col*hsvChannels + 1];
+                hsvValues(counter, 2) = hsvPtr[row*imgCopy.cols*hsvChannels+col*hsvChannels + 2];
+                results(counter) = 1;
+                ++counter;
+            }
+
             line(imgCopy,cv::Point(col,row),cv::Point(col,row),goodColor);
-            allGoodValues[counter](0,0) = hsvPtr[row*hsv.cols*hsv.channels()+col*hsv.channels()];
-            allGoodValues[counter](0,1) = hsvPtr[row*hsv.cols*hsv.channels()+col*hsv.channels()+1];
-            allGoodValues[counter](0,2) = hsvPtr[row*hsv.cols*hsv.channels()+col*hsv.channels()+2];
-            ++counter;
         }
     }
 
@@ -215,64 +209,29 @@ void CalibrationHandler::calibrate(cv::Mat img,
         return;
     }
 
-    /*********************************************************************
-     * Sort good values with respect to brightness.
-     * Leave brightest and darkest values out and fill matrices.
-     * *******************************************************************/
     cv::putText(imgCopy,"Calculating ...",
                 cv::Point(distanceText2Border_,imgCopy.rows-distanceText2Border_),
                 font_, textScale_, textColor_, textThickness_);
     cv::imshow(title_,imgCopy);
     cv::waitKey(1); // Needed to show img.
 
-    std::sort(allGoodValues.begin(), allGoodValues.end(),[](const Matrix8u& lhs, const Matrix8u& rhs) {
-        return lhs(0,2) < rhs(0,2);
-    });
-
-    // debugging
-    for (int i = 0; i < allGoodValues.size(); ++i) {
-        std::cout << unsigned(allGoodValues[i](0,0)) << unsigned(allGoodValues[i](0,1)) << unsigned(allGoodValues[i](0,2)) << std::endl;
-    }
-
-    counter = goodValuesStart;
-    results = Eigen::VectorXd(numAllBrightAndDark);
-
-    for (uint32_t row = 0; row < numUpperAndLowerPart; ++row) {
-        for (uint16_t m = 0; m < mult; ++m) {
-            hsvValuesBright.row(counter) = allGoodValues[offsetBrightAndDark+row];
-            hsvValuesDark.row(counter) = allGoodValues[offsetBrightAndDark-row];
-            results(counter) = 1;
-            ++counter;
-        }
-    }
-
     /**********************************************************
      * Find median values to have a refenrence color.
      * *******************************************************/
-    // Get median before multiplication would be better!
-    getMedianValues(offsetBrightAndDark,numUpperAndLowerPart);
+    // Get max of histogram better!!!
+    getMedianValues(goodValuesStart);
 
-    std::cout << "Bright hsv= " << hsvBright_(0) << " "
-              << hsvBright_(1) << " " << hsvBright_(2) << std::endl;
-    std::cout << "Dark hsv= " << hsvDark_(0)
-              << " " << hsvDark_(1) << " " << hsvDark_(2) << std::endl;
+    std::cout << "hsv = " << hsvColor_(0) << " "
+              << hsvColor_(1) << " " << hsvColor_(2) << std::endl;
 
     /*************************************************************
      * Start calibration for factors (tolerances) of colors
      * **********************************************************/
     std::cout << "Starting calibration" << std::endl;
 
-    factorsBright_ = {startValueFactors,startValueFactors,startValueFactors};
-    calculate(hsvBright_,factorsBright_, hsvValuesBright,
-              results, "bright", goodValuesStart);
-    std::cout << "Factors for bright = " << std::endl << factorsBright_(0)
-              << " " << factorsBright_(1) << " " << factorsBright_(2) << std::endl;
-
-    factorsDark_ = {startValueFactors,startValueFactors,startValueFactors};
-    calculate(hsvDark_,factorsDark_,hsvValuesDark,
-              results, "dark", goodValuesStart);
-    std::cout << "Factors for dark = " << std::endl << factorsDark_(0)
-              << " " << factorsDark_(1) << " " << factorsDark_(2) << std::endl;
+    calculate(goodValuesStart);
+    std::cout << "Factors for bright = " << std::endl << factorsColor_(0)
+              << " " << factorsColor_(1) << " " << factorsColor_(2) << std::endl;
 
     /***************************************************************
      * Visualisation of bright color search and optional save.
@@ -282,18 +241,12 @@ void CalibrationHandler::calibrate(cv::Mat img,
     bool acceptValues =  visualizeResult();
 
     if (acceptValues) {
-        hsvBright[0] = hsvBright_(0);
-        hsvBright[1] = hsvBright_(1);
-        hsvBright[2] = hsvBright_(2);
-        factorsBright[0] = factorsBright_[0];
-        factorsBright[1] = factorsBright_[1];
-        factorsBright[2] = factorsBright_[2];
-        hsvDark[0] = hsvDark_(0);
-        hsvDark[1] = hsvDark_(1);
-        hsvDark[2] = hsvDark_(2);
-        factorsDark[0] = factorsDark_(0);
-        factorsDark[1] = factorsDark_(1);
-        factorsDark[2] = factorsDark_(2);
+        hsvColor[0] = hsvColor_(0);
+        hsvColor[1] = hsvColor_(1);
+        hsvColor[2] = hsvColor_(2);
+        factorsColor[0] = factorsColor_[0];
+        factorsColor[1] = factorsColor_[1];
+        factorsColor[2] = factorsColor_[2];
     }
 
     *hsvPtr = 0;
@@ -354,84 +307,46 @@ double CalibrationHandler::getProbability(const double &err2,const double &facto
 double CalibrationHandler::getPrediction(const uint16_t &row, const uint16_t &col)
 {
     if (hsvPtr != 0) {
-
-        int16_t v_h = hsvBright_(0) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels];
-        int16_t v_s = hsvBright_(1) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels + 1];
-        int16_t v_v = hsvBright_(2) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels + 2];
-        double test = pow(v_h,2)*factorsBright_(0) + pow(v_s,2)*factorsBright_(1)
-                      + pow(v_v,2)*factorsBright_(2);
-        double trustBright = getProbability(pow(v_h,2)*factorsBright_(0) + pow(v_s,2)*factorsBright_(1)
-                                            + pow(v_v,2)*factorsBright_(2),1);
-
-        v_h = hsvDark_(0) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels];
-        v_s = hsvDark_(1) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels + 1];
-        v_v = hsvDark_(2) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels + 2];
-
-        double test1 = pow(v_h,2)*factorsDark_(0) + pow(v_s,2)*factorsDark_(1)
-                       + pow(v_v,2)*factorsDark_(2);
-        double trustDark = getProbability(pow(v_h,2)*factorsDark_(0) + pow(v_s,2)*factorsDark_(1)
-                                          + pow(v_v,2)*factorsDark_(2),1);
-
-        if (trustBright > trustDark)
-            return trustBright;
-        else
-            return trustDark;
+        int16_t v_h = hsvColor_(0) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels];
+        int16_t v_s = hsvColor_(1) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels + 1];
+        int16_t v_v = hsvColor_(2) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels + 2];
+        return getProbability(pow(v_h,2)*factorsColor_(0) + pow(v_s,2)*factorsColor_(1)
+                                            + pow(v_v,2)*factorsColor_(2),1);
     } else {
         return -1;
     }
 }
 
-void CalibrationHandler::getMedianValues(const uint32_t &offset, const uint32_t &numElements)
+void CalibrationHandler::getMedianValues(const uint32_t &offset)
 {
-    Eigen::VectorXi colorVec(numElements);
+    Eigen::VectorXi colorVec(hsvValues.rows()-offset);
 
     // Bright hue
     for (int i = 0; i < colorVec.size(); ++i) {
-        colorVec(i) = allGoodValues[offset+i](0,0);
+        colorVec(i) = hsvValues(i, 0);
     }
 
-    hsvBright_(0) = median(colorVec);
+    hsvColor_(0) = median(colorVec);
 
     // Bright saturation
     for (int i = 0; i < colorVec.size(); ++i) {
-        colorVec(i) = allGoodValues[offset+i](0,1);
+        colorVec(i) = hsvValues(i, 1);
     }
 
-    hsvBright_(1) = median(colorVec);
+    hsvColor_(1) = median(colorVec);
 
     // Bright value
     for (int i = 0; i < colorVec.size(); ++i) {
-        colorVec(i) = allGoodValues[offset+i](0,2);
+        colorVec(i) = hsvValues(i, 2);
     }
 
-    hsvBright_(2) = median(colorVec);
-
-    // Dark hue
-    for (int i = 0; i < colorVec.size(); ++i) {
-        colorVec(i) = allGoodValues[offset-i](0,0);
-    }
-
-    hsvDark_(0) = median(colorVec);
-
-    // Dark saturation
-    for (int i = 0; i < colorVec.size(); ++i) {
-        colorVec(i) = allGoodValues[offset-i](0,1);
-    }
-
-    hsvDark_(1) = median(colorVec);
-
-    // Dark value
-    for (int i = 0; i < colorVec.size(); ++i) {
-        colorVec(i) = allGoodValues[offset-i](0,2);
-    }
-
-    hsvDark_(2) = median(colorVec);
+    hsvColor_(2) = median(colorVec);
 }
 
-void CalibrationHandler::calculate(const Eigen::Vector3i &hsvBrightOrDark, Eigen::Vector3d &x0,
-                                   const Matrix8u &hsvValues, const Eigen::VectorXd &results,
-                                   const std::string &description, const uint64_t &startGoodValues)
+void CalibrationHandler::calculate(const uint64_t &startGoodValues)
 {
+    factorsColor_ = {startValueFactors,startValueFactors,startValueFactors};
+
     double v_h;
     double v_s;
     double v_v;
@@ -443,32 +358,32 @@ void CalibrationHandler::calculate(const Eigen::Vector3i &hsvBrightOrDark, Eigen
 
     while (iterations < maxIteration) {
         for (int i = 0; i < hsvValues.rows(); ++i) {
-            v_h = hsvBrightOrDark[0] - hsvValues(i,0);
-            v_s = hsvBrightOrDark[1] - hsvValues(i,1);
-            v_v = hsvBrightOrDark[2] - hsvValues(i,2);
-            sum_denominator = 1 + pow(v_h,2)*x0(0)
-                              + pow(v_s,2)*x0(1) + pow(v_v,2)*x0(2);
+            v_h = hsvColor_[0] - hsvValues(i,0);
+            v_s = hsvColor_[1] - hsvValues(i,1);
+            v_v = hsvColor_[2] - hsvValues(i,2);
+            sum_denominator = 1 + pow(v_h,2)*factorsColor_(0)
+                              + pow(v_s,2)*factorsColor_(1) + pow(v_v,2)*factorsColor_(2);
             A(i,0) = -pow(v_h,2)/pow(sum_denominator,2);
             A(i,1) = -pow(v_s,2)/pow(sum_denominator,2);
             A(i,2) = -pow(v_v,2)/pow(sum_denominator,2);
         }
 
         dx = svd_solver.compute(A,Eigen::ComputeThinU|Eigen::ComputeThinV).solve(results);
-        x0 += dx;
+        factorsColor_ += dx;
 
         if (dx(0) < 0) dx(0) *= -1;
         if (dx(1) < 0) dx(1) *= -1;
         if (dx(2) < 0) dx(2) *= -1;
 
 
-        if (getFalsePositives(hsvBrightOrDark,x0,hsvValues,startGoodValues) < minError) {
+        if (getFalsePositives(startGoodValues) < minError) {
             break;
         }
 
         ++iterations;
     }
 
-    std::cout << "Used iterations for " << description << "= " << unsigned(iterations) << std::endl;
+    std::cout << "Used iterations for calculation of factors = " << unsigned(iterations) << std::endl;
 }
 
 
@@ -479,24 +394,30 @@ bool CalibrationHandler::visualizeResult()
     for (uint16_t col = 0; col < imgCopy.cols; col += negDist) {
         // Above
         for (uint16_t row = 0; row < square_points[0].y; row += negDist) {
-            addNegPointInImg(row, col, falsePositives);
+            addPointInImg(row, col);
+            ++falsePositives;
+
         }
 
         // Below
         for (int row = square_points[1].y; row < imgCopy.rows; row += negDist) {
-            addNegPointInImg(row, col, falsePositives);
+            addPointInImg(row, col);
+            ++falsePositives;
+
         }
     }
 
     // Left
     for (int row = square_points[0].y; row < square_points[1].y; row += negDist) {
         for (int col = 0; col < square_points[0].x; col += negDist) {
-            addNegPointInImg(row, col, falsePositives);
+            addPointInImg(row, col);
+            ++falsePositives;
         }
 
         // Right
         for (int col = square_points[1].x; col < imgCopy.cols; col += negDist) {
-            addNegPointInImg(row, col, falsePositives);
+            addPointInImg(row, col);
+            ++falsePositives;
         }
     }
 
@@ -517,16 +438,21 @@ bool CalibrationHandler::visualizeResult()
 
     std::cout << "False positives in image = " << falsePositives << std::endl;
     cv::imshow(title_,imgCopy);
-    int key = cv::waitKey(0);
 
-    if (key == 115) // s
-        return true;
-    else
-        return false;
+    int key;
+
+    while (true) {
+        key = cv::waitKey(0);
+
+        if (key == 115) // s
+            return true;
+        else if (key == 27)
+            return false;
+
+    }
 }
 
-uint64_t CalibrationHandler::getFalsePositives(const Eigen::Vector3i &hsv,const Eigen::Vector3d &factors,
-        const Matrix8u &hsvValues,const uint64_t &startGoodValues)
+uint64_t CalibrationHandler::getFalsePositives(const uint64_t &startGoodValues)
 {
     uint64_t falsePositives = 0;
     double prediction;
@@ -535,10 +461,13 @@ uint64_t CalibrationHandler::getFalsePositives(const Eigen::Vector3i &hsv,const 
     int16_t v_v;
 
     for (uint64_t i = 0; i < startGoodValues; ++i) {
-        v_h = hsv(0) - hsvValues(i,0);
-        v_s = hsv(1) - hsvValues(i,1);
-        v_v = hsv(2) - hsvValues(i,2);
-        prediction = getProbability(pow(v_h,2)*factors(0) + pow(v_s,2)*factors(1) + pow(v_v,2)*factors(2),1);
+        v_h = hsvColor_(0) - hsvValues(i,0);
+        v_s = hsvColor_(1) - hsvValues(i,1);
+        v_v = hsvColor_(2) - hsvValues(i,2);
+        prediction = getProbability(pow(v_h,2)*factorsColor_(0)
+                                    + pow(v_s,2)*factorsColor_(1)
+                                    + pow(v_v,2)*factorsColor_(2),
+                                    1);
 
         if (prediction >= 0.5)
             ++falsePositives;
@@ -550,20 +479,16 @@ uint64_t CalibrationHandler::getFalsePositives(const Eigen::Vector3i &hsv,const 
 void CalibrationHandler::fillMatricesWithBadValues(const uint16_t &hsvCols, const uint16_t &row,
         const uint16_t &col, uint64_t &counter)
 {
-    hsvValuesBright(counter,0) = hsvPtr[row*hsvCols*hsvChannels+col*hsvChannels];
-    hsvValuesBright(counter,1) = hsvPtr[row*hsvCols*hsvChannels+col*hsvChannels+1];
-    hsvValuesBright(counter,2) = hsvPtr[row*hsvCols*hsvChannels+col*hsvChannels+2];
-
-    hsvValuesDark(counter,0) = hsvPtr[row*hsvCols*hsvChannels+col*hsvChannels];
-    hsvValuesDark(counter,1) = hsvPtr[row*hsvCols*hsvChannels+col*hsvChannels+1];
-    hsvValuesDark(counter,2) = hsvPtr[row*hsvCols*hsvChannels+col*hsvChannels+2];
+    hsvValues(counter,0) = hsvPtr[row*hsvCols*hsvChannels+col*hsvChannels];
+    hsvValues(counter,1) = hsvPtr[row*hsvCols*hsvChannels+col*hsvChannels+1];
+    hsvValues(counter,2) = hsvPtr[row*hsvCols*hsvChannels+col*hsvChannels+2];
 
     cv::line(imgCopy,cv::Point(col,row),cv::Point(col,row),badColor);
     ++counter;
 
 }
 
-void CalibrationHandler::addNegPointInImg(const uint16_t &row, const uint16_t &col, uint64_t &falsePositives)
+void CalibrationHandler::addPointInImg(const uint16_t &row, const uint16_t &col)
 {
     double prediction = getPrediction(row,col);
 
@@ -571,6 +496,5 @@ void CalibrationHandler::addNegPointInImg(const uint16_t &row, const uint16_t &c
         line(imgCopy,cv::Point(col,row),cv::Point(col,row),badColor);
     else {
         line(imgCopy,cv::Point(col,row),cv::Point(col,row),goodColor);
-        ++falsePositives;
     }
 }

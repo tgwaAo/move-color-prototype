@@ -28,16 +28,12 @@ void photoWithTimer(cv::VideoCapture &cap, cv::Mat &image, const std::string &ti
 /**
  * @brief Save calibration in a txt file.
  * @param filename Name of the calibration file.
- * @param hsvBright Vector of bright optimal values.
- * @param factorsBright Vector of bright factors.
- * @param hsvDark Vector of dark optimal values.
- * @param factorsDark Vector of dark factors.
+ * @param hsvColor Vector of bright optimal values.
+ * @param factorsColor Vector of bright factors.
  */
 void saveCalibration(const std::string &filename,
-                     const std::vector<uint16_t> &hsvBright,
-                     const std::vector<double> &factorsBright,
-                     const std::vector<uint16_t> &hsvDark,
-                     const std::vector<double> &factorsDark);
+                     const std::vector<uint16_t> &hsvColor,
+                     const std::vector<double> &factorsColor);
 
 int main()
 {
@@ -60,10 +56,8 @@ int main()
     cv::namedWindow(TITLE,cv::WINDOW_AUTOSIZE);
     cv::resizeWindow(TITLE, WIDTH,HEIGHT);
 
-    std::vector<uint16_t> hsvBright(3,0);
-    std::vector<double> factorsBright(3,1000000);
-    std::vector<uint16_t> hsvDark(3,0);
-    std::vector<double> factorsDark(3,1000000);
+    std::vector<uint16_t> hsvColor(3,0);
+    std::vector<double> factorsColor(3,1000000);
 
     struct stat buffer;
     const std::string SETTINGS_FILENAME = "hsv.txt";
@@ -75,26 +69,20 @@ int main()
         std::ifstream settings_file;
         settings_file.open(SETTINGS_FILENAME);
 
-        settings_file >> hsvBright[0];
-        settings_file >> hsvBright[1];
-        settings_file >> hsvBright[2];
-        settings_file >> factorsBright[0];
-        settings_file >> factorsBright[1];
-        settings_file >> factorsBright[2];
-        settings_file >> hsvDark[0];
-        settings_file >> hsvDark[1];
-        settings_file >> hsvDark[2];
-        settings_file >> factorsDark[0];
-        settings_file >> factorsDark[1];
-        settings_file >> factorsDark[2];
+        settings_file >> hsvColor[0];
+        settings_file >> hsvColor[1];
+        settings_file >> hsvColor[2];
+        settings_file >> factorsColor[0];
+        settings_file >> factorsColor[1];
+        settings_file >> factorsColor[2];
 
         settings_file.close();
     } else {
         cv::Mat image;
         photoWithTimer(cap, image, TITLE);
         CalibrationHandler calibrator(TITLE);
-        calibrator.calibrate(image, hsvBright, factorsBright, hsvDark, factorsDark);
-        saveCalibration(SETTINGS_FILENAME, hsvBright,factorsBright,hsvDark,factorsDark);
+        calibrator.calibrate(image, hsvColor, factorsColor);
+        saveCalibration(SETTINGS_FILENAME, hsvColor,factorsColor);
     }
 
     /************************************************************
@@ -104,26 +92,17 @@ int main()
     const uint8_t MAX_WEIGHT = 30;
     const uint8_t MAX_DISTANCE = 10;
     uint16_t mat_size = HEIGHT/MAX_DISTANCE;
-    std::vector<std::vector<ParticleWeighting> > weightingMatrixBright(mat_size,
+    std::vector<std::vector<ParticleWeighting> > weightingMatrix(mat_size,
             std::vector<ParticleWeighting>(WIDTH/MAX_DISTANCE,ParticleWeighting(NUM_PARTICLES,0,10,0,10,
-                                           MAX_WEIGHT,WIDTH,NUM_PARTICLES*MAX_WEIGHT*4/10, factorsBright,hsvBright)));
-    std::vector<std::vector<ParticleWeighting> > weightingMatrixDark(mat_size,
-            std::vector<ParticleWeighting>(WIDTH/MAX_DISTANCE,ParticleWeighting(NUM_PARTICLES,0,10,0,10,
-                                           MAX_WEIGHT,WIDTH,NUM_PARTICLES*MAX_WEIGHT*4/10, factorsDark,hsvDark)));
+                                           MAX_WEIGHT,WIDTH,NUM_PARTICLES*MAX_WEIGHT*4/10, factorsColor,hsvColor)));
 
     for (int i = 0; i < HEIGHT/MAX_DISTANCE; ++i) {
         for (int j = 0; j < WIDTH/MAX_DISTANCE; ++j) {
-            weightingMatrixBright[i][j].setMinHeight(i*MAX_DISTANCE);
-            weightingMatrixBright[i][j].setMaxHeight((i+1)*MAX_DISTANCE);
-            weightingMatrixBright[i][j].setMinWidth(j*MAX_DISTANCE);
-            weightingMatrixBright[i][j].setMaxWidth((j+1)*MAX_DISTANCE);
-            weightingMatrixBright[i][j].update();
-
-            weightingMatrixDark[i][j].setMinHeight(i*MAX_DISTANCE);
-            weightingMatrixDark[i][j].setMaxHeight((i+1)*MAX_DISTANCE);
-            weightingMatrixDark[i][j].setMinWidth(j*MAX_DISTANCE);
-            weightingMatrixDark[i][j].setMaxWidth((j+1)*MAX_DISTANCE);
-            weightingMatrixDark[i][j].update();
+            weightingMatrix[i][j].setMinHeight(i*MAX_DISTANCE);
+            weightingMatrix[i][j].setMaxHeight((i+1)*MAX_DISTANCE);
+            weightingMatrix[i][j].setMinWidth(j*MAX_DISTANCE);
+            weightingMatrix[i][j].setMaxWidth((j+1)*MAX_DISTANCE);
+            weightingMatrix[i][j].update();
         }
     }
 
@@ -162,8 +141,7 @@ int main()
     std::mt19937 eng(rd());
 
     int key;
-    bool goodAreaBright;
-    bool goodAreaDark;
+    bool goodArea;
 
     float leftSeconds;
     const uint8_t gameTime = 60;
@@ -181,9 +159,9 @@ int main()
 
         for (int i = 0; i < HEIGHT/MAX_DISTANCE; ++i) {
             for (int j = 0; j < WIDTH/MAX_DISTANCE; ++j) {
-                goodAreaBright = weightingMatrixBright[i][j].is_color(pixelPtr_hsv);
-                goodAreaDark = weightingMatrixDark[i][j].is_color(pixelPtr_hsv);
-                if (goodAreaBright || goodAreaDark) {
+                goodArea = weightingMatrix[i][j].is_color(pixelPtr_hsv);
+
+                if (goodArea) {
                     color = GOOD_COLOR;
                     cv::line(mirror,cv::Point(j*MAX_DISTANCE+corner2Center,i*MAX_DISTANCE+corner2Center),
                              cv::Point(j*MAX_DISTANCE+corner2Center,i*MAX_DISTANCE+corner2Center),color,10,10);
@@ -206,15 +184,13 @@ int main()
                 cv::Mat image;
                 photoWithTimer(cap, image, TITLE);
                 CalibrationHandler calibrator(TITLE);
-                calibrator.calibrate(image,hsvBright,factorsBright,hsvDark,factorsDark);
-                saveCalibration(SETTINGS_FILENAME, hsvBright,factorsBright,hsvDark,factorsDark);
+                calibrator.calibrate(image,hsvColor,factorsColor);
+                saveCalibration(SETTINGS_FILENAME, hsvColor,factorsColor);
 
                 for (int i = 0; i < HEIGHT/MAX_DISTANCE; ++i) {
                     for (int j = 0; j < WIDTH/MAX_DISTANCE; ++j) {
-                        weightingMatrixBright[i][j].setHsv(hsvBright);
-                        weightingMatrixBright[i][j].setFactors(factorsBright);
-                        weightingMatrixDark[i][j].setHsv(hsvDark);
-                        weightingMatrixDark[i][j].setFactors(factorsDark);
+                        weightingMatrix[i][j].setHsv(hsvColor);
+                        weightingMatrix[i][j].setFactors(factorsColor);
                     }
                 }
 
@@ -311,26 +287,18 @@ void photoWithTimer(cv::VideoCapture &cap, cv::Mat &image, const std::string &ti
 }
 
 void saveCalibration(const std::string &filename,
-                     const std::vector<uint16_t> &hsvBright,
-                     const std::vector<double> &factorsBright,
-                     const std::vector<uint16_t> &hsvDark,
-                     const std::vector<double> &factorsDark)
+                     const std::vector<uint16_t> &hsvColor,
+                     const std::vector<double> &factorsColor)
 {
     std::ofstream save_file;
     save_file.open(filename);
 
-    save_file << unsigned(hsvBright[0]) << std::endl;
-    save_file << unsigned(hsvBright[1]) << std::endl;
-    save_file << unsigned(hsvBright[2]) << std::endl;
-    save_file << factorsBright[0] << std::endl;
-    save_file << factorsBright[1]<< std::endl;
-    save_file << factorsBright[2] << std::endl;
-    save_file << unsigned(hsvDark[0]) << std::endl;
-    save_file << unsigned(hsvDark[1]) << std::endl;
-    save_file << unsigned(hsvDark[2]) << std::endl;
-    save_file << factorsDark[0] << std::endl;
-    save_file << factorsDark[1]<< std::endl;
-    save_file << factorsDark[2] << std::endl;
+    save_file << unsigned(hsvColor[0]) << std::endl;
+    save_file << unsigned(hsvColor[1]) << std::endl;
+    save_file << unsigned(hsvColor[2]) << std::endl;
+    save_file << factorsColor[0] << std::endl;
+    save_file << factorsColor[1]<< std::endl;
+    save_file << factorsColor[2] << std::endl;
 
     save_file.close();
     std::cout << "Saved" << std::endl;

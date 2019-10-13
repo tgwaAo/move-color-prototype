@@ -45,16 +45,13 @@ public:
      * @brief Calibrates params. Values without error are found using median,
      * factors to calculate prediction are calculated using eigens BDCSVD.
      * @param img Image used to visualize steps and to get values for calibration.
-     * @param hsvBright Values to decide, whether a color is inside 
+     * @param hsvColor Values to decide, whether a color is inside 
      *                  bright color spectrum or not.
-     * @param factorsBright Factors to calculate prediction of dark color spectrum.
-     * @param hsvDark Values to decide, whether a color is inside 
-     *                bright color spectrum or not.
-     * @param factorsDark Factors to calculate prediction of dark color spectrum.
+     * @param factorsColor Factors to calculate prediction of dark color spectrum.
      */
     void calibrate(cv::Mat img,
-                   std::vector<uint16_t> &hsvBright, std::vector<double> &factorsBright,
-                   std::vector<uint16_t> &hsvDark, std::vector<double> &factorsDark);
+                   std::vector<uint16_t> &hsvColor, 
+                   std::vector<double> &factorsColor);
 
 private:
     /**
@@ -97,22 +94,15 @@ private:
      * @param numElements Number of elements in bright or dark. Darkest and 
      *                    brightest positive values are not used in any calculation.
      */
-    void getMedianValues(const uint32_t &offset, const uint32_t &numElements);
+    void getMedianValues(const uint32_t &offset);
     
     /**
      * @brief Calculate factors to predict being searched color or not using eigens BDCSVD.
      *        Result is returned, if number of false positives is lower than bound or 
      *        max. iterations are reached.
-     * @param hsvBrightOrDark Hsv values of bright or dark color.
-     * @param x0 Calculated factors to create min. squared error with initialized start values.
-     * @param hsvValues Values used to calculate errors.
-     * @param results Expected results of equation A*x=l.
-     * @param description Text of bright or dark calculation.
      * @param startGoodValues Index of begin of good values.
      */
-    void calculate(const Eigen::Vector3i &hsvBrightOrDark, Eigen::Vector3d &x0,
-                   const Matrix8u &hsvValues, const Eigen::VectorXd &results,
-                   const std::string &description, const uint64_t &startGoodValues);
+    void calculate(const uint64_t &startGoodValues);
     
     /**
      * @brief Visualization of predicted result and user decision to accept new values
@@ -123,14 +113,10 @@ private:
     
     /**
      * @brief Calculate number of false positives. 
-     * @param hsv Ideal color.
-     * @param factors Factors multiplied by errors.
-     * @param hsvValues Matrix containing values for calculation.
      * @param startGoodValues End of calculation. Only false positives are interesting.
      * @return Number of false positives.
      */
-    uint64_t getFalsePositives(const Eigen::Vector3i &hsv,const Eigen::Vector3d &factors,
-                      const Matrix8u &hsvValues,const uint64_t &startGoodValues);
+    uint64_t getFalsePositives(const uint64_t &startGoodValues);
                       
     /**
      * @brief Fill bright and dark matrices with bad values.
@@ -146,9 +132,8 @@ private:
      * @brief Add a point in image in bad color and increase false positives.
      * @param row Row of point in image.
      * @param col Column of point in image.
-     * @param falsePositives Number of false positives.
      */
-    void addNegPointInImg(const uint16_t &row, const uint16_t &col, uint64_t &falsePositives);
+    void addPointInImg(const uint16_t &row, const uint16_t &col);
     
     /**
      * @brief Function to handle mouse callback in image.
@@ -171,7 +156,7 @@ private:
                                int flags, void *userdata);
     
 
-    std::vector<cv::Point> square_points;     // Used for clickAndCrop
+    std::vector<cv::Point> square_points; // Used for clickAndCrop
 
     uint8_t hsvChannels; // Always 3!
 
@@ -183,15 +168,14 @@ private:
     cv::Scalar textColor_;
     uint8_t textThickness_;
 
-    uint8_t negDist = 2;
-    uint8_t posDist = 1;
+    uint8_t negDist;
+    uint8_t posDist;
 
     cv::Scalar badColor;
     cv::Scalar goodColor;
 
     uint8_t *hsvPtr;
-    Matrix8u hsvValuesBright;
-    Matrix8u hsvValuesDark;
+    Matrix8u hsvValues;
     Eigen::VectorXd results;
     std::vector<Matrix8u> allGoodValues;
 
@@ -199,11 +183,8 @@ private:
     double minError;
     uint16_t maxIteration;
 
-    Eigen::Vector3i hsvBright_;
-    Eigen::Vector3i hsvDark_;
-    Eigen::Vector3d factorsBright_;
-    Eigen::Vector3d factorsDark_;
-
+    Eigen::Vector3i hsvColor_;
+    Eigen::Vector3d factorsColor_;
 
 };
 
