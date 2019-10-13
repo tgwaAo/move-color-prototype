@@ -186,10 +186,9 @@ void CalibrationHandler::calibrate(cv::Mat img,
     // Positive values
     uint64_t goodValuesStart = counter;
     results = Eigen::VectorXd(numAll);
-    findMinMaxXY(square_points, smallest_x, biggest_x, smallest_y, biggest_y);
 
-    for (uint32_t col = smallest_x; col < biggest_x; ++col) {
-        for (uint32_t row = smallest_y; row < biggest_y; ++row) {
+    for (uint32_t col = g_smallest_x; col < g_biggest_x; ++col) {
+        for (uint32_t row = g_smallest_y; row < g_biggest_y; ++row) {
             for (uint16_t m = 0; m < mult; ++m) {
                 hsvValues(counter, 0) = hsvPtr[row*imgCopy.cols*hsvChannels+col*hsvChannels];
                 hsvValues(counter, 1) = hsvPtr[row*imgCopy.cols*hsvChannels+col*hsvChannels + 1];
@@ -323,21 +322,21 @@ void CalibrationHandler::getMedianValues(const uint32_t &offset)
 
     // Bright hue
     for (int i = 0; i < colorVec.size(); ++i) {
-        colorVec(i) = hsvValues(i, 0);
+        colorVec(i) = hsvValues(offset + i, 0);
     }
 
     hsvColor_(0) = median(colorVec);
 
     // Bright saturation
     for (int i = 0; i < colorVec.size(); ++i) {
-        colorVec(i) = hsvValues(i, 1);
+        colorVec(i) = hsvValues(offset + i, 1);
     }
 
     hsvColor_(1) = median(colorVec);
 
     // Bright value
     for (int i = 0; i < colorVec.size(); ++i) {
-        colorVec(i) = hsvValues(i, 2);
+        colorVec(i) = hsvValues(offset + i, 2);
     }
 
     hsvColor_(2) = median(colorVec);
