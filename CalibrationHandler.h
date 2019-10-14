@@ -42,8 +42,8 @@ public:
     ~CalibrationHandler();
     
     /**
-     * @brief Calibrates params. Values without error are found using median,
-     * factors to calculate prediction are calculated using eigens BDCSVD.
+     * @brief Calibrates params. Values without error are found using histograms,
+     * factors for predictions are calculated using eigens BDCSVD.
      * @param img Image used to visualize steps and to get values for calibration.
      * @param hsvColor Values to decide, whether a color is inside 
      *                  bright color spectrum or not.
@@ -53,14 +53,7 @@ public:
                    std::vector<uint16_t> &hsvColor, 
                    std::vector<double> &factorsColor);
 
-private:
-    /**
-     * @brief Calculate median (nthelement) of values inside vector.
-     * @param Vector to calculate median.
-     * @return Calculated median.
-     */
-    int median(Eigen::VectorXi &v);
-    
+private:   
     /**
      * @brief Find min. and max. x- and y-values of a rectangle.
      * @param square Rectangle representation as two points.
@@ -87,14 +80,6 @@ private:
      * @return Better pobability of being color.
      */
     double getPrediction(const uint16_t &row, const uint16_t &col);
-    
-    /**
-     * @brief Calculation of bright and dark color values using median.
-     * @param offset Offset of allGoodValues to only get bright or dark values.
-     * @param numElements Number of elements in bright or dark. Darkest and 
-     *                    brightest positive values are not used in any calculation.
-     */
-    void getMedianValues(const uint32_t &offset);
     
     /**
      * @brief Calculate factors to predict being searched color or not using eigens BDCSVD.

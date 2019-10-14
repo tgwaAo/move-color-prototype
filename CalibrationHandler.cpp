@@ -149,7 +149,7 @@ void CalibrationHandler::calibrate(cv::Mat img,
     numAll += mult*numAllGoodValues;
 
     /**************************************************************
-     * Fill matrices with wrong colors and collect right colors.
+     * Fill matrices with wrong colors.
      * ***********************************************************/
     hsvValues = Matrix8u(numAll,3);
 
@@ -183,12 +183,24 @@ void CalibrationHandler::calibrate(cv::Mat img,
         }
     }
 
-    // Positive values
+    /********************************************************
+     * Collect positive values and create histograms.
+     * *****************************************************/
     uint64_t goodValuesStart = counter;
     results = Eigen::VectorXd(numAll);
+    Eigen::VectorXi hueHist = Eigen::VectorXi::Zero(256);
+    Eigen::VectorXi satHist = Eigen::VectorXi::Zero(256);
+    Eigen::VectorXi valHist = Eigen::VectorXi::Zero(256);
 
     for (uint32_t col = g_smallest_x; col < g_biggest_x; ++col) {
         for (uint32_t row = g_smallest_y; row < g_biggest_y; ++row) {
+            line(imgCopy,cv::Point(col,row),cv::Point(col,row),goodColor);
+
+            // Fill histograms.
+            ++hueHist(hsvPtr[row*imgCopy.cols*hsvChannels+col*hsvChannels]);
+            ++satHist(hsvPtr[row*imgCopy.cols*hsvChannels+col*hsvChannels+1]);
+            ++valHist(hsvPtr[row*imgCopy.cols*hsvChannels+col*hsvChannels+2]);
+
             for (uint16_t m = 0; m < mult; ++m) {
                 hsvValues(counter, 0) = hsvPtr[row*imgCopy.cols*hsvChannels+col*hsvChannels];
                 hsvValues(counter, 1) = hsvPtr[row*imgCopy.cols*hsvChannels+col*hsvChannels + 1];
@@ -196,8 +208,6 @@ void CalibrationHandler::calibrate(cv::Mat img,
                 results(counter) = 1;
                 ++counter;
             }
-
-            line(imgCopy,cv::Point(col,row),cv::Point(col,row),goodColor);
         }
     }
 
@@ -215,48 +225,59 @@ void CalibrationHandler::calibrate(cv::Mat img,
     cv::waitKey(1); // Needed to show img.
 
     /**********************************************************
-     * Find median values to have a refenrence color.
+     * Find optimal values using histograms.
      * *******************************************************/
-    // Get max of histogram better!!!
-    getMedianValues(goodValuesStart);
+    int maxHue = 0;
+    int maxSat = 0;
+    int maxVal = 0;
+    
+    for (int i = 0; i < hueHist.size(); ++i) {
+        if (maxHue < hueHist(i)) {
+            hsvColor_(0) = i;
+            maxHue = hueHist(i);
+        }
 
-    std::cout << "hsv = " << hsvColor_(0) << " "
-              << hsvColor_(1) << " " << hsvColor_(2) << std::endl;
+        if (maxSat < satHist(i)) {
+            hsvColor_(1) = i;
+            maxSat = satHist(i);
+        }
 
-    /*************************************************************
-     * Start calibration for factors (tolerances) of colors
-     * **********************************************************/
-    std::cout << "Starting calibration" << std::endl;
-
-    calculate(goodValuesStart);
-    std::cout << "Factors for bright = " << std::endl << factorsColor_(0)
-              << " " << factorsColor_(1) << " " << factorsColor_(2) << std::endl;
-
-    /***************************************************************
-     * Visualisation of bright color search and optional save.
-     * ************************************************************/
-
-    img.copyTo(imgCopy);
-    bool acceptValues =  visualizeResult();
-
-    if (acceptValues) {
-        hsvColor[0] = hsvColor_(0);
-        hsvColor[1] = hsvColor_(1);
-        hsvColor[2] = hsvColor_(2);
-        factorsColor[0] = factorsColor_[0];
-        factorsColor[1] = factorsColor_[1];
-        factorsColor[2] = factorsColor_[2];
+        if (maxVal < valHist(i)) {
+            hsvColor_(2) = i;
+            maxVal = valHist(i);
+        }
     }
 
-    *hsvPtr = 0;
+std::cout << "hsv = " << hsvColor_(0) << " "
+          << hsvColor_(1) << " " << hsvColor_(2) << std::endl;
+
+/*************************************************************
+ * Start calibration for factors (tolerances) of colors
+ * **********************************************************/
+std::cout << "Starting calibration" << std::endl;
+
+calculate(goodValuesStart);
+std::cout << "Factors for bright = " << std::endl << factorsColor_(0)
+          << " " << factorsColor_(1) << " " << factorsColor_(2) << std::endl;
+
+/***************************************************************
+ * Visualisation of bright color search and optional save.
+ * ************************************************************/
+
+img.copyTo(imgCopy);
+bool acceptValues =  visualizeResult();
+
+if (acceptValues)
+{
+    hsvColor[0] = hsvColor_(0);
+    hsvColor[1] = hsvColor_(1);
+    hsvColor[2] = hsvColor_(2);
+    factorsColor[0] = factorsColor_[0];
+    factorsColor[1] = factorsColor_[1];
+    factorsColor[2] = factorsColor_[2];
 }
 
-
-int CalibrationHandler::median(Eigen::VectorXi &v)
-{
-    size_t n = v.size() / 2;
-    std::nth_element(v.data(), v.data()+n, v.data()+v.size());
-    return v(n);
+*hsvPtr = 0;
 }
 
 void CalibrationHandler::clickAndCrop(int event, int x, int y, int flags, void *userdata)
@@ -310,36 +331,10 @@ double CalibrationHandler::getPrediction(const uint16_t &row, const uint16_t &co
         int16_t v_s = hsvColor_(1) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels + 1];
         int16_t v_v = hsvColor_(2) - hsvPtr[row*imgCopy.cols*hsvChannels + col*hsvChannels + 2];
         return getProbability(pow(v_h,2)*factorsColor_(0) + pow(v_s,2)*factorsColor_(1)
-                                            + pow(v_v,2)*factorsColor_(2),1);
+                              + pow(v_v,2)*factorsColor_(2),1);
     } else {
         return -1;
     }
-}
-
-void CalibrationHandler::getMedianValues(const uint32_t &offset)
-{
-    Eigen::VectorXi colorVec(hsvValues.rows()-offset);
-
-    // Bright hue
-    for (int i = 0; i < colorVec.size(); ++i) {
-        colorVec(i) = hsvValues(offset + i, 0);
-    }
-
-    hsvColor_(0) = median(colorVec);
-
-    // Bright saturation
-    for (int i = 0; i < colorVec.size(); ++i) {
-        colorVec(i) = hsvValues(offset + i, 1);
-    }
-
-    hsvColor_(1) = median(colorVec);
-
-    // Bright value
-    for (int i = 0; i < colorVec.size(); ++i) {
-        colorVec(i) = hsvValues(offset + i, 2);
-    }
-
-    hsvColor_(2) = median(colorVec);
 }
 
 void CalibrationHandler::calculate(const uint64_t &startGoodValues)
