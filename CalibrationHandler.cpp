@@ -214,7 +214,7 @@ void CalibrationHandler::calibrate(cv::Mat img,
     cv::imshow(title_,imgCopy);
     key = cv::waitKey(0);
 
-    if (key == 27 || key == 113) { // esc or q
+    if (key == 27) { // esc or q
         return;
     }
 
