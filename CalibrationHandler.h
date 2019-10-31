@@ -1,6 +1,7 @@
 #ifndef CALIBRATOR_H
 #define CALIBRATOR_H
 
+#define EIGEN_MPL2_ONLY
 
 #include <opencv2/opencv.hpp>
 #include <math.h>

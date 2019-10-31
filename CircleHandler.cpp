@@ -5,16 +5,21 @@ CircleHandler::CircleHandler()
     CircleHandler(10, 10, std::vector<float>(3,3), 0, 640, 480);
 }
 
-CircleHandler::CircleHandler(const uint8_t &numCircles, const uint8_t &radius,
+CircleHandler::CircleHandler(const uint8_t numCircles, const uint8_t radius,
                              const std::vector<float> &circleTimeStates,
-                             const uint8_t &colorIdx,
+                             const cv::Scalar& color,
                              const uint16_t width,
                              const uint16_t height)
 {
-    circleTimeStates_ = circleTimeStates;
+    if (circleTimeStates.size() == sizeOfTimeStates) {
+        circleTimeStates_ = circleTimeStates;
+    } else {
+        circleTimeStates_ = std::vector<float>(3,10);
+    }
+
     radius_ = radius;
-    colorIdx_ = colorIdx;
-    
+    color_ = color;
+
     std::random_device rd;
     eng = std::mt19937(rd());
     // Use an index to select different positions.
@@ -39,7 +44,8 @@ CircleHandler::~CircleHandler()
 void CircleHandler::updateCircles(cv::Mat &img)
 {
     float leftSeconds;
-    cv::Scalar color(0,0,0);
+    cv::Scalar usedColor;
+    
     for (uint8_t i = 0; i < allCircles.size(); ++i) {
         leftSeconds = circleTimeStates_[allCircles[i].status] - (float)(clock() - allCircles[i].timerStart)/CLOCKS_PER_SEC;
 
@@ -53,9 +59,11 @@ void CircleHandler::updateCircles(cv::Mat &img)
         }
 
         if (allCircles[i].status != 0) {
-            color.val[colorIdx_] = 127*allCircles[i].status;
+            usedColor.val[0] = color_.val[0] * 0.5 * allCircles[i].status;
+            usedColor.val[1] = color_.val[1] * 0.5 * allCircles[i].status;
+            usedColor.val[2] = color_.val[2] * 0.5 * allCircles[i].status;
             cv::circle(img,allCircles[i].point,radius_,
-                       color,-1);
+                       usedColor,-1);
         }
     }
 }
@@ -85,4 +93,36 @@ void CircleHandler::newPos(uint8_t idx)
     allCircles[idx].point.y = radius_ + 2*radius_*randomUpDownIdx(eng);
     allCircles[idx].timerStart = clock();
     allCircles[idx].status = 0;
+}
+
+void CircleHandler::setCircleTimeStates(const std::vector<float>& circleTimeStates)
+{
+    if (circleTimeStates.size() == sizeOfTimeStates) {
+        circleTimeStates_ = circleTimeStates;
+    }
+}
+
+void CircleHandler::setColor(const cv::Scalar& color)
+{
+    color_ = color;
+}
+
+void CircleHandler::setRadius(const uint8_t radius)
+{
+    radius_ = radius;
+}
+
+float CircleHandler::getCircleTimeState(uint8_t idx) const
+{
+    return circleTimeStates_[idx];
+}
+
+cv::Scalar CircleHandler::getColor() const
+{
+    return color_;
+}
+
+uint8_t CircleHandler::getRadius() const
+{
+    return radius_;
 }

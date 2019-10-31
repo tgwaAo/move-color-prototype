@@ -40,7 +40,7 @@ int main()
     /*******************************************************************
      * Set camera up and initialize variables.
      * ****************************************************************/
-    cv::VideoCapture cap(0);
+    cv::VideoCapture cap(1);
 
     if (!cap.isOpened()) {
         return -1;
@@ -117,13 +117,13 @@ int main()
      * Circle and timer stuff. (Circles have timers)
      * *****************************************************/
     std::vector<float> stateTimes(3,2);
-    CircleHandler posHandler(7, targetRadius, stateTimes, 1, WIDTH, HEIGHT);
+    CircleHandler posHandler(7, targetRadius, stateTimes, cv::Scalar(0,254,0), WIDTH, HEIGHT);
 
     for (uint8_t i = 0; i < stateTimes.size(); ++i)
         stateTimes[i] = 10;
 
     targetRadius = 20;
-    CircleHandler negHandler(14, targetRadius, stateTimes, 2, WIDTH, HEIGHT);
+    CircleHandler negHandler(14, targetRadius, stateTimes, cv::Scalar(0,0,254), WIDTH, HEIGHT);
 
 
     /*******************************************************
