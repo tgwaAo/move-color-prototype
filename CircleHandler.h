@@ -17,7 +17,7 @@ public:
     /**
      * @brief Default constructor calling other constructor with 10 circles
      *        with a radius of ten. The time of each state is 3 seconds and
-     *        initial state is dark (seeable, but not active jet). The circles
+     *        initial state is dark (visible, but not active jet). The circles
      *        are blue and created in a window of size 480x640.
      */
     CircleHandler();
@@ -39,7 +39,7 @@ public:
                   const uint16_t height = 480);
 
     /**
-     * @brief Destructor
+     * @brief Destructor of class
      */
     ~CircleHandler();
 
@@ -73,10 +73,11 @@ public:
 
     /**
      * @brief Set times of different states.
-     * @param circleTimeStates
+     * @param circleTimeStates Possible states of the circles
      */
     void setCircleTimeStates(const std::vector<float>& circleTimeStates);
 
+    
     void setColor(const cv::Scalar& color);
 
     void setRadius(const uint8_t radius);
