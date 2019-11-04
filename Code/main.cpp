@@ -63,7 +63,7 @@ int main()
     /*******************************************************************
      * Set camera up and initialize variables.
      * ****************************************************************/
-    cv::VideoCapture cap(0);
+    cv::VideoCapture cap(1);
 
     if (!cap.isOpened()) {
         return -1;

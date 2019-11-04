@@ -146,14 +146,11 @@ void CalibrationHandler::calibrate(cv::Mat img,
     numAll += numX * numY;
 
     // Only good values
-    uint16_t gSmallestX, gSmallestY, gBiggestX, gBiggestY;
-    findMinMaxXY(truePositiveSquare, gSmallestX, gSmallestY, gBiggestX, gBiggestY);
-    truePositiveSquare[0].x = gSmallestX;
-    truePositiveSquare[1].x = gBiggestX;
-    truePositiveSquare[0].y = gSmallestY;
-    truePositiveSquare[1].y = gBiggestY;
-    numX = ceil( (gBiggestX - gSmallestX)/(float)posDist);
-    numY = ceil((gBiggestY - gSmallestY )/(float)posDist);
+    uint16_t goodSmallestX, goodSmallestY, goodBiggestX, goodBiggestY;
+    findMinMaxXY(truePositiveSquare, goodSmallestX, goodBiggestX, goodSmallestY, goodBiggestY);
+
+    numX = ceil( (goodBiggestX - goodSmallestX)/(float)posDist);
+    numY = ceil((goodBiggestY - goodSmallestY )/(float)posDist);
     uint32_t numAllGoodValues = numX * numY;
     uint16_t mult = numAll/(numAllGoodValues);
     numAll += mult*numAllGoodValues;
@@ -202,8 +199,8 @@ void CalibrationHandler::calibrate(cv::Mat img,
     Eigen::VectorXi satHist = Eigen::VectorXi::Zero(256);
     Eigen::VectorXi valHist = Eigen::VectorXi::Zero(256);
 
-    for (uint32_t col = gSmallestX; col < gBiggestX; ++col) {
-        for (uint32_t row = gSmallestY; row < gBiggestY; ++row) {
+    for (uint32_t col = goodSmallestX; col < goodBiggestX; ++col) {
+        for (uint32_t row = goodSmallestY; row < goodBiggestY; ++row) {
             line(imgCopy,cv::Point(col,row),cv::Point(col,row),goodColor);
 
             // Fill histograms.
@@ -222,7 +219,7 @@ void CalibrationHandler::calibrate(cv::Mat img,
     }
 
     cv::imshow(title_,imgCopy);
-    key = cv::waitKey(WAIT_TIME);
+    key = cv::waitKey(0);
 
     if (key == KEY_ESC) {
         return;
