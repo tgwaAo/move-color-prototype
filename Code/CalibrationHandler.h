@@ -69,10 +69,9 @@ private:
     /**
      * @brief Calculate probability to be searched color.
      * @param err2 Squared error used to calculate probability.
-     * @param factor Factor to strech function.
      * @return Calculated probability of being searched color.
      */
-    double getProbability(const double &err2,const double &factor);
+    double getProbability(const double err2);
     
     /**
      * @brief Predict pixel being bright or dark searched color. Use higher value.
@@ -142,10 +141,15 @@ private:
                                int flags, void *userdata);
     
 
-    std::vector<cv::Point> square_points; // Used for clickAndCrop
+    std::vector<cv::Point> squarePoints; // Used for clickAndCrop
 
-    uint8_t hsvChannels; // Always 3!
-
+    const uint8_t HSV_CHANNELS = 3;
+    const uint8_t KEY_ACCEPT = 13;
+    const uint8_t KEY_S = 115;
+    const uint8_t KEY_R = 114;
+    const uint8_t KEY_ESC = 27;
+    const uint8_t POINTS_OF_RECTANGLE = 2;
+    
     cv::Mat imgCopy;
     std::string title_;
     uint16_t distanceText2Border_;
