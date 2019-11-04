@@ -14,9 +14,9 @@ CalibrationHandler::CalibrationHandler(std::string title, uint16_t distanceText2
       font_(font),textScale_(textScale), textColor_(textColor),
       textThickness_(textThickness)
 {
-    hsvColor_ = {0,0,0}; // Just some really wrong values.
-    factorsColor_ = {1000000,1000000,1000000}; // Just some really wrong values.
-
+//    hsvColor_ = {0,0,0};
+//    factorsColor_ = {1000000,1000000,1000000};
+    
     hsvPtr = 0;
 
     negDist = 2;

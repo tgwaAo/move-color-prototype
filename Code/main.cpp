@@ -143,7 +143,7 @@ int main()
     CircleHandler posHandler(7, targetRadius, stateTimes, cv::Scalar(0,254,0), WIDTH, HEIGHT);
 
     for (uint8_t i = 0; i < stateTimes.size(); ++i)
-        stateTimes[i] = 10;
+        stateTimes[i] = 5;
 
     targetRadius = 20;
     CircleHandler negHandler(14, targetRadius, stateTimes, cv::Scalar(0,0,254), WIDTH, HEIGHT);
