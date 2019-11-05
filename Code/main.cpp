@@ -40,6 +40,9 @@
 #include "CircleHandler.h"
 
 
+uint8_t gameplay(cv::VideoCapture& cap, cv::Mat& mirror, const std::string& title, const uint8_t corner2center,
+                 CircleHandler& posHandler, CircleHandler& negHandler, const uint8_t maxDistance,
+                 std::vector<std::vector<ParticleWeighting> > weightingMatrix);
 /**
  * @brief Take a photo after 5 seconds.
  * @param cap Camera to shot photo.
@@ -47,6 +50,9 @@
  * @param title Title shown on conting down.
  */
 void photoWithTimer(cv::VideoCapture &cap, cv::Mat &image, const std::string &title);
+
+int16_t loadHighscore(const std::string& filename,
+                      int16_t hits);
 
 /**
  * @brief Save calibration in a txt file.
@@ -85,6 +91,9 @@ int main()
     struct stat buffer;
     const std::string SETTINGS_FILENAME = "hsv.txt";
 
+    CalibrationHandler calibrator(TITLE);
+    cv::Mat mirror;
+
     /*********************************************************************
      * Load configuration or calibrate a new.
      * ******************************************************************/
@@ -101,11 +110,9 @@ int main()
 
         settings_file.close();
     } else {
-        cv::Mat image;
-        photoWithTimer(cap, image, TITLE);
-        CalibrationHandler calibrator(TITLE);
-        calibrator.calibrate(image, hsvColor, factorsColor);
-        saveCalibration(SETTINGS_FILENAME, hsvColor,factorsColor);
+        photoWithTimer(cap, mirror, TITLE);
+        calibrator.calibrate(mirror, hsvColor, factorsColor);
+        saveCalibration(SETTINGS_FILENAME, hsvColor, factorsColor);
     }
 
     /************************************************************
@@ -152,23 +159,63 @@ int main()
     /*******************************************************
      * Let the game start.
      * ****************************************************/
+    uint8_t keyCode;
+    const uint8_t CODE_END = 1;
+    const uint8_t CODE_CALIBRATE = 2;
+    bool run = true;
+    const uint8_t CORNER_2_CENTER = MAX_DISTANCE/2;
+
+    while (run) {
+        keyCode = gameplay(cap, mirror, TITLE, CORNER_2_CENTER, posHandler,
+                           negHandler, MAX_DISTANCE, weightingMatrix);
+
+        switch (keyCode) {
+        case CODE_END:
+            run = false;
+            break;
+        case CODE_CALIBRATE:
+            photoWithTimer(cap, mirror, TITLE); // move outside
+            calibrator.calibrate(mirror,hsvColor,factorsColor);
+            saveCalibration(SETTINGS_FILENAME, hsvColor,factorsColor);
+
+            for (int i = 0; i < HEIGHT/MAX_DISTANCE; ++i) {
+                for (int j = 0; j < WIDTH/MAX_DISTANCE; ++j) {
+                    weightingMatrix[i][j].setHsv(hsvColor);
+                    weightingMatrix[i][j].setFactors(factorsColor);
+                }
+            }
+
+            break;
+        }
+    }
+
+    cv::destroyAllWindows();
+
+    return 0;
+}
+
+uint8_t gameplay(cv::VideoCapture& cap, cv::Mat& mirror, const std::string& title, const uint8_t corner2center,
+                 CircleHandler& posHandler, CircleHandler& negHandler, const uint8_t maxDistance,
+                 std::vector<std::vector<ParticleWeighting> > weightingMatrix)
+{
     cv::Mat frame;
-    cv::Mat mirror;
     cv::Mat hsv;
     uint8_t* pixelPtr_hsv;
     cv::Scalar color;
     const cv::Scalar BAD_COLOR(0,0,255);
     const cv::Scalar GOOD_COLOR(255,0,0);
-    const uint8_t corner2Center = MAX_DISTANCE/2;
     std::random_device rd;
     std::mt19937 eng(rd());
 
     int key;
     bool goodArea;
-
     float leftSeconds;
-    const uint8_t gameTime = 60;
     int16_t hits = 0;
+    const int16_t KEY_ESC = 27;
+    const int16_t KEY_C = 99;
+    const int16_t KEY_R = 114;
+    const uint8_t gameTime = 60;
+
     clock_t timeStart = clock();
 
     while (true) {
@@ -180,16 +227,16 @@ int main()
         posHandler.updateCircles(mirror);
         negHandler.updateCircles(mirror);
 
-        for (int i = 0; i < HEIGHT/MAX_DISTANCE; ++i) {
-            for (int j = 0; j < WIDTH/MAX_DISTANCE; ++j) {
+        for (int i = 0; i < weightingMatrix.size(); ++i) {
+            for (int j = 0; j < weightingMatrix[i].size(); ++j) {
                 goodArea = weightingMatrix[i][j].is_color(pixelPtr_hsv);
 
                 if (goodArea) {
                     color = GOOD_COLOR;
-                    cv::line(mirror,cv::Point(j*MAX_DISTANCE+corner2Center,i*MAX_DISTANCE+corner2Center),
-                             cv::Point(j*MAX_DISTANCE+corner2Center,i*MAX_DISTANCE+corner2Center),color,10,10);
-                    hits += posHandler.checkHit(j*MAX_DISTANCE+corner2Center,i*MAX_DISTANCE+corner2Center);
-                    hits -= negHandler.checkHit(j*MAX_DISTANCE+corner2Center,i*MAX_DISTANCE+corner2Center);
+                    cv::line(mirror,cv::Point(j*maxDistance+corner2center,i*maxDistance+corner2center),
+                             cv::Point(j*maxDistance+corner2center,i*maxDistance+corner2center),color,10,10);
+                    hits += posHandler.checkHit(j*maxDistance+corner2center,i*maxDistance+corner2center);
+                    hits -= negHandler.checkHit(j*maxDistance+corner2center,i*maxDistance+corner2center);
                 }
             }
         }
@@ -197,28 +244,14 @@ int main()
         putText(mirror,"Hits= " + std::to_string(hits),cv::Point(10,mirror.rows-10),
                 cv::FONT_HERSHEY_SIMPLEX,1.2,cv::Scalar(255,255,0));
 
-        if (cv::getWindowProperty(TITLE,cv::WND_PROP_VISIBLE)) {
-            cv::imshow(TITLE,mirror);
+        if (cv::getWindowProperty(title,cv::WND_PROP_VISIBLE)) {
+            cv::imshow(title,mirror);
             key = cv::waitKey(1);
 
-            if (key == 27) // esc
+            if (key == KEY_ESC)
                 break;
-            else if (key == 99) { // 'c'
-                cv::Mat image;
-                photoWithTimer(cap, image, TITLE);
-                CalibrationHandler calibrator(TITLE);
-                calibrator.calibrate(image,hsvColor,factorsColor);
-                saveCalibration(SETTINGS_FILENAME, hsvColor,factorsColor);
-
-                for (int i = 0; i < HEIGHT/MAX_DISTANCE; ++i) {
-                    for (int j = 0; j < WIDTH/MAX_DISTANCE; ++j) {
-                        weightingMatrix[i][j].setHsv(hsvColor);
-                        weightingMatrix[i][j].setFactors(factorsColor);
-                    }
-                }
-
-                timeStart = clock(); // New start of game timer.
-                hits = 0; // Reset points gained in game.
+            else if (key == KEY_C) {
+                return 2;
             }
         }
 
@@ -231,57 +264,29 @@ int main()
     /******************************************************
      * Get actual highscore and show it.
      * ***************************************************/
+    const std::string HIGHSCORE_FILENAME = "highscore.txt";
+    int16_t highscore = loadHighscore(HIGHSCORE_FILENAME, hits);
+
     cv::putText(mirror, "Finished",cv::Point(20,mirror.rows/2),cv::FONT_HERSHEY_SIMPLEX,
                 1.2,cv::Scalar(255,255,0));
-
-    const std::string HIGHTSCORE_FILENAME = "highscore.txt";
-    int16_t highscore;
-    bool alreadyExits = stat (HIGHTSCORE_FILENAME.c_str(), &buffer) == 0;
-
-    if (alreadyExits) {
-        std::ifstream readHighscoreFile;
-        readHighscoreFile.open(HIGHTSCORE_FILENAME);
-
-        readHighscoreFile >> highscore;
-
-        readHighscoreFile.close();
-
-        if (highscore < hits) {
-            highscore = hits;
-
-            std::ofstream writeHighscoreFile;
-            writeHighscoreFile.open(HIGHTSCORE_FILENAME);
-
-            writeHighscoreFile << hits;
-
-            writeHighscoreFile.close();
-        }
-    } else {
-        highscore = hits;
-
-        std::ofstream writeHighscoreFile;
-        writeHighscoreFile.open(HIGHTSCORE_FILENAME);
-
-        writeHighscoreFile << hits;
-
-        writeHighscoreFile.close();
-    }
-
     cv::putText(mirror, "Highscore = " + std::to_string(highscore),cv::Point(20,30+mirror.rows/2),
                 cv::FONT_HERSHEY_SIMPLEX,1.2,cv::Scalar(255,255,0));
-    cv::imshow(TITLE,mirror);
+    cv::imshow(title,mirror);
 
     while (true) {
-        if (cv::getWindowProperty(TITLE,cv::WND_PROP_VISIBLE)) {
-            if (cv::waitKey(100) != -1)
-                break;
+        if (cv::getWindowProperty(title,cv::WND_PROP_VISIBLE)) {
+            key = cv::waitKey(100);
+            if (key != -1) {
+                if (key == KEY_R)
+                    return 0;
+                else
+                    break;
+            }
         } else
             break;
     }
 
-    cv::destroyAllWindows();
-
-    return 0;
+    return 1; // Game finished and ends.
 }
 
 // Take photo after 3 seconds.
@@ -309,9 +314,48 @@ void photoWithTimer(cv::VideoCapture &cap, cv::Mat &image, const std::string &ti
     cv::flip(frame,image,1);
 }
 
-void saveCalibration(const std::string &filename,
-                     const std::vector<uint16_t> &hsvColor,
-                     const std::vector<double> &factorsColor)
+int16_t loadHighscore(const std::string& filename,
+                      int16_t hits)
+{
+    struct stat buffer;
+    int16_t highscore;
+    
+    bool alreadyExits = stat (filename.c_str(), &buffer) == 0;
+
+    if (alreadyExits) {
+        std::ifstream readHighscoreFile;
+        readHighscoreFile.open(filename);
+
+        readHighscoreFile >> highscore;
+
+        readHighscoreFile.close();
+
+        if (highscore < hits) {
+            std::ofstream writeHighscoreFile;
+            writeHighscoreFile.open(filename);
+
+            writeHighscoreFile << hits;
+
+            writeHighscoreFile.close();
+            return hits;
+        } else {
+            return highscore;
+        }
+    } else {
+        std::ofstream writeHighscoreFile;
+        writeHighscoreFile.open(filename);
+
+        writeHighscoreFile << hits;
+
+        writeHighscoreFile.close();
+
+        return hits;
+    }
+}
+
+void saveCalibration(const std::string& filename,
+                     const std::vector<uint16_t>& hsvColor,
+                     const std::vector<double>& factorsColor)
 {
     std::ofstream save_file;
     save_file.open(filename);

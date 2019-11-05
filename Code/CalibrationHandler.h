@@ -143,11 +143,11 @@ private:
 
     std::vector<cv::Point> squarePoints; // Used for clickAndCrop
 
-    const uint8_t HSV_CHANNELS = 3;
-    const uint8_t KEY_ACCEPT = 13;
-    const uint8_t KEY_S = 115;
-    const uint8_t KEY_R = 114;
-    const uint8_t KEY_ESC = 27;
+    const int16_t HSV_CHANNELS = 3;
+    const int16_t KEY_ACCEPT = 13;
+    const int16_t KEY_S = 115;
+    const int16_t KEY_R = 114;
+    const int16_t KEY_ESC = 27;
     const uint8_t POINTS_OF_RECTANGLE = 2;
     
     cv::Mat imgCopy;
