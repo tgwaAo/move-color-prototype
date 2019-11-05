@@ -111,8 +111,9 @@ int main()
         settings_file.close();
     } else {
         photoWithTimer(cap, mirror, TITLE);
-        calibrator.calibrate(mirror, hsvColor, factorsColor);
-        saveCalibration(SETTINGS_FILENAME, hsvColor, factorsColor);
+        if (calibrator.calibrate(mirror, hsvColor, factorsColor))
+            saveCalibration(SETTINGS_FILENAME, hsvColor, factorsColor);
+
     }
 
     /************************************************************
@@ -175,16 +176,17 @@ int main()
             break;
         case CODE_CALIBRATE:
             photoWithTimer(cap, mirror, TITLE); // move outside
-            calibrator.calibrate(mirror,hsvColor,factorsColor);
-            saveCalibration(SETTINGS_FILENAME, hsvColor,factorsColor);
 
-            for (int i = 0; i < HEIGHT/MAX_DISTANCE; ++i) {
-                for (int j = 0; j < WIDTH/MAX_DISTANCE; ++j) {
-                    weightingMatrix[i][j].setHsv(hsvColor);
-                    weightingMatrix[i][j].setFactors(factorsColor);
+            if (calibrator.calibrate(mirror,hsvColor,factorsColor)) {
+                saveCalibration(SETTINGS_FILENAME, hsvColor,factorsColor);
+
+                for (int i = 0; i < HEIGHT/MAX_DISTANCE; ++i) {
+                    for (int j = 0; j < WIDTH/MAX_DISTANCE; ++j) {
+                        weightingMatrix[i][j].setHsv(hsvColor);
+                        weightingMatrix[i][j].setFactors(factorsColor);
+                    }
                 }
             }
-
             break;
         }
     }
@@ -319,7 +321,7 @@ int16_t loadHighscore(const std::string& filename,
 {
     struct stat buffer;
     int16_t highscore;
-    
+
     bool alreadyExits = stat (filename.c_str(), &buffer) == 0;
 
     if (alreadyExits) {

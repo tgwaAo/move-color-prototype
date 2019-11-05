@@ -49,8 +49,9 @@ public:
      * @param hsvColor Values to decide, whether a color is inside 
      *                  bright color spectrum or not.
      * @param factorsColor Factors to calculate prediction of dark color spectrum.
+     * @return Acception of new values.
      */
-    void calibrate(cv::Mat img,
+    bool calibrate(cv::Mat img,
                    std::vector<uint16_t> &hsvColor, 
                    std::vector<double> &factorsColor);
 

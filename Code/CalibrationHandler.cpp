@@ -31,7 +31,7 @@ CalibrationHandler::~CalibrationHandler()
 {
 }
 
-void CalibrationHandler::calibrate(cv::Mat img,
+bool CalibrationHandler::calibrate(cv::Mat img,
                                    std::vector<uint16_t> &hsvColor,
                                    std::vector<double> &factorsColor)
 {
@@ -46,6 +46,9 @@ void CalibrationHandler::calibrate(cv::Mat img,
     int key;
     std::vector<cv::Point> truePositiveSquare;
     const uint8_t WAIT_TIME = 20;
+
+    if (squarePoints.size() == 2)
+        std::cout << "here";
 
     while (true) {
         cv::imshow(title_, imgCopy);
@@ -281,6 +284,11 @@ void CalibrationHandler::calibrate(cv::Mat img,
     }
 
     *hsvPtr = 0;
+    squarePoints.pop_back();
+    squarePoints.pop_back();
+    squarePoints.pop_back();
+    
+    return acceptValues;
 }
 
 void CalibrationHandler::findMinMaxXY(const std::vector<cv::Point> &square, uint16_t &smallestX,
