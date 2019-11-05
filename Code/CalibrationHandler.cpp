@@ -74,7 +74,7 @@ bool CalibrationHandler::calibrate(cv::Mat img,
             truePositiveSquare = squarePoints;
             break;
         } else if (key == KEY_ESC) {
-            return;
+            return false;
         }
     }
 
@@ -112,7 +112,7 @@ bool CalibrationHandler::calibrate(cv::Mat img,
         } else if (key == KEY_ACCEPT) {
             break;
         } else if (key == KEY_ESC) {
-            return;
+            return false;
         }
     }
 
@@ -222,7 +222,7 @@ bool CalibrationHandler::calibrate(cv::Mat img,
     key = cv::waitKey(0);
 
     if (key == KEY_ESC) {
-        return;
+        return false;
     }
 
     cv::putText(imgCopy,"Calculating ...",
