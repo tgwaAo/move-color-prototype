@@ -39,7 +39,18 @@
 #include "CalibrationHandler.h"
 #include "CircleHandler.h"
 
-
+/**
+ * @brief A single play.
+ * @param cap Camera for aquisition of pictures.
+ * @param mirror Image for visualization.
+ * @param title Title of gameplay.
+ * @param corner2center Distance from center of particle weighting to its start.
+ * @param posHandler Handler of positive circles.
+ * @param negHandler Handler of negative circles.
+ * @param maxDistance Distance of one particle weighting.
+ * @param weightingMatrix Matrix of particle weightings.
+ * @return Code of user input. 0 for replay, 1 for end of game and 2 for calibration.
+ */
 uint8_t gameplay(cv::VideoCapture& cap, cv::Mat& mirror, const std::string& title, const uint8_t corner2center,
                  CircleHandler& posHandler, CircleHandler& negHandler, const uint8_t maxDistance,
                  std::vector<std::vector<ParticleWeighting> > weightingMatrix);
@@ -51,6 +62,12 @@ uint8_t gameplay(cv::VideoCapture& cap, cv::Mat& mirror, const std::string& titl
  */
 void photoWithTimer(cv::VideoCapture &cap, cv::Mat &image, const std::string &title);
 
+/**
+ * @brief Load last highscore and return current highscore.
+ * @param filename Name of highscore file.
+ * @param hits Number of hits in actual gameplay.
+ * @return Actual highscore.
+ */
 int16_t loadHighscore(const std::string& filename,
                       int16_t hits);
 
