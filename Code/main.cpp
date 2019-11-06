@@ -195,7 +195,7 @@ int main()
             run = false;
             break;
         case CODE_CALIBRATE:
-            photoWithTimer(std::move(cap), mirror, TITLE); // move outside
+            photoWithTimer(std::move(cap), mirror, TITLE);
 
             if (calibrator.calibrate(mirror,hsvColor,factorsColor)) {
                 saveCalibration(SETTINGS_FILENAME, hsvColor,factorsColor);
