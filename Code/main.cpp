@@ -51,7 +51,8 @@
  * @param weightingMatrix Matrix of particle weightings.
  * @return Code of user input. 0 for replay, 1 for end of game and 2 for calibration.
  */
-uint8_t gameplay(cv::VideoCapture& cap, cv::Mat& mirror,
+uint8_t gameplay(std::unique_ptr<cv::VideoCapture> cap,
+                 cv::Mat *mirror,
                  const std::string& title, const uint8_t corner2center,
                  CircleHandler& posHandler, CircleHandler& negHandler,
                  const uint8_t maxDistance,
@@ -62,7 +63,7 @@ uint8_t gameplay(cv::VideoCapture& cap, cv::Mat& mirror,
  * @param image Image to save picture.
  * @param title Title shown on conting down.
  */
-void photoWithTimer(cv::VideoCapture &cap, cv::Mat &image, const std::string &title);
+void photoWithTimer(std::unique_ptr<cv::VideoCapture> cap, cv::Mat *image, const std::string &title);
 
 /**
  * @brief Load last highscore and return current highscore.
@@ -88,19 +89,19 @@ int main()
     /*******************************************************************
      * Set camera up and initialize variables.
      * ****************************************************************/
-    cv::VideoCapture cap(1);
+    std::unique_ptr<cv::VideoCapture> cap(new cv::VideoCapture(1));
 
-    if (!cap.isOpened()) {
+    if (!cap->isOpened()) {
         return -1;
     }
 
     const double WIDTH = 640;
     const double HEIGHT = 480;
 
-    cap.set(cv::CAP_PROP_FRAME_WIDTH,WIDTH);
-    cap.set(cv::CAP_PROP_FRAME_HEIGHT,HEIGHT);
+    cap->set(cv::CAP_PROP_FRAME_WIDTH, WIDTH);
+    cap->set(cv::CAP_PROP_FRAME_HEIGHT, HEIGHT);
 
-    const std::string TITLE = "calibration";
+    const std::string TITLE = "Calibration";
     cv::namedWindow(TITLE,cv::WINDOW_AUTOSIZE);
     cv::resizeWindow(TITLE, WIDTH,HEIGHT);
 
@@ -111,7 +112,7 @@ int main()
     const std::string SETTINGS_FILENAME = "hsv.txt";
 
     CalibrationHandler calibrator(TITLE);
-    cv::Mat mirror;
+    cv::Mat *mirror(new cv::Mat);
 
     /*********************************************************************
      * Load configuration or calibrate a new.
@@ -129,8 +130,8 @@ int main()
 
         settings_file.close();
     } else {
-        photoWithTimer(cap, mirror, TITLE);
-        if (calibrator.calibrate(mirror, hsvColor, factorsColor))
+        photoWithTimer(std::move(cap), mirror, TITLE);
+        if (calibrator.calibrate(std::move(mirror), hsvColor, factorsColor))
             saveCalibration(SETTINGS_FILENAME, hsvColor, factorsColor);
 
     }
@@ -186,7 +187,7 @@ int main()
     const uint8_t CORNER_2_CENTER = MAX_DISTANCE/2;
 
     while (run) {
-        keyCode = gameplay(cap, mirror, TITLE, CORNER_2_CENTER, posHandler,
+        keyCode = gameplay(std::move(cap), mirror, TITLE, CORNER_2_CENTER, posHandler,
                            negHandler, MAX_DISTANCE, weightingMatrix);
 
         switch (keyCode) {
@@ -194,7 +195,7 @@ int main()
             run = false;
             break;
         case CODE_CALIBRATE:
-            photoWithTimer(cap, mirror, TITLE); // move outside
+            photoWithTimer(std::move(cap), mirror, TITLE); // move outside
 
             if (calibrator.calibrate(mirror,hsvColor,factorsColor)) {
                 saveCalibration(SETTINGS_FILENAME, hsvColor,factorsColor);
@@ -211,12 +212,16 @@ int main()
     }
 
     cv::destroyAllWindows();
+    delete mirror;
 
     return 0;
 }
 
-uint8_t gameplay(cv::VideoCapture& cap, cv::Mat& mirror, const std::string& title, const uint8_t corner2center,
-                 CircleHandler& posHandler, CircleHandler& negHandler, const uint8_t maxDistance,
+uint8_t gameplay(std::unique_ptr<cv::VideoCapture> cap,
+                 cv::Mat *mirror,
+                 const std::string& title, const uint8_t corner2center,
+                 CircleHandler& posHandler, CircleHandler& negHandler,
+                 const uint8_t maxDistance,
                  std::vector<std::vector<ParticleWeighting> > weightingMatrix)
 {
     cv::Mat frame;
@@ -240,13 +245,13 @@ uint8_t gameplay(cv::VideoCapture& cap, cv::Mat& mirror, const std::string& titl
     clock_t timeStart = clock();
 
     while (true) {
-        cap >> frame;
-        cv::flip(frame,mirror,1);
-        cvtColor(mirror,hsv,cv::COLOR_BGR2HSV);
+        *cap >> frame;
+        cv::flip(frame, *mirror,1);
+        cvtColor(*mirror,hsv,cv::COLOR_BGR2HSV);
         pixelPtr_hsv= (uint8_t*)hsv.data;
 
-        posHandler.updateCircles(mirror);
-        negHandler.updateCircles(mirror);
+        posHandler.updateCircles(std::move(mirror));
+        negHandler.updateCircles(std::move(mirror));
 
         for (int i = 0; i < weightingMatrix.size(); ++i) {
             for (int j = 0; j < weightingMatrix[i].size(); ++j) {
@@ -254,7 +259,7 @@ uint8_t gameplay(cv::VideoCapture& cap, cv::Mat& mirror, const std::string& titl
 
                 if (goodArea) {
                     color = GOOD_COLOR;
-                    cv::line(mirror,cv::Point(j*maxDistance+corner2center,i*maxDistance+corner2center),
+                    cv::line(*mirror,cv::Point(j*maxDistance+corner2center,i*maxDistance+corner2center),
                              cv::Point(j*maxDistance+corner2center,i*maxDistance+corner2center),color,10,10);
                     hits += posHandler.checkHit(j*maxDistance+corner2center,i*maxDistance+corner2center);
                     hits -= negHandler.checkHit(j*maxDistance+corner2center,i*maxDistance+corner2center);
@@ -262,11 +267,11 @@ uint8_t gameplay(cv::VideoCapture& cap, cv::Mat& mirror, const std::string& titl
             }
         }
 
-        putText(mirror,"Hits= " + std::to_string(hits),cv::Point(10,mirror.rows-10),
+        putText(*mirror,"Hits= " + std::to_string(hits),cv::Point(10, mirror->rows-10),
                 cv::FONT_HERSHEY_SIMPLEX,1.2,cv::Scalar(255,255,0));
 
         if (cv::getWindowProperty(title,cv::WND_PROP_VISIBLE)) {
-            cv::imshow(title,mirror);
+            cv::imshow(title, *mirror);
             key = cv::waitKey(1);
 
             if (key == KEY_ESC)
@@ -288,15 +293,16 @@ uint8_t gameplay(cv::VideoCapture& cap, cv::Mat& mirror, const std::string& titl
     const std::string HIGHSCORE_FILENAME = "highscore.txt";
     int16_t highscore = loadHighscore(HIGHSCORE_FILENAME, hits);
 
-    cv::putText(mirror, "Finished",cv::Point(20,mirror.rows/2),cv::FONT_HERSHEY_SIMPLEX,
+    cv::putText(*mirror, "Finished",cv::Point(20, mirror->rows/2),cv::FONT_HERSHEY_SIMPLEX,
                 1.2,cv::Scalar(255,255,0));
-    cv::putText(mirror, "Highscore = " + std::to_string(highscore),cv::Point(20,30+mirror.rows/2),
+    cv::putText(*mirror, "Highscore = " + std::to_string(highscore),cv::Point(20, 30+mirror->rows/2),
                 cv::FONT_HERSHEY_SIMPLEX,1.2,cv::Scalar(255,255,0));
-    cv::imshow(title,mirror);
+    cv::imshow(title, *mirror);
 
     while (true) {
         if (cv::getWindowProperty(title,cv::WND_PROP_VISIBLE)) {
             key = cv::waitKey(100);
+
             if (key != -1) {
                 if (key == KEY_R)
                     return 0;
@@ -311,7 +317,7 @@ uint8_t gameplay(cv::VideoCapture& cap, cv::Mat& mirror, const std::string& titl
 }
 
 // Take photo after 3 seconds.
-void photoWithTimer(cv::VideoCapture &cap, cv::Mat &image, const std::string &title)
+void photoWithTimer(std::unique_ptr<cv::VideoCapture> cap, cv::Mat *image, const std::string &title)
 {
     /***********************************************************
     *  Wait a few seconds to give the user time to get in position.
@@ -322,17 +328,17 @@ void photoWithTimer(cv::VideoCapture &cap, cv::Mat &image, const std::string &ti
     cv::Mat frame;
 
     while (leftSeconds > 0) {
-        cap >> frame;
-        cv::flip(frame,image,1);
+        *cap >> frame;
+        cv::flip(frame,*image,1);
         leftSeconds = minTimePassed - (float)(clock() - timeStart)/CLOCKS_PER_SEC;
-        cv::putText(image,"Countdown= " + std::to_string(leftSeconds),
-                    cv::Point(10,image.rows-10),cv::FONT_HERSHEY_SIMPLEX,1.2,cv::Scalar(255,255,0),2);
-        cv::imshow(title,image);
+        cv::putText(*image,"Countdown= " + std::to_string(leftSeconds),
+                    cv::Point(10,image->rows-10),cv::FONT_HERSHEY_SIMPLEX,1.2,cv::Scalar(255,255,0),2);
+        cv::imshow(title, *image);
         cv::waitKey(1);
     }
 
-    cap >> frame;
-    cv::flip(frame,image,1);
+    *cap >> frame;
+    cv::flip(frame, *image,1);
 }
 
 int16_t loadHighscore(const std::string& filename,

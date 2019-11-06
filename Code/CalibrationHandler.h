@@ -48,7 +48,7 @@ public:
      * @param factorsColor Factors to calculate prediction of dark color spectrum.
      * @return Acception of new values.
      */
-    bool calibrate(cv::Mat img,
+    bool calibrate(cv::Mat *img,
                    std::vector<uint16_t> &hsvColor, 
                    std::vector<double> &factorsColor);
 

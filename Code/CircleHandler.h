@@ -47,7 +47,7 @@ public:
      * @brief Update states and drawings.
      * @param img Used image to draw circles.
      */
-    void updateCircles(cv::Mat &img);
+    void updateCircles(cv::Mat *img);
 
     /**
      * @brief Check hits of circles at position.

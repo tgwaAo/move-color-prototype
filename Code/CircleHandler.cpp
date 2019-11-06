@@ -41,7 +41,7 @@ CircleHandler::~CircleHandler()
 {
 }
 
-void CircleHandler::updateCircles(cv::Mat &img)
+void CircleHandler::updateCircles(cv::Mat *img)
 {
     float leftSeconds;
     cv::Scalar usedColor;
@@ -62,7 +62,7 @@ void CircleHandler::updateCircles(cv::Mat &img)
             usedColor.val[0] = color_.val[0] * 0.5 * allCircles[i].status;
             usedColor.val[1] = color_.val[1] * 0.5 * allCircles[i].status;
             usedColor.val[2] = color_.val[2] * 0.5 * allCircles[i].status;
-            cv::circle(img,allCircles[i].point,radius_,
+            cv::circle(*img,allCircles[i].point,radius_,
                        usedColor,-1);
         }
     }

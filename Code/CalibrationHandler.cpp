@@ -31,7 +31,7 @@ CalibrationHandler::~CalibrationHandler()
 {
 }
 
-bool CalibrationHandler::calibrate(cv::Mat img,
+bool CalibrationHandler::calibrate(cv::Mat *img,
                                    std::vector<uint16_t> &hsvColor,
                                    std::vector<double> &factorsColor)
 {
@@ -40,7 +40,7 @@ bool CalibrationHandler::calibrate(cv::Mat img,
      * ************************************************************/
     cv::setMouseCallback(title_, clickAndCrop, this);
 
-    img.copyTo(imgCopy);
+    img->copyTo(imgCopy);
     cv::putText(imgCopy,"Select ONLY good color", cv::Point(distanceText2Border_,imgCopy.rows-distanceText2Border_),
                 font_, textScale_, textColor_, textThickness_);
     int key;
@@ -54,7 +54,7 @@ bool CalibrationHandler::calibrate(cv::Mat img,
         cv::imshow(title_, imgCopy);
 
         if (squarePoints.size() == POINTS_OF_RECTANGLE) { // Draw rectangle.
-            img.copyTo(imgCopy);
+            img->copyTo(imgCopy);
             cv::putText(imgCopy,"Select ONLY good color", cv::Point(distanceText2Border_,imgCopy.rows-distanceText2Border_),
                         font_, textScale_, textColor_, textThickness_);
             cv::rectangle(imgCopy, squarePoints[0], squarePoints[1],cv::Scalar(0,0,0),2);
@@ -66,7 +66,7 @@ bool CalibrationHandler::calibrate(cv::Mat img,
             for (int i = 0; i < POINTS_OF_RECTANGLE; ++i) {
                 squarePoints.pop_back();
             }
-            img.copyTo(imgCopy);
+            img->copyTo(imgCopy);
             cv::putText(imgCopy,"Select ONLY good color",
                         cv::Point(distanceText2Border_,imgCopy.rows-distanceText2Border_),
                         font_, textScale_, textColor_, textThickness_);
@@ -83,7 +83,7 @@ bool CalibrationHandler::calibrate(cv::Mat img,
      * ***************************************************************/
     squarePoints.pop_back();
     squarePoints.pop_back();
-    img.copyTo(imgCopy);
+    img->copyTo(imgCopy);
     cv::putText(imgCopy,"Select MORE than good color!",
                 cv::Point(distanceText2Border_,imgCopy.rows-distanceText2Border_),
                 font_, textScale_, textColor_, textThickness_);
@@ -92,7 +92,7 @@ bool CalibrationHandler::calibrate(cv::Mat img,
         cv::imshow(title_, imgCopy);
 
         if (squarePoints.size() == POINTS_OF_RECTANGLE) {
-            img.copyTo(imgCopy);
+            img->copyTo(imgCopy);
             cv::putText(imgCopy,"Select MORE than good color!",
                         cv::Point(distanceText2Border_,imgCopy.rows-distanceText2Border_),
                         font_, textScale_, textColor_, textThickness_);
@@ -105,7 +105,7 @@ bool CalibrationHandler::calibrate(cv::Mat img,
             for (int i = 0; i < POINTS_OF_RECTANGLE; ++i) {
                 squarePoints.pop_back();
             }
-            img.copyTo(imgCopy);
+            img->copyTo(imgCopy);
             cv::putText(imgCopy,"Select MORE than good color!",
                         cv::Point(distanceText2Border_,imgCopy.rows-distanceText2Border_),
                         font_, textScale_, textColor_, textThickness_);
@@ -119,7 +119,7 @@ bool CalibrationHandler::calibrate(cv::Mat img,
     /*************************************************************
      * Calculate sizes for preallocation
      * **********************************************************/
-    img.copyTo(imgCopy);
+    img->copyTo(imgCopy);
     cv::putText(imgCopy,"Calibrating ...",
                 cv::Point(distanceText2Border_,imgCopy.rows-distanceText2Border_),
                 font_, textScale_, textColor_, textThickness_);
@@ -161,7 +161,7 @@ bool CalibrationHandler::calibrate(cv::Mat img,
     hsvValues = Matrix8u(numAll,3);
 
     uint64_t counter = 0;
-    img.copyTo(imgCopy);
+    img->copyTo(imgCopy);
     cv::Mat hsv;
     cv::cvtColor(imgCopy,hsv,cv::COLOR_BGR2HSV);
     hsvPtr = (uint8_t*)hsv.data;
@@ -271,7 +271,7 @@ bool CalibrationHandler::calibrate(cv::Mat img,
      * Visualisation of bright color search and optional save.
      * ************************************************************/
 
-    img.copyTo(imgCopy);
+    img->copyTo(imgCopy);
     bool acceptValues =  visualizeResult();
 
     if (acceptValues) {
