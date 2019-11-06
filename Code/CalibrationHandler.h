@@ -9,9 +9,6 @@
 #include <vector>
 #include <eigen3/Eigen/Dense>
 
-#include "ParticleWeighting.h"
-
-
 // Define own matrix to save space
 typedef Eigen::Matrix<uint8_t, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> Matrix8u;
 

@@ -9,8 +9,8 @@
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
 //
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
 //
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -29,11 +29,11 @@
 */
 
 
-#include <opencv2/opencv.hpp>
-#include <sstream>
 #include <sys/stat.h>
+#include <sstream>
 #include <vector>
 #include <random>
+#include <opencv2/opencv.hpp>
 
 #include "ParticleWeighting.h"
 #include "CalibrationHandler.h"
@@ -51,8 +51,10 @@
  * @param weightingMatrix Matrix of particle weightings.
  * @return Code of user input. 0 for replay, 1 for end of game and 2 for calibration.
  */
-uint8_t gameplay(cv::VideoCapture& cap, cv::Mat& mirror, const std::string& title, const uint8_t corner2center,
-                 CircleHandler& posHandler, CircleHandler& negHandler, const uint8_t maxDistance,
+uint8_t gameplay(cv::VideoCapture& cap, cv::Mat& mirror,
+                 const std::string& title, const uint8_t corner2center,
+                 CircleHandler& posHandler, CircleHandler& negHandler,
+                 const uint8_t maxDistance,
                  std::vector<std::vector<ParticleWeighting> > weightingMatrix);
 /**
  * @brief Take a photo after 5 seconds.
