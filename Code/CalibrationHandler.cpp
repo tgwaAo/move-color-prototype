@@ -22,7 +22,6 @@ CalibrationHandler::CalibrationHandler(std::string title, uint16_t distanceText2
     badColor = cv::Scalar(0,0,255);
     goodColor = cv::Scalar(0,255,0);
 
-    startValueFactors = 0.0003;
     minError = 50;
     maxIteration = 100;
 }
@@ -331,7 +330,7 @@ double CalibrationHandler::getPrediction(const uint16_t &row, const uint16_t &co
 
 void CalibrationHandler::calculate(const uint64_t &startGoodValues)
 {
-    factorsColor_ = {startValueFactors,startValueFactors,startValueFactors};
+    factorsColor_ = {START_VALUE_FACTORS,START_VALUE_FACTORS,START_VALUE_FACTORS};
 
     double errHue;
     double errSat;
@@ -507,3 +506,92 @@ void CalibrationHandler::clickAndCrop(int event, int x, int y)
         }
     }
 }
+
+void CalibrationHandler::setFont(const uint8_t& font_)
+    {
+        this->font_ = font_;
+    }
+    
+    void CalibrationHandler::setMaxIteration(const uint16_t& maxIteration)
+    {
+        this->maxIteration = maxIteration;
+    }
+
+    void CalibrationHandler::setMinError(double minError)
+    {
+        this->minError = minError;
+    }
+    
+    void CalibrationHandler::setNegDist(const uint8_t& negDist)
+    {
+        this->negDist = negDist;
+    }
+    
+    void CalibrationHandler::setPosDist(const uint8_t& posDist)
+    {
+        this->posDist = posDist;
+    }
+    
+    void CalibrationHandler::setTextColor(const cv::Scalar& textColor_)
+    {
+        this->textColor_ = textColor_;
+    }
+    
+    void CalibrationHandler::setTextScale(float textScale_)
+    {
+        this->textScale_ = textScale_;
+    }
+    
+    void CalibrationHandler::setTextThickness(const uint8_t& textThickness_)
+    {
+        this->textThickness_ = textThickness_;
+    }
+    
+    void CalibrationHandler::setTitle(const std::string& title_)
+    {
+        this->title_ = title_;
+    }
+    
+    const uint8_t& CalibrationHandler::getFont() const
+    {
+        return font_;
+    }
+    
+    const uint16_t& CalibrationHandler::getMaxIteration() const
+    {
+        return maxIteration;
+    }
+    
+    double CalibrationHandler::getMinError() const
+    {
+        return minError;
+    }
+    const uint8_t& CalibrationHandler::getNegDist() const
+    {
+        return negDist;
+    }
+    
+    const uint8_t& CalibrationHandler::getPosDist() const
+    {
+        return posDist;
+    }
+    
+    const cv::Scalar& CalibrationHandler::getTextColor() const
+    {
+        return textColor_;
+    }
+    
+    float CalibrationHandler::getTextScale() const
+    {
+        return textScale_;
+    }
+    
+    const uint8_t& CalibrationHandler::getTextThickness() const
+    {
+        return textThickness_;
+    }
+    
+    const std::string& CalibrationHandler::getTitle() const
+    {
+        return title_;
+    }
