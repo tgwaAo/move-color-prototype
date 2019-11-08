@@ -77,15 +77,35 @@ public:
      */
     void setCircleTimeStates(const std::vector<float>& circleTimeStates);
 
-    
+    /**
+     * @brief Set color of shown circles.
+     * @param color Color of shown circles.
+     */
     void setColor(const cv::Scalar& color);
 
+    /**
+     * @brief Set radius of shown circles.
+     * @param radius Radius of shown circles.
+     */
     void setRadius(const uint8_t radius);
 
-    float getCircleTimeState(uint8_t idx) const;
+    /**
+     * @brief Get time of state at given index.
+     * @param idx Index of time state.
+     * @return 
+     */
+    std::vector<float> getCircleTimeStates() const;
 
+    /**
+     * @brief Get color of drawn circles.
+     * @return Color of drawn circles.
+     */
     cv::Scalar getColor() const;
 
+    /**
+     * @brief Get radius of drawn cirlces.
+     * @return Radius of drawn circles.
+     */
     uint8_t getRadius() const;
 
 private:
@@ -102,7 +122,8 @@ private:
     std::mt19937 eng;
     std::uniform_int_distribution<uint16_t> randomUpDownIdx;
     std::uniform_int_distribution<uint16_t> randomLeftRightIdx;
-    const uint8_t sizeOfTimeStates = 3;
+    
+    const uint8_t SIZE_OF_TIME_STATES = 3;
 };
 
 #endif // CIRCLEHANDLER_H

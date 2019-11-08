@@ -11,7 +11,7 @@ CircleHandler::CircleHandler(const uint8_t numCircles, const uint8_t radius,
                              const uint16_t width,
                              const uint16_t height)
 {
-    if (circleTimeStates.size() == sizeOfTimeStates) {
+    if (circleTimeStates.size() == SIZE_OF_TIME_STATES) {
         circleTimeStates_ = circleTimeStates;
     } else {
         circleTimeStates_ = std::vector<float>(3,10);
@@ -97,7 +97,7 @@ void CircleHandler::newPos(uint8_t idx)
 
 void CircleHandler::setCircleTimeStates(const std::vector<float>& circleTimeStates)
 {
-    if (circleTimeStates.size() == sizeOfTimeStates) {
+    if (circleTimeStates.size() == SIZE_OF_TIME_STATES) {
         circleTimeStates_ = circleTimeStates;
     }
 }
@@ -112,9 +112,9 @@ void CircleHandler::setRadius(const uint8_t radius)
     radius_ = radius;
 }
 
-float CircleHandler::getCircleTimeState(uint8_t idx) const
+std::vector<float> CircleHandler::getCircleTimeStates() const
 {
-    return circleTimeStates_[idx];
+    return circleTimeStates_;
 }
 
 cv::Scalar CircleHandler::getColor() const
