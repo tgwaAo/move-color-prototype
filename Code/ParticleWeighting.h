@@ -1,17 +1,39 @@
-/**
- * Class to calculate decision of containing a color in hsv space or not.
- * This is done via unmoving particles, because the color
- * from one pixel and the one next to it will not change often.
- */
-
+// Modified MIT License
+//
+// Copyright (c) 2019 tgwaAo
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+//
+// Modified part:
+//
+// THIS SOFTWARE DOES NOT CHECK YOUR SURROUNDINGS NOR DOES IT CONTROL YOUR
+// MOVEMENT, SO IT IS UNDER YOUR OWN RESPONSIBILITY TO ENSURE NOBODY GETS HURT
+// AND NOTHING GETS DAMAGED. PLAY CAREFULLY AND CHECK YOUR SURROUNDINGS BEFORE
+// PLAYING.
 
 #ifndef PARTICLE_WEIGHTING_H
 #define PARTICLE_WEIGHTING_H
 
 
-#include <vector>
-#include <cstdint>
 #include <math.h>
+#include <cstdint>
+#include <vector>
 
 
 /**
@@ -38,7 +60,17 @@ public:
      * @param factors Factors multiplied by squared error.
      * @param hsvBest HSV values without error.
      */
-    ParticleWeighting(const uint16_t &num_particles_, const double &min_width_, const double &max_width_, const double &min_height_, const double &max_height_, const uint16_t &max_weight_, const uint16_t &cols_, const uint32_t bound_, const std::vector<double> &factors, const std::vector<uint16_t> &hsvBest);
+    ParticleWeighting(
+        const uint16_t &num_particles_,
+        const double &min_width_,
+        const double &max_width_,
+        const double &min_height_,
+        const double &max_height_,
+        const uint16_t &max_weight_,
+        const uint16_t &cols_,
+        const uint32_t bound_,
+        const std::vector<double> &factors,
+        const std::vector<uint16_t> &hsvBest);
 
     /**
      * @brief Calculate sum of weights.
@@ -62,11 +94,17 @@ public:
     /**
      * @brief Get values of a particle.
      * @param idx_ Index of wanted particle.
-     * @param back_x_ X position of particle.
-     * @param back_y_ Y position of particle.
-     * @param back_w_ Weight of particle.
+     * @param backX X position of particle.
+     * @param backY Y position of particle.
+     * @param backW Weight of particle.
+     * @param alright Is alright, if idx_ is in valid range.
      */
-    void get_particle(const uint16_t &idx_, uint16_t &back_x_, uint16_t &back_y_, uint16_t &back_w_) const;
+    void getParticle(
+        const uint16_t &idx_,
+        uint16_t backX,
+        uint16_t backY,
+        uint16_t backW,
+        bool alright) const;
 
     /**
      * @brief Set values of a particle.
@@ -75,7 +113,11 @@ public:
      * @param change_y_ Next y position of particle.
      * @param change_w_ Next weight of particle.
      */
-    void set_particle(const uint16_t &idx_, const uint16_t &change_x_, const uint16_t &change_y_, const uint16_t &change_w_);
+    void set_particle(
+    const uint16_t &idx_,
+    const uint16_t &change_x_,
+    const uint16_t &change_y_,
+    const uint16_t &change_w_);
 
     /**
      * @brief Get sum of weights.
@@ -245,8 +287,8 @@ public:
      * @param factors Factors of squared errors of hsv values.
      * @return Returns true, if input vector has a length of 3.
      */
-    bool setFactors(std::vector<double> &factors);
-    
+    bool setFactors(const std::vector<double> &factors);
+
 private:
     std::vector<uint16_t> particlesX;
     std::vector<uint16_t> particlesY;
@@ -268,4 +310,4 @@ private:
     uint8_t hsvChannels;
 };
 
-#endif // PARTICLE_WEIGHTING_H
+#endif  // PARTICLE_WEIGHTING_H

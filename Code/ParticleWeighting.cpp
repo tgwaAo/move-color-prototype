@@ -1,3 +1,9 @@
+/**
+ * Class to calculate decision of containing a color in hsv space or not.
+ * This is done via unmoving particles, because the color
+ * from one pixel and the one next to it will not change often.
+ */
+
 #include "ParticleWeighting.h"
 
 void ParticleWeighting::setSumWeights(const uint32_t& value)
@@ -222,7 +228,7 @@ std::vector<double> ParticleWeighting::getFactors() const
     return factors;
 }
 
-bool ParticleWeighting::setFactors(std::vector<double> &factors)
+bool ParticleWeighting::setFactors(const std::vector<double> &factors)
 {
     if (factors.size() == hsvChannels) {
         factorH = factors[0];
@@ -231,5 +237,25 @@ bool ParticleWeighting::setFactors(std::vector<double> &factors)
         return true;
     } else {
         return false;
+    }
+}
+
+void ParticleWeighting::getParticle(
+    const uint16_t &idx_,
+    uint16_t backX,
+    uint16_t backY,
+    uint16_t backW, 
+    bool alright) const
+{
+    if (idx_ < particlesX.size()) {
+        backX = particlesX[idx_];
+        backY = particlesY[idx_];
+        backW = particlesW[idx_];
+        alright = true;
+    } else {
+        backX = 0;
+        backY = 0;
+        backW = 0;
+        alright = false;
     }
 }
