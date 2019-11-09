@@ -1,3 +1,32 @@
+// Modified MIT License
+//
+// Copyright (c) 2019 tgwaAo
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+//
+// Modified part:
+//
+// THIS SOFTWARE DOES NOT CHECK YOUR SURROUNDINGS NOR DOES IT CONTROL YOUR
+// MOVEMENT, SO IT IS UNDER YOUR OWN RESPONSIBILITY TO ENSURE NOBODY GETS HURT
+// AND NOTHING GETS DAMAGED. PLAY CAREFULLY AND CHECK YOUR SURROUNDINGS BEFORE
+// PLAYING.
+
 /**
 * CalibrationHandler.cpp
 *
@@ -7,11 +36,18 @@
 
 #include "CalibrationHandler.h"
 
-CalibrationHandler::CalibrationHandler(std::string title, uint16_t distanceText2Border,
-                                       uint8_t font, float textScale,
-                                       cv::Scalar textColor, uint8_t textThickness)
-    : title_ (title), distanceText2Border_(distanceText2Border),
-      font_(font),textScale_(textScale), textColor_(textColor),
+CalibrationHandler::CalibrationHandler(
+    std::string title,
+    uint16_t distanceText2Border,
+    uint8_t font,
+    float textScale,
+    cv::Scalar textColor,
+    uint8_t textThickness)
+    : title_(title),
+      distanceText2Border_(distanceText2Border),
+      font_(font),
+      textScale_(textScale),
+      textColor_(textColor),
       textThickness_(textThickness)
 {
     hsvPtr = 0;
@@ -19,8 +55,8 @@ CalibrationHandler::CalibrationHandler(std::string title, uint16_t distanceText2
     negDist = 2;
     posDist = 1;
 
-    badColor = cv::Scalar(0,0,255);
-    goodColor = cv::Scalar(0,255,0);
+    badColor = cv::Scalar(0, 0, 255);
+    goodColor = cv::Scalar(0, 255, 0);
 
     minError = 50;
     maxIteration = 100;
@@ -30,9 +66,10 @@ CalibrationHandler::~CalibrationHandler()
 {
 }
 
-bool CalibrationHandler::calibrate(cv::Mat *img,
-                                   std::vector<uint16_t> *hsvColor,
-                                   std::vector<double> *factorsColor)
+bool CalibrationHandler::calibrate(
+    cv::Mat *img,
+    std::vector<uint16_t> *hsvColor,
+    std::vector<double> *factorsColor)
 {
     /***************************************************************
      * Let user select positives.
@@ -40,8 +77,15 @@ bool CalibrationHandler::calibrate(cv::Mat *img,
     cv::setMouseCallback(title_, clickAndCrop, this);
 
     img->copyTo(imgCopy);
-    cv::putText(imgCopy,"Select ONLY good color", cv::Point(distanceText2Border_,imgCopy.rows-distanceText2Border_),
-                font_, textScale_, textColor_, textThickness_);
+    cv::putText(
+        imgCopy,
+        "Select ONLY good color",
+        cv::Point(distanceText2Border_, imgCopy.rows-distanceText2Border_),
+        font_,
+        textScale_,
+        textColor_,
+        textThickness_);
+
     int key;
     std::vector<cv::Point> truePositiveSquare;
     const uint8_t WAIT_TIME = 20;
@@ -52,11 +96,25 @@ bool CalibrationHandler::calibrate(cv::Mat *img,
     while (true) {
         cv::imshow(title_, imgCopy);
 
-        if (squarePoints.size() == POINTS_OF_RECTANGLE) { // Draw rectangle.
+        // Draw rectangle.
+        if (squarePoints.size() == POINTS_OF_RECTANGLE) {
             img->copyTo(imgCopy);
-            cv::putText(imgCopy,"Select ONLY good color", cv::Point(distanceText2Border_,imgCopy.rows-distanceText2Border_),
-                        font_, textScale_, textColor_, textThickness_);
-            cv::rectangle(imgCopy, squarePoints[0], squarePoints[1],cv::Scalar(0,0,0),2);
+            cv::putText(
+                imgCopy,
+                "Select ONLY good color",
+                cv::Point(
+                    distanceText2Border_,
+                    imgCopy.rows-distanceText2Border_),
+                font_,
+                textScale_,
+                textColor_,
+                textThickness_);
+            cv::rectangle(
+                imgCopy,
+                squarePoints[0],
+                squarePoints[1],
+                cv::Scalar(0, 0, 0),
+                2);
         }
 
         key = cv::waitKey(WAIT_TIME);
@@ -66,9 +124,16 @@ bool CalibrationHandler::calibrate(cv::Mat *img,
                 squarePoints.pop_back();
             }
             img->copyTo(imgCopy);
-            cv::putText(imgCopy,"Select ONLY good color",
-                        cv::Point(distanceText2Border_,imgCopy.rows-distanceText2Border_),
-                        font_, textScale_, textColor_, textThickness_);
+            cv::putText(
+                imgCopy,
+                "Select ONLY good color",
+                cv::Point(
+                    distanceText2Border_,
+                    imgCopy.rows-distanceText2Border_),
+                font_,
+                textScale_,
+                textColor_,
+                textThickness_);
         } else if (key == KEY_ACCEPT) {
             truePositiveSquare = squarePoints;
             break;
@@ -83,19 +148,37 @@ bool CalibrationHandler::calibrate(cv::Mat *img,
     squarePoints.pop_back();
     squarePoints.pop_back();
     img->copyTo(imgCopy);
-    cv::putText(imgCopy,"Select MORE than good color!",
-                cv::Point(distanceText2Border_,imgCopy.rows-distanceText2Border_),
-                font_, textScale_, textColor_, textThickness_);
+    cv::putText(imgCopy,
+                "Select MORE than good color!",
+                cv::Point(
+                    distanceText2Border_,
+                    imgCopy.rows-distanceText2Border_),
+                font_,
+                textScale_,
+                textColor_,
+                textThickness_);
 
     while (true) {
         cv::imshow(title_, imgCopy);
 
         if (squarePoints.size() == POINTS_OF_RECTANGLE) {
             img->copyTo(imgCopy);
-            cv::putText(imgCopy,"Select MORE than good color!",
-                        cv::Point(distanceText2Border_,imgCopy.rows-distanceText2Border_),
-                        font_, textScale_, textColor_, textThickness_);
-            cv::rectangle(imgCopy, squarePoints[0],squarePoints[1],cv::Scalar(0,0,0),2);
+            cv::putText(
+                imgCopy,
+                "Select MORE than good color!",
+                cv::Point(
+                    distanceText2Border_,
+                    imgCopy.rows-distanceText2Border_),
+                font_,
+                textScale_,
+                textColor_,
+                textThickness_);
+            cv::rectangle(
+                imgCopy,
+                squarePoints[0],
+                squarePoints[1],
+                cv::Scalar(0, 0, 0),
+                2);
         }
 
         key = cv::waitKey(WAIT_TIME);
@@ -105,9 +188,16 @@ bool CalibrationHandler::calibrate(cv::Mat *img,
                 squarePoints.pop_back();
             }
             img->copyTo(imgCopy);
-            cv::putText(imgCopy,"Select MORE than good color!",
-                        cv::Point(distanceText2Border_,imgCopy.rows-distanceText2Border_),
-                        font_, textScale_, textColor_, textThickness_);
+            cv::putText(
+                imgCopy,
+                "Select MORE than good color!",
+                cv::Point(
+                    distanceText2Border_,
+                    imgCopy.rows-distanceText2Border_),
+                font_,
+                textScale_,
+                textColor_,
+                textThickness_);
         } else if (key == KEY_ACCEPT) {
             break;
         } else if (key == KEY_ESC) {
@@ -119,55 +209,68 @@ bool CalibrationHandler::calibrate(cv::Mat *img,
      * Calculate sizes for preallocation
      * **********************************************************/
     img->copyTo(imgCopy);
-    cv::putText(imgCopy,"Calibrating ...",
-                cv::Point(distanceText2Border_,imgCopy.rows-distanceText2Border_),
-                font_, textScale_, textColor_, textThickness_);
+    cv::putText(
+        imgCopy,
+        "Calibrating ...",
+        cv::Point(
+            distanceText2Border_,
+            imgCopy.rows-distanceText2Border_),
+        font_,
+        textScale_,
+        textColor_,
+        textThickness_);
+
     uint16_t smallestX, biggestX, smallestY, biggestY;
 
     findMinMaxXY(squarePoints, &smallestX, &biggestX, &smallestY, &biggestY);
 
     // Above square
     uint16_t numX = ceil(imgCopy.cols/negDist);
-    uint16_t numY = ceil(smallestY/(float)negDist);
+    uint16_t numY = ceil(smallestY / static_cast<float>(negDist));
     uint64_t numAll = numX * numY;
 
     // Below square
-    numY = ceil( (imgCopy.rows-biggestY)/(float)negDist );
+    numY = ceil((imgCopy.rows - biggestY) / static_cast<float>(negDist));
     numAll += numX * numY;
 
     // Left next to square
-    numX = ceil(smallestX/(float)negDist);
-    numY = ceil( (biggestY-smallestY)/(float)negDist );
+    numX = ceil(smallestX / static_cast<float>(negDist));
+    numY = ceil((biggestY - smallestY) / static_cast<float>(negDist));
     numAll += numX * numY;
 
     // Right next to square
-    numX = ceil( (imgCopy.cols-biggestX)/(float)negDist );
+    numX = ceil((imgCopy.cols - biggestX) / static_cast<float>(negDist));
     numAll += numX * numY;
 
     // Only good values
     uint16_t goodSmallestX, goodSmallestY, goodBiggestX, goodBiggestY;
-    findMinMaxXY(truePositiveSquare, &goodSmallestX, &goodBiggestX, &goodSmallestY, &goodBiggestY);
+    findMinMaxXY(
+        truePositiveSquare,
+        &goodSmallestX,
+        &goodBiggestX,
+        &goodSmallestY,
+        &goodBiggestY);
 
-    numX = ceil( (goodBiggestX - goodSmallestX)/(float)posDist);
-    numY = ceil((goodBiggestY - goodSmallestY )/(float)posDist);
+    numX = ceil((goodBiggestX - goodSmallestX) / static_cast<float>(posDist));
+    numY = ceil((goodBiggestY - goodSmallestY) / static_cast<float>(posDist));
     uint32_t numAllGoodValues = numX * numY;
-    uint16_t mult = numAll/(numAllGoodValues);
-    numAll += mult*numAllGoodValues;
+    uint16_t mult = numAll / (numAllGoodValues);
+    numAll += mult * numAllGoodValues;
 
     /**************************************************************
      * Fill matrices with wrong colors.
      * ***********************************************************/
-    hsvValues = Matrix8u(numAll,3);
+    hsvValues = Matrix8u(numAll, 3);
 
     uint64_t counter = 0;
     img->copyTo(imgCopy);
     cv::Mat hsv;
-    cv::cvtColor(imgCopy,hsv,cv::COLOR_BGR2HSV);
-    hsvPtr = (uint8_t*)hsv.data;
+    cv::cvtColor(imgCopy, hsv, cv::COLOR_BGR2HSV);
+    hsvPtr = reinterpret_cast<uint8_t*>(hsv.data);
 
-    for (int col = 0; col < imgCopy.cols; col+=negDist) {
+    for (int col = 0; col < imgCopy.cols; col += negDist) {
         // Above square
-        for (int row = 0; row < smallestY; row+=negDist) {
+        for (int row = 0; row < smallestY; row += negDist) {
             fillMatricesWithBadValues(imgCopy.cols, row, col, counter);
             ++counter;
         }
@@ -204,34 +307,61 @@ bool CalibrationHandler::calibrate(cv::Mat *img,
 
     for (uint32_t col = goodSmallestX; col < goodBiggestX; ++col) {
         for (uint32_t row = goodSmallestY; row < goodBiggestY; ++row) {
-            line(imgCopy,cv::Point(col,row),cv::Point(col,row),goodColor);
+            line(imgCopy, cv::Point(col, row), cv::Point(col, row), goodColor);
 
             // Fill histograms.
-            ++hueHist(hsvPtr[row*imgCopy.cols*HSV_CHANNELS+col*HSV_CHANNELS]);
-            ++satHist(hsvPtr[row*imgCopy.cols*HSV_CHANNELS+col*HSV_CHANNELS+1]);
-            ++valHist(hsvPtr[row*imgCopy.cols*HSV_CHANNELS+col*HSV_CHANNELS+2]);
+            ++hueHist(
+                hsvPtr[
+                    row * imgCopy.cols * HSV_CHANNELS
+                    + col * HSV_CHANNELS]);
+
+            ++satHist(
+                hsvPtr[
+                    row * imgCopy.cols * HSV_CHANNELS
+                    + col * HSV_CHANNELS
+                    + 1]);
+
+            ++valHist(
+                hsvPtr[
+                    row * imgCopy.cols * HSV_CHANNELS
+                    + col * HSV_CHANNELS
+                    + 2]);
 
             for (uint16_t m = 0; m < mult; ++m) {
-                hsvValues(counter, 0) = hsvPtr[row*imgCopy.cols*HSV_CHANNELS+col*HSV_CHANNELS];
-                hsvValues(counter, 1) = hsvPtr[row*imgCopy.cols*HSV_CHANNELS+col*HSV_CHANNELS + 1];
-                hsvValues(counter, 2) = hsvPtr[row*imgCopy.cols*HSV_CHANNELS+col*HSV_CHANNELS + 2];
+                hsvValues(counter, 0) = hsvPtr[
+                                            row * imgCopy.cols * HSV_CHANNELS
+                                            + col * HSV_CHANNELS];
+                hsvValues(counter, 1) = hsvPtr[
+                                            row * imgCopy.cols * HSV_CHANNELS
+                                            + col * HSV_CHANNELS
+                                            + 1];
+                hsvValues(counter, 2) = hsvPtr[
+                                            row * imgCopy.cols * HSV_CHANNELS
+                                            + col * HSV_CHANNELS
+                                            + 2];
+
                 results(counter) = 1;
                 ++counter;
             }
         }
     }
 
-    cv::imshow(title_,imgCopy);
+    cv::imshow(title_, imgCopy);
     key = cv::waitKey(0);
 
     if (key == KEY_ESC) {
         return false;
     }
 
-    cv::putText(imgCopy,"Calculating ...",
-                cv::Point(distanceText2Border_,imgCopy.rows-distanceText2Border_),
-                font_, textScale_, textColor_, textThickness_);
-    cv::imshow(title_,imgCopy);
+    cv::putText(
+        imgCopy,
+        "Calculating ...",
+        cv::Point(distanceText2Border_, imgCopy.rows-distanceText2Border_),
+        font_,
+        textScale_,
+        textColor_,
+        textThickness_);
+    cv::imshow(title_, imgCopy);
     cv::waitKey(WAIT_TIME);
 
     /**********************************************************
@@ -267,13 +397,19 @@ bool CalibrationHandler::calibrate(cv::Mat *img,
     std::cout << "Starting calibration" << std::endl;
 
     calculate(goodValuesStart);
-    std::cout << "Factors for bright = " << std::endl << factorsColor_(0)
-              << " " << factorsColor_(1) << " " << factorsColor_(2) << std::endl;
+    std::cout
+            << "Factors for bright = "
+            << std::endl
+            << factorsColor_(0)
+            << " "
+            << factorsColor_(1)
+            << " "
+            << factorsColor_(2)
+            << std::endl;
 
     /***************************************************************
      * Visualisation of bright color search and optional save.
      * ************************************************************/
-
     img->copyTo(imgCopy);
     bool acceptValues =  visualizeResult();
 
@@ -323,14 +459,27 @@ double CalibrationHandler::getProbability(const double err2)
     return (1 / (1 + err2) );
 }
 
-double CalibrationHandler::getPrediction(const uint16_t &row, const uint16_t &col)
+double CalibrationHandler::getPrediction(
+    const uint16_t &row,
+    const uint16_t &col)
 {
     if (hsvPtr != 0) {
-        int16_t errHue = hsvColor_(0) - hsvPtr[row*imgCopy.cols*HSV_CHANNELS + col*HSV_CHANNELS];
-        int16_t errSat = hsvColor_(1) - hsvPtr[row*imgCopy.cols*HSV_CHANNELS + col*HSV_CHANNELS + 1];
-        int16_t errVal = hsvColor_(2) - hsvPtr[row*imgCopy.cols*HSV_CHANNELS + col*HSV_CHANNELS + 2];
-        return getProbability(pow(errHue,2)*factorsColor_(0) + pow(errSat,2)*factorsColor_(1)
-                              + pow(errVal,2)*factorsColor_(2));
+        int16_t errHue = hsvColor_(0) - hsvPtr[
+                      row * imgCopy.cols * HSV_CHANNELS
+                      + col * HSV_CHANNELS];
+        int16_t errSat = hsvColor_(1) - hsvPtr[
+                      row * imgCopy.cols * HSV_CHANNELS
+                      + col * HSV_CHANNELS
+                      + 1];
+        int16_t errVal = hsvColor_(2) - hsvPtr[
+                      row * imgCopy.cols * HSV_CHANNELS
+                      + col * HSV_CHANNELS
+                      + 2];
+
+        return getProbability(
+                   pow(errHue, 2) * factorsColor_(0)
+                   + pow(errSat, 2) * factorsColor_(1)
+                   + pow(errVal, 2) * factorsColor_(2));
     } else {
         return -1;
     }
@@ -338,12 +487,16 @@ double CalibrationHandler::getPrediction(const uint16_t &row, const uint16_t &co
 
 void CalibrationHandler::calculate(const uint64_t &startGoodValues)
 {
-    factorsColor_ = {START_VALUE_FACTORS,START_VALUE_FACTORS,START_VALUE_FACTORS};
+    factorsColor_ = {
+        START_VALUE_FACTORS,
+        START_VALUE_FACTORS,
+        START_VALUE_FACTORS
+    };
 
     double errHue;
     double errSat;
     double errVal;
-    Eigen::MatrixXd A(hsvValues.rows(),hsvValues.cols());
+    Eigen::MatrixXd A(hsvValues.rows(), hsvValues.cols());
     double sum_denominator;
     Eigen::BDCSVD<Eigen::MatrixXd> svd_solver;
     Eigen::Vector3d dx;
@@ -351,17 +504,20 @@ void CalibrationHandler::calculate(const uint64_t &startGoodValues)
 
     while (iterations < maxIteration) {
         for (int i = 0; i < hsvValues.rows(); ++i) {
-            errHue = hsvColor_[0] - hsvValues(i,0);
-            errSat = hsvColor_[1] - hsvValues(i,1);
-            errVal = hsvColor_[2] - hsvValues(i,2);
-            sum_denominator = 1 + pow(errHue,2)*factorsColor_(0)
-                              + pow(errSat,2)*factorsColor_(1) + pow(errVal,2)*factorsColor_(2);
-            A(i,0) = -pow(errHue,2)/pow(sum_denominator,2);
-            A(i,1) = -pow(errSat,2)/pow(sum_denominator,2);
-            A(i,2) = -pow(errVal,2)/pow(sum_denominator,2);
+            errHue = hsvColor_[0] - hsvValues(i, 0);
+            errSat = hsvColor_[1] - hsvValues(i, 1);
+            errVal = hsvColor_[2] - hsvValues(i, 2);
+            sum_denominator = 1
+                              + pow(errHue, 2) * factorsColor_(0)
+                              + pow(errSat, 2) * factorsColor_(1)
+                              + pow(errVal, 2) * factorsColor_(2);
+            A(i, 0) = -pow(errHue, 2) / pow(sum_denominator, 2);
+            A(i, 1) = -pow(errSat, 2) / pow(sum_denominator, 2);
+            A(i, 2) = -pow(errVal, 2) / pow(sum_denominator, 2);
         }
 
-        dx = svd_solver.compute(A,Eigen::ComputeThinU|Eigen::ComputeThinV).solve(results);
+        dx = svd_solver.compute(
+                 A, Eigen::ComputeThinU|Eigen::ComputeThinV).solve(results);
         factorsColor_ += dx;
 
         if (dx(0) < 0) dx(0) *= -1;
@@ -376,7 +532,10 @@ void CalibrationHandler::calculate(const uint64_t &startGoodValues)
         ++iterations;
     }
 
-    std::cout << "Used iterations for calculation of factors = " << unsigned(iterations) << std::endl;
+    std::cout
+            << "Used iterations for calculation of factors = "
+            << unsigned(iterations)
+            << std::endl;
 }
 
 
@@ -395,7 +554,6 @@ bool CalibrationHandler::visualizeResult()
         for (int row = squarePoints[1].y; row < imgCopy.rows; row += negDist) {
             addPointInImg(row, col);
             ++falsePositives;
-
         }
     }
 
@@ -416,20 +574,33 @@ bool CalibrationHandler::visualizeResult()
     // Good and more values
     double prediction;
 
-    for (int col = squarePoints[0].x; col < squarePoints[1].x; col += posDist) {
-        for (int row = squarePoints[0].y; row < squarePoints[1].y; row += posDist) {
-            prediction = getPrediction(row,col);
+    for (
+        int col = squarePoints[0].x;
+        col < squarePoints[1].x;
+        col += posDist) {
+        for (
+            int row = squarePoints[0].y;
+            row < squarePoints[1].y;
+            row += posDist) {
+            prediction = getPrediction(row, col);
 
             if (prediction < 0.5)
-                line(imgCopy,cv::Point(col,row),cv::Point(col,row),badColor);
-            else {
-                line(imgCopy,cv::Point(col,row),cv::Point(col,row),goodColor);
-            }
+                line(
+                    imgCopy,
+                    cv::Point(col, row),
+                    cv::Point(col, row),
+                    badColor);
+            else
+                line(
+                    imgCopy,
+                    cv::Point(col, row),
+                    cv::Point(col, row),
+                    goodColor);
         }
     }
 
     std::cout << "False positives in image = " << falsePositives << std::endl;
-    cv::imshow(title_,imgCopy);
+    cv::imshow(title_, imgCopy);
 
     int key;
 
@@ -440,7 +611,6 @@ bool CalibrationHandler::visualizeResult()
             return true;
         else if (key == 27)
             return false;
-
     }
 }
 
@@ -453,12 +623,13 @@ uint64_t CalibrationHandler::getFalsePositives(const uint64_t &startGoodValues)
     int16_t v_v;
 
     for (uint64_t i = 0; i < startGoodValues; ++i) {
-        v_h = hsvColor_(0) - hsvValues(i,0);
-        v_s = hsvColor_(1) - hsvValues(i,1);
-        v_v = hsvColor_(2) - hsvValues(i,2);
-        prediction = getProbability(pow(v_h,2)*factorsColor_(0)
-                                    + pow(v_s,2)*factorsColor_(1)
-                                    + pow(v_v,2)*factorsColor_(2));
+        v_h = hsvColor_(0) - hsvValues(i, 0);
+        v_s = hsvColor_(1) - hsvValues(i, 1);
+        v_v = hsvColor_(2) - hsvValues(i, 2);
+        prediction = getProbability(
+                         pow(v_h, 2) * factorsColor_(0)
+                         + pow(v_s, 2) * factorsColor_(1)
+                         + pow(v_v, 2) * factorsColor_(2));
 
         if (prediction >= 0.5)
             ++falsePositives;
@@ -473,22 +644,33 @@ void CalibrationHandler::fillMatricesWithBadValues(
     const uint16_t &col,
     const uint64_t &pos)
 {
-    hsvValues(pos,0) = hsvPtr[row*hsvCols*HSV_CHANNELS+col*HSV_CHANNELS];
-    hsvValues(pos,1) = hsvPtr[row*hsvCols*HSV_CHANNELS+col*HSV_CHANNELS+1];
-    hsvValues(pos,2) = hsvPtr[row*hsvCols*HSV_CHANNELS+col*HSV_CHANNELS+2];
+    hsvValues(pos, 0) = hsvPtr[
+                            row * hsvCols * HSV_CHANNELS
+                            + col * HSV_CHANNELS];
+    hsvValues(pos, 1) = hsvPtr[
+                            row * hsvCols * HSV_CHANNELS
+                            + col * HSV_CHANNELS
+                            + 1];
+    hsvValues(pos, 2) = hsvPtr[
+                            row * hsvCols * HSV_CHANNELS
+                            + col * HSV_CHANNELS
+                            + 2];
 
-    cv::line(imgCopy,cv::Point(col,row),cv::Point(col,row),badColor);
+    cv::line(
+        imgCopy,
+        cv::Point(col, row),
+        cv::Point(col, row),
+        badColor);
 }
 
 void CalibrationHandler::addPointInImg(const uint16_t &row, const uint16_t &col)
 {
-    double prediction = getPrediction(row,col);
+    double prediction = getPrediction(row, col);
 
     if (prediction < 0.5)
-        line(imgCopy,cv::Point(col,row),cv::Point(col,row),badColor);
-    else {
-        line(imgCopy,cv::Point(col,row),cv::Point(col,row),goodColor);
-    }
+        line(imgCopy, cv::Point(col, row), cv::Point(col, row), badColor);
+    else
+        line(imgCopy, cv::Point(col, row), cv::Point(col, row), goodColor);
 }
 
 void CalibrationHandler::clickAndCrop(
@@ -499,7 +681,8 @@ void CalibrationHandler::clickAndCrop(
     void *userdata)
 {
     if (userdata != 0) {
-        CalibrationHandler* handler = reinterpret_cast<CalibrationHandler*>(userdata);
+        CalibrationHandler* handler =
+            reinterpret_cast<CalibrationHandler*>(userdata);
         handler->clickAndCrop(event, x, y);
     }
 }
@@ -507,8 +690,8 @@ void CalibrationHandler::clickAndCrop(
 void CalibrationHandler::clickAndCrop(int event, int x, int y)
 {
     if (event == cv::EVENT_LBUTTONDOWN && squarePoints.size() < 2) {
-        squarePoints.push_back(cv::Point(x,y));
-        squarePoints.push_back(cv::Point(x,y));
+        squarePoints.push_back(cv::Point(x, y));
+        squarePoints.push_back(cv::Point(x, y));
         drawActive = true;
     } else if (event == cv::EVENT_LBUTTONUP) {
         drawActive = false;
@@ -516,7 +699,7 @@ void CalibrationHandler::clickAndCrop(int event, int x, int y)
 
     if (event == cv::EVENT_MOUSEMOVE && drawActive) {
         if (squarePoints.size() == 2) {
-            squarePoints[1] = cv::Point(x,y);
+            squarePoints[1] = cv::Point(x, y);
         }
     }
 }
