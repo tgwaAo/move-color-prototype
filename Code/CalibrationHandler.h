@@ -1,16 +1,50 @@
-#ifndef CALIBRATOR_H
-#define CALIBRATOR_H
+// Modified MIT License
+//
+// Copyright (c) 2019 tgwaAo
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+//
+// Modified part:
+//
+// THIS SOFTWARE DOES NOT CHECK YOUR SURROUNDINGS NOR DOES IT CONTROL YOUR
+// MOVEMENT, SO IT IS UNDER YOUR OWN RESPONSIBILITY TO ENSURE NOBODY GETS HURT
+// AND NOTHING GETS DAMAGED. PLAY CAREFULLY AND CHECK YOUR SURROUNDINGS BEFORE
+// PLAYING.
+
+#ifndef CODE_CALIBRATIONHANDLER_H_
+#define CODE_CALIBRATIONHANDLER_H_
 
 #define EIGEN_MPL2_ONLY
 
-#include <opencv2/opencv.hpp>
-#include <math.h>
 #include <time.h>
-#include <vector>
+#include <math.h>
 #include <eigen3/Eigen/Dense>
+#include <vector>
+#include <string>
+#include <opencv2/opencv.hpp>
 
 // Define own matrix to save space
-typedef Eigen::Matrix<uint8_t, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> Matrix8u;
+typedef Eigen::Matrix<
+uint8_t,
+Eigen::Dynamic,
+Eigen::Dynamic,
+Eigen::RowMajor> Matrix8u;
 
 /**
  * @class CalibrationHandler
@@ -31,10 +65,14 @@ public:
      * @param textColor Color of description text.
      * @param textThickness Thickness of description text.
      */
-    CalibrationHandler(std::string title = "Calibration", uint16_t distanceText2Border = 10,
-                       uint8_t font = cv::FONT_HERSHEY_SIMPLEX, float textScale = 1.2,
-                       cv::Scalar textColor = cv::Scalar(255,255,0), uint8_t textThickness = 2);
-    
+    CalibrationHandler(
+        std::string title = "Calibration",
+        uint16_t distanceText2Border = 10,
+        uint8_t font = cv::FONT_HERSHEY_SIMPLEX,
+        float textScale = 1.2,
+        cv::Scalar textColor = cv::Scalar(255, 255, 0),
+        uint8_t textThickness = 2);
+
     /**
      * @brief Destoying object.
      */
@@ -49,9 +87,11 @@ public:
      * @param factorsColor Factors to calculate prediction of dark color spectrum.
      * @return Acception of new values.
      */
-    bool calibrate(cv::Mat *img,
-                   std::vector<uint16_t> &hsvColor,
-                   std::vector<double> &factorsColor);
+    bool calibrate(
+        cv::Mat *img,
+        std::vector<uint16_t> *hsvColor,
+        std::vector<double> *factorsColor);
+
     /**
      * @brief Set title of shown window.
      * @param title_ Title of shown window.
@@ -89,7 +129,7 @@ public:
     void setMaxIteration(const uint16_t& maxIteration);
 
     /**
-     * @brief Set minimum of false positives. 
+     * @brief Set minimum of false positives.
      * @param minError Minimum of false positives.
      */
     void setMinError(double minError);
@@ -117,19 +157,19 @@ public:
      * @return Font of shown explanation text.
      */
     const uint8_t& getFont() const;
-    
+
     /**
      * @brief Get color of explanation text.
      * @return Color of explanation text.
      */
     const cv::Scalar& getTextColor() const;
-    
+
     /**
      * @brief Get scale of explanation text.
      * @return Scale of explanation text.
      */
     float getTextScale() const;
-    
+
     /**
      * @brief Get thickness of explanation text.
      * @return Thickness of explanation text.
@@ -169,8 +209,12 @@ private:
      * @param smallestY Smallest searched x-value.
      * @param biggestY Biggest searched y-value.
      */
-    void findMinMaxXY(const std::vector<cv::Point> &square,
-                      uint16_t &smallestX, uint16_t &biggestX, uint16_t &smallestY, uint16_t &biggestY);
+    void findMinMaxXY(
+        const std::vector<cv::Point> &square,
+        uint16_t *smallestX,
+        uint16_t *biggestX,
+        uint16_t *smallestY,
+        uint16_t *biggestY);
 
     /**
      * @brief Calculate probability to be searched color.
@@ -216,8 +260,11 @@ private:
      * @param col Number of column of pixel.
      * @param counter Index in matrices to store pixel values.
      */
-    void fillMatricesWithBadValues(const uint16_t &hsvCols, const uint16_t &row,
-                                   const uint16_t &col, uint64_t &counter);
+    void fillMatricesWithBadValues(
+        const uint16_t &hsvCols,
+        const uint16_t &row,
+        const uint16_t &col,
+        const uint64_t &pos);
 
     /**
      * @brief Add a point in image in bad color and increase false positives.
@@ -236,18 +283,22 @@ private:
 
     /**
      * @brief OpenCV can not handle a member function. This is a hack around to use member
-     *        variables in mouse callback.
+     *        variables in mouse callback. Needed to use own clickAndCrop.
      * @param event Mouse event.
      * @param x X-coordinate in image.
      * @param y Y-coordinate in image.
      * @param flags Keys used.
      * @param userdata Additional data given in setMouseCallback.
      */
-    static void clickAndCrop(int event, int x, int y, // Needed to use own clickAndCrop.
-                             int flags, void *userdata);
+    static void clickAndCrop(
+        int event,
+        int x,
+        int y,
+        int flags,
+        void *userdata);
 
-
-    std::vector<cv::Point> squarePoints; // Used for clickAndCrop
+    // Used for clickAndCrop
+    std::vector<cv::Point> squarePoints;
 
     const int16_t HSV_CHANNELS = 3;
     const int16_t KEY_ACCEPT = 13;
@@ -284,4 +335,4 @@ private:
     Eigen::Vector3d factorsColor_;
 };
 
-#endif //CALIBRATOR_H
+#endif  // CODE_CALIBRATIONHANDLER_H_

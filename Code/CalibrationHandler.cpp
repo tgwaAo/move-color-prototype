@@ -13,7 +13,7 @@ CalibrationHandler::CalibrationHandler(std::string title, uint16_t distanceText2
     : title_ (title), distanceText2Border_(distanceText2Border),
       font_(font),textScale_(textScale), textColor_(textColor),
       textThickness_(textThickness)
-{  
+{
     hsvPtr = 0;
 
     negDist = 2;
@@ -31,8 +31,8 @@ CalibrationHandler::~CalibrationHandler()
 }
 
 bool CalibrationHandler::calibrate(cv::Mat *img,
-                                   std::vector<uint16_t> &hsvColor,
-                                   std::vector<double> &factorsColor)
+                                   std::vector<uint16_t> *hsvColor,
+                                   std::vector<double> *factorsColor)
 {
     /***************************************************************
      * Let user select positives.
@@ -124,7 +124,7 @@ bool CalibrationHandler::calibrate(cv::Mat *img,
                 font_, textScale_, textColor_, textThickness_);
     uint16_t smallestX, biggestX, smallestY, biggestY;
 
-    findMinMaxXY(squarePoints, smallestX, biggestX, smallestY, biggestY);
+    findMinMaxXY(squarePoints, &smallestX, &biggestX, &smallestY, &biggestY);
 
     // Above square
     uint16_t numX = ceil(imgCopy.cols/negDist);
@@ -146,7 +146,7 @@ bool CalibrationHandler::calibrate(cv::Mat *img,
 
     // Only good values
     uint16_t goodSmallestX, goodSmallestY, goodBiggestX, goodBiggestY;
-    findMinMaxXY(truePositiveSquare, goodSmallestX, goodBiggestX, goodSmallestY, goodBiggestY);
+    findMinMaxXY(truePositiveSquare, &goodSmallestX, &goodBiggestX, &goodSmallestY, &goodBiggestY);
 
     numX = ceil( (goodBiggestX - goodSmallestX)/(float)posDist);
     numY = ceil((goodBiggestY - goodSmallestY )/(float)posDist);
@@ -169,11 +169,13 @@ bool CalibrationHandler::calibrate(cv::Mat *img,
         // Above square
         for (int row = 0; row < smallestY; row+=negDist) {
             fillMatricesWithBadValues(imgCopy.cols, row, col, counter);
+            ++counter;
         }
 
         // Below square
         for (int row = biggestY; row < imgCopy.rows; row += negDist) {
             fillMatricesWithBadValues(imgCopy.cols, row, col, counter);
+            ++counter;
         }
     }
 
@@ -181,11 +183,13 @@ bool CalibrationHandler::calibrate(cv::Mat *img,
     for (int row = smallestY; row < biggestY; row += negDist) {
         for (int col = 0; col < smallestX; col += negDist) {
             fillMatricesWithBadValues(imgCopy.cols, row, col, counter);
+            ++counter;
         }
 
         // Right next to square
         for (int col = biggestX; col < imgCopy.cols; col += negDist) {
             fillMatricesWithBadValues(imgCopy.cols, row, col, counter);
+            ++counter;
         }
     }
 
@@ -274,39 +278,43 @@ bool CalibrationHandler::calibrate(cv::Mat *img,
     bool acceptValues =  visualizeResult();
 
     if (acceptValues) {
-        hsvColor[0] = hsvColor_(0);
-        hsvColor[1] = hsvColor_(1);
-        hsvColor[2] = hsvColor_(2);
-        factorsColor[0] = factorsColor_[0];
-        factorsColor[1] = factorsColor_[1];
-        factorsColor[2] = factorsColor_[2];
+        (*hsvColor)[0] = hsvColor_(0);
+        (*hsvColor)[1] = hsvColor_(1);
+        (*hsvColor)[2] = hsvColor_(2);
+        (*factorsColor)[0] = factorsColor_[0];
+        (*factorsColor)[1] = factorsColor_[1];
+        (*factorsColor)[2] = factorsColor_[2];
     }
 
     *hsvPtr = 0;
     squarePoints.pop_back();
     squarePoints.pop_back();
     squarePoints.pop_back();
-    
+
     return acceptValues;
 }
 
-void CalibrationHandler::findMinMaxXY(const std::vector<cv::Point> &square, uint16_t &smallestX,
-                                      uint16_t &biggestX, uint16_t &smallestY, uint16_t &biggestY)
+void CalibrationHandler::findMinMaxXY(
+    const std::vector<cv::Point> &square,
+    uint16_t *smallestX,
+    uint16_t *biggestX,
+    uint16_t *smallestY,
+    uint16_t *biggestY)
 {
     if (square[0].x < square[1].x) {
-        smallestX = square[0].x;
-        biggestX = square[1].x;
+        *smallestX = square[0].x;
+        *biggestX = square[1].x;
     } else {
-        smallestX = square[1].x;
-        biggestX = square[0].x;
+        *smallestX = square[1].x;
+        *biggestX = square[0].x;
     }
 
     if (square[0].y < square[1].y) {
-        smallestY = square[0].y;
-        biggestY = square[1].y;
+        *smallestY = square[0].y;
+        *biggestY = square[1].y;
     } else {
-        smallestY = square[1].y;
-        biggestY = square[0].y;
+        *smallestY = square[1].y;
+        *biggestY = square[0].y;
     }
 }
 
@@ -381,7 +389,6 @@ bool CalibrationHandler::visualizeResult()
         for (uint16_t row = 0; row < squarePoints[0].y; row += negDist) {
             addPointInImg(row, col);
             ++falsePositives;
-
         }
 
         // Below
@@ -460,15 +467,17 @@ uint64_t CalibrationHandler::getFalsePositives(const uint64_t &startGoodValues)
     return falsePositives;
 }
 
-void CalibrationHandler::fillMatricesWithBadValues(const uint16_t &hsvCols, const uint16_t &row,
-        const uint16_t &col, uint64_t &counter)
+void CalibrationHandler::fillMatricesWithBadValues(
+    const uint16_t &hsvCols,
+    const uint16_t &row,
+    const uint16_t &col,
+    const uint64_t &pos)
 {
-    hsvValues(counter,0) = hsvPtr[row*hsvCols*HSV_CHANNELS+col*HSV_CHANNELS];
-    hsvValues(counter,1) = hsvPtr[row*hsvCols*HSV_CHANNELS+col*HSV_CHANNELS+1];
-    hsvValues(counter,2) = hsvPtr[row*hsvCols*HSV_CHANNELS+col*HSV_CHANNELS+2];
+    hsvValues(pos,0) = hsvPtr[row*hsvCols*HSV_CHANNELS+col*HSV_CHANNELS];
+    hsvValues(pos,1) = hsvPtr[row*hsvCols*HSV_CHANNELS+col*HSV_CHANNELS+1];
+    hsvValues(pos,2) = hsvPtr[row*hsvCols*HSV_CHANNELS+col*HSV_CHANNELS+2];
 
     cv::line(imgCopy,cv::Point(col,row),cv::Point(col,row),badColor);
-    ++counter;
 }
 
 void CalibrationHandler::addPointInImg(const uint16_t &row, const uint16_t &col)
@@ -482,7 +491,12 @@ void CalibrationHandler::addPointInImg(const uint16_t &row, const uint16_t &col)
     }
 }
 
-void CalibrationHandler::clickAndCrop(int event, int x, int y, int flags, void *userdata)
+void CalibrationHandler::clickAndCrop(
+    int event,
+    int x,
+    int y,
+    int flags,
+    void *userdata)
 {
     if (userdata != 0) {
         CalibrationHandler* handler = reinterpret_cast<CalibrationHandler*>(userdata);
@@ -508,90 +522,90 @@ void CalibrationHandler::clickAndCrop(int event, int x, int y)
 }
 
 void CalibrationHandler::setFont(const uint8_t& font_)
-    {
-        this->font_ = font_;
-    }
-    
-    void CalibrationHandler::setMaxIteration(const uint16_t& maxIteration)
-    {
-        this->maxIteration = maxIteration;
-    }
+{
+    this->font_ = font_;
+}
 
-    void CalibrationHandler::setMinError(double minError)
-    {
-        this->minError = minError;
-    }
-    
-    void CalibrationHandler::setNegDist(const uint8_t& negDist)
-    {
-        this->negDist = negDist;
-    }
-    
-    void CalibrationHandler::setPosDist(const uint8_t& posDist)
-    {
-        this->posDist = posDist;
-    }
-    
-    void CalibrationHandler::setTextColor(const cv::Scalar& textColor_)
-    {
-        this->textColor_ = textColor_;
-    }
-    
-    void CalibrationHandler::setTextScale(float textScale_)
-    {
-        this->textScale_ = textScale_;
-    }
-    
-    void CalibrationHandler::setTextThickness(const uint8_t& textThickness_)
-    {
-        this->textThickness_ = textThickness_;
-    }
-    
-    void CalibrationHandler::setTitle(const std::string& title_)
-    {
-        this->title_ = title_;
-    }
-    
-    const uint8_t& CalibrationHandler::getFont() const
-    {
-        return font_;
-    }
-    
-    const uint16_t& CalibrationHandler::getMaxIteration() const
-    {
-        return maxIteration;
-    }
-    
-    double CalibrationHandler::getMinError() const
-    {
-        return minError;
-    }
-    const uint8_t& CalibrationHandler::getNegDist() const
-    {
-        return negDist;
-    }
-    
-    const uint8_t& CalibrationHandler::getPosDist() const
-    {
-        return posDist;
-    }
-    
-    const cv::Scalar& CalibrationHandler::getTextColor() const
-    {
-        return textColor_;
-    }
-    
-    float CalibrationHandler::getTextScale() const
-    {
-        return textScale_;
-    }
-    
-    const uint8_t& CalibrationHandler::getTextThickness() const
-    {
-        return textThickness_;
-    }
-    
-    const std::string& CalibrationHandler::getTitle() const
-    {
-        return title_;
-    }
+void CalibrationHandler::setMaxIteration(const uint16_t& maxIteration)
+{
+    this->maxIteration = maxIteration;
+}
+
+void CalibrationHandler::setMinError(double minError)
+{
+    this->minError = minError;
+}
+
+void CalibrationHandler::setNegDist(const uint8_t& negDist)
+{
+    this->negDist = negDist;
+}
+
+void CalibrationHandler::setPosDist(const uint8_t& posDist)
+{
+    this->posDist = posDist;
+}
+
+void CalibrationHandler::setTextColor(const cv::Scalar& textColor_)
+{
+    this->textColor_ = textColor_;
+}
+
+void CalibrationHandler::setTextScale(float textScale_)
+{
+    this->textScale_ = textScale_;
+}
+
+void CalibrationHandler::setTextThickness(const uint8_t& textThickness_)
+{
+    this->textThickness_ = textThickness_;
+}
+
+void CalibrationHandler::setTitle(const std::string& title_)
+{
+    this->title_ = title_;
+}
+
+const uint8_t& CalibrationHandler::getFont() const
+{
+    return font_;
+}
+
+const uint16_t& CalibrationHandler::getMaxIteration() const
+{
+    return maxIteration;
+}
+
+double CalibrationHandler::getMinError() const
+{
+    return minError;
+}
+const uint8_t& CalibrationHandler::getNegDist() const
+{
+    return negDist;
+}
+
+const uint8_t& CalibrationHandler::getPosDist() const
+{
+    return posDist;
+}
+
+const cv::Scalar& CalibrationHandler::getTextColor() const
+{
+    return textColor_;
+}
+
+float CalibrationHandler::getTextScale() const
+{
+    return textScale_;
+}
+
+const uint8_t& CalibrationHandler::getTextThickness() const
+{
+    return textThickness_;
+}
+
+const std::string& CalibrationHandler::getTitle() const
+{
+    return title_;
+}

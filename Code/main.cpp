@@ -1,4 +1,4 @@
-// MIT License
+// Modified MIT License
 //
 // Copyright (c) 2019 tgwaAo
 //
@@ -9,8 +9,8 @@
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
 //
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
 //
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -19,6 +19,13 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
+//
+// Modified part:
+//
+// THIS SOFTWARE DOES NOT CHECK YOUR SURROUNDINGS NOR DOES IT CONTROL YOUR
+// MOVEMENT, SO IT IS UNDER YOUR OWN RESPONSIBILITY TO ENSURE NOBODY GETS HURT
+// AND NOTHING GETS DAMAGED. PLAY CAREFULLY AND CHECK YOUR SURROUNDINGS BEFORE
+// PLAYING.
 
 /**
  * Start of a little game. The goal is to hit the bright
@@ -137,7 +144,7 @@ int main()
         settings_file.close();
     } else {
         photoWithTimer(std::move(cap), mirror, TITLE);
-        if (calibrator.calibrate(std::move(mirror), hsvColor, factorsColor))
+        if (calibrator.calibrate(mirror, &hsvColor, &factorsColor))
             saveCalibration(SETTINGS_FILENAME, hsvColor, factorsColor);
     }
 
@@ -162,7 +169,7 @@ int main()
                                     10,
                                     MAX_WEIGHT,
                                     WIDTH,
-                                    NUM_PARTICLES*MAX_WEIGHT*4/10,
+                                    NUM_PARTICLES * MAX_WEIGHT * 4 / 10,
                                     factorsColor,
                                     hsvColor))));
 
@@ -241,7 +248,7 @@ int main()
                            mirror,
                            TITLE);
 
-            if (calibrator.calibrate(mirror, hsvColor, factorsColor)) {
+            if (calibrator.calibrate(mirror, &hsvColor, &factorsColor)) {
                 saveCalibration(SETTINGS_FILENAME, hsvColor, factorsColor);
 
                 for (int i = 0; i < HEIGHT / MAX_DISTANCE; ++i) {
