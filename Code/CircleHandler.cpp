@@ -27,6 +27,12 @@
 // AND NOTHING GETS DAMAGED. PLAY CAREFULLY AND CHECK YOUR SURROUNDINGS BEFORE
 // PLAYING.
 
+/**
+ * CircleHandler.cpp
+ * 
+ * Handles timers and visualization of circles.
+ */
+
 #include "CircleHandler.h"
 
 CircleHandler::CircleHandler()
