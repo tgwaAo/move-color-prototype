@@ -39,9 +39,9 @@
 
 /**
  * @brief A single play.
- * @param cap Camera for aquisition of pictures.
+ * @param cap Camera for acquisition of pictures.
  * @param mirror Image for visualization.
- * @param title Title of gameplay.
+ * @param title Title of game play.
  * @param corner2center Distance from center of particle weighting to its start.
  * @param posHandler Handler of positive circles.
  * @param negHandler Handler of negative circles.
@@ -49,28 +49,31 @@
  * @param weightingMatrix Matrix of particle weightings.
  * @return Code of user input. 0 for replay, 1 for end of game and 2 for calibration.
  */
-uint8_t gameplay(std::unique_ptr<cv::VideoCapture> cap,
-                 cv::Mat *mirror,
-                 const std::string &title,
-                 const uint8_t corner2center,
-                 std::unique_ptr<CircleHandler> posHandler,
-                 std::unique_ptr<CircleHandler> negHandler,
-                 const uint8_t maxDistance,
-                 std::unique_ptr<std::vector<std::vector<ParticleWeighting>
-                 > > weightingMatrix);
+uint8_t gameplay(
+    std::unique_ptr<cv::VideoCapture> cap,
+    cv::Mat *mirror,
+    const std::string &title,
+    const uint8_t corner2center,
+    std::unique_ptr<CircleHandler> posHandler,
+    std::unique_ptr<CircleHandler> negHandler,
+    const uint8_t maxDistance,
+    std::unique_ptr<std::vector<std::vector<ParticleWeighting>
+    > > weightingMatrix);
 /**
  * @brief Take a photo after 5 seconds.
  * @param cap Camera to shot photo.
  * @param image Image to save picture.
- * @param title Title shown on conting down.
+ * @param title Title shown on counting down.
  */
-void photoWithTimer(std::unique_ptr<cv::VideoCapture> cap,
-                    cv::Mat *image, const std::string &title);
+void photoWithTimer(
+    std::unique_ptr<cv::VideoCapture> cap,
+    cv::Mat *image,
+    const std::string &title);
 
 /**
  * @brief Load last highscore and return current highscore.
  * @param filename Name of highscore file.
- * @param hits Number of hits in actual gameplay.
+ * @param hits Number of hits in actual game play.
  * @return Actual highscore.
  */
 int16_t loadHighscore(const std::string &filename, int16_t hits);
@@ -81,9 +84,10 @@ int16_t loadHighscore(const std::string &filename, int16_t hits);
  * @param hsvColor Vector of bright optimal values.
  * @param factorsColor Vector of bright factors.
  */
-void saveCalibration(const std::string &filename,
-                     const std::vector<uint16_t> &hsvColor,
-                     const std::vector<double> &factorsColor);
+void saveCalibration(
+    const std::string &filename,
+    const std::vector<uint16_t> &hsvColor,
+    const std::vector<double> &factorsColor);
 
 int main()
 {
@@ -146,12 +150,21 @@ int main()
     uint16_t mat_size = HEIGHT / MAX_DISTANCE;
     std::unique_ptr<std::vector<std::vector<ParticleWeighting>
     > > weightingMatrix(
-        new std::vector<std::vector<ParticleWeighting>>(mat_size,
-                std::vector<ParticleWeighting>(WIDTH / MAX_DISTANCE,
-                        ParticleWeighting(NUM_PARTICLES, 0, 10, 0, 10,
-                                          MAX_WEIGHT, WIDTH,
-                                          NUM_PARTICLES * MAX_WEIGHT * 4 / 10,
-                                          factorsColor, hsvColor))));
+        new std::vector<std::vector<ParticleWeighting>>(
+            mat_size,
+            std::vector
+            <ParticleWeighting>(WIDTH / MAX_DISTANCE,
+                                ParticleWeighting(
+                                    NUM_PARTICLES,
+                                    0,
+                                    10,
+                                    0,
+                                    10,
+                                    MAX_WEIGHT,
+                                    WIDTH,
+                                    NUM_PARTICLES*MAX_WEIGHT*4/10,
+                                    factorsColor,
+                                    hsvColor))));
 
     for (int i = 0; i < HEIGHT / MAX_DISTANCE; ++i) {
         for (int j = 0; j < WIDTH / MAX_DISTANCE; ++j) {
@@ -167,26 +180,37 @@ int main()
      * Define circle data.
      * ***************************************************************/
     uint8_t targetRadius = 30;
-    std::uniform_int_distribution<uint16_t> randomUpDown(targetRadius,
-            HEIGHT - targetRadius);
-    std::uniform_int_distribution<uint16_t> randomLeftRight(targetRadius,
-            WIDTH - targetRadius);
+    std::uniform_int_distribution<uint16_t> randomUpDown(
+        targetRadius,
+        HEIGHT - targetRadius);
+    std::uniform_int_distribution<uint16_t> randomLeftRight(
+        targetRadius,
+        WIDTH - targetRadius);
 
     /********************************************************
      * Circle and timer stuff. (Circles have timers)
      * *****************************************************/
     std::vector<float> stateTimes(3, 2);
     std::unique_ptr<CircleHandler> posHandler(
-        new CircleHandler(7, targetRadius, stateTimes,
-                          cv::Scalar(0, 254, 0), WIDTH, HEIGHT));
+        new CircleHandler(
+            7,
+            targetRadius,
+            stateTimes,
+            cv::Scalar(0, 254, 0),
+            WIDTH,
+            HEIGHT));
 
     for (uint8_t i = 0; i < stateTimes.size(); ++i)
         stateTimes[i] = 5;
 
     targetRadius = 20;
     std::unique_ptr<CircleHandler> negHandler(
-        new CircleHandler(14, targetRadius, stateTimes,
-                          cv::Scalar(0, 0, 254), WIDTH, HEIGHT));
+        new CircleHandler(14,
+                          targetRadius,
+                          stateTimes,
+                          cv::Scalar(0, 0, 254),
+                          WIDTH,
+                          HEIGHT));
 
     /*******************************************************
      * Let the game start.
@@ -198,16 +222,24 @@ int main()
     const uint8_t CORNER_2_CENTER = MAX_DISTANCE / 2;
 
     while (run) {
-        keyCode = gameplay(std::move(cap), mirror, TITLE, CORNER_2_CENTER,
-                           std::move(posHandler), std::move(negHandler),
-                           MAX_DISTANCE, std::move(weightingMatrix));
+        keyCode = gameplay(
+                      std::move(cap),
+                      mirror,
+                      TITLE,
+                      CORNER_2_CENTER,
+                      std::move(posHandler),
+                      std::move(negHandler),
+                      MAX_DISTANCE,
+                      std::move(weightingMatrix));
 
         switch (keyCode) {
         case CODE_END:
             run = false;
             break;
         case CODE_CALIBRATE:
-            photoWithTimer(std::move(cap), mirror, TITLE);
+            photoWithTimer(std::move(cap),
+                           mirror,
+                           TITLE);
 
             if (calibrator.calibrate(mirror, hsvColor, factorsColor)) {
                 saveCalibration(SETTINGS_FILENAME, hsvColor, factorsColor);
@@ -229,15 +261,16 @@ int main()
     return 0;
 }
 
-uint8_t gameplay(std::unique_ptr<cv::VideoCapture> cap,
-                 cv::Mat *mirror,
-                 const std::string &title,
-                 const uint8_t corner2center,
-                 std::unique_ptr<CircleHandler> posHandler,
-                 std::unique_ptr<CircleHandler> negHandler,
-                 const uint8_t maxDistance,
-                 std::unique_ptr<std::vector<std::vector<ParticleWeighting>
-                 > > weightingMatrix)
+uint8_t gameplay(
+    std::unique_ptr<cv::VideoCapture> cap,
+    cv::Mat *mirror,
+    const std::string &title,
+    const uint8_t corner2center,
+    std::unique_ptr<CircleHandler> posHandler,
+    std::unique_ptr<CircleHandler> negHandler,
+    const uint8_t maxDistance,
+    std::unique_ptr<std::vector<std::vector
+    <ParticleWeighting>>> weightingMatrix)
 {
     cv::Mat frame;
     cv::Mat hsv;
@@ -274,12 +307,17 @@ uint8_t gameplay(std::unique_ptr<cv::VideoCapture> cap,
 
                 if (goodArea) {
                     color = GOOD_COLOR;
-                    cv::line(*mirror,
-                             cv::Point(j * maxDistance + corner2center,
-                                       i * maxDistance + corner2center),
-                             cv::Point(j * maxDistance + corner2center,
-                                       i * maxDistance + corner2center),
-                             color, 10, 10);
+                    cv::line(
+                        *mirror,
+                        cv::Point(
+                            j * maxDistance + corner2center,
+                            i * maxDistance + corner2center),
+                        cv::Point(
+                            j * maxDistance + corner2center,
+                            i * maxDistance + corner2center),
+                        color,
+                        10,
+                        10);
 
                     hits += posHandler->checkHit(
                                 j * maxDistance + corner2center,
@@ -291,9 +329,16 @@ uint8_t gameplay(std::unique_ptr<cv::VideoCapture> cap,
             }
         }
 
-        putText(*mirror, "Hits= " + std::to_string(hits),
-                cv::Point(10, mirror->rows - 10), cv::FONT_HERSHEY_SIMPLEX,
-                1.2, cv::Scalar(255, 255, 0));
+        putText(
+            *mirror,
+            "Hits= " + std::to_string(hits),
+            cv::Point(10,
+                      mirror->rows - 10),
+            cv::FONT_HERSHEY_SIMPLEX,
+            1.2,
+            cv::Scalar(255,
+                       255,
+                       0));
 
         if (cv::getWindowProperty(title, cv::WND_PROP_VISIBLE)) {
             cv::imshow(title, *mirror);
@@ -317,11 +362,20 @@ uint8_t gameplay(std::unique_ptr<cv::VideoCapture> cap,
     const std::string HIGHSCORE_FILENAME = "highscore.txt";
     int16_t highscore = loadHighscore(HIGHSCORE_FILENAME, hits);
 
-    cv::putText(*mirror, "Finished", cv::Point(20, mirror->rows / 2),
-                cv::FONT_HERSHEY_SIMPLEX, 1.2, cv::Scalar(255, 255, 0));
-    cv::putText(*mirror, "Highscore = " + std::to_string(highscore),
-                cv::Point(20, 30 + mirror->rows / 2),
-                cv::FONT_HERSHEY_SIMPLEX, 1.2, cv::Scalar(255, 255, 0));
+    cv::putText(
+        *mirror,
+        "Finished",
+        cv::Point(20, mirror->rows / 2),
+        cv::FONT_HERSHEY_SIMPLEX,
+        1.2,
+        cv::Scalar(255, 255, 0));
+    cv::putText(
+        *mirror,
+        "Highscore = " + std::to_string(highscore),
+        cv::Point(20, 30 + mirror->rows / 2),
+        cv::FONT_HERSHEY_SIMPLEX,
+        1.2,
+        cv::Scalar(255, 255, 0));
     cv::imshow(title, *mirror);
 
     while (true) {
@@ -342,8 +396,10 @@ uint8_t gameplay(std::unique_ptr<cv::VideoCapture> cap,
 }
 
 // Take photo after 3 seconds.
-void photoWithTimer(std::unique_ptr<cv::VideoCapture> cap,
-                    cv::Mat *image, const std::string &title)
+void photoWithTimer(
+    std::unique_ptr<cv::VideoCapture> cap,
+    cv::Mat *image,
+    const std::string &title)
 {
     /***********************************************************
      *  Wait a few seconds to give the user time to get in position.
@@ -359,9 +415,14 @@ void photoWithTimer(std::unique_ptr<cv::VideoCapture> cap,
         cv::flip(frame, *image, 1);
         leftSeconds = minTimePassed - static_cast<float>(clock() - timeStart)
                       / CLOCKS_PER_SEC;
-        cv::putText(*image, "Countdown= " + std::to_string(leftSeconds),
-                    cv::Point(10, image->rows - 10), cv::FONT_HERSHEY_SIMPLEX,
-                    1.2, cv::Scalar(255, 255, 0), 2);
+        cv::putText(
+            *image,
+            "Countdown= " + std::to_string(leftSeconds),
+            cv::Point(10, image->rows - 10),
+            cv::FONT_HERSHEY_SIMPLEX,
+            1.2,
+            cv::Scalar(255, 255, 0),
+            2);
         cv::imshow(title, *image);
         cv::waitKey(1);
     }
@@ -408,9 +469,10 @@ int16_t loadHighscore(const std::string &filename, int16_t hits)
     }
 }
 
-void saveCalibration(const std::string &filename,
-                     const std::vector<uint16_t> &hsvColor,
-                     const std::vector<double> &factorsColor)
+void saveCalibration(
+    const std::string &filename,
+    const std::vector<uint16_t> &hsvColor,
+    const std::vector<double> &factorsColor)
 {
     std::ofstream save_file;
     save_file.open(filename);
