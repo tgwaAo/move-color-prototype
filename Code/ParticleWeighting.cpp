@@ -1,4 +1,35 @@
+// Modified MIT License
+//
+// Copyright (c) 2019 tgwaAo
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+//
+// Modified part:
+//
+// THIS SOFTWARE DOES NOT CHECK YOUR SURROUNDINGS NOR DOES IT CONTROL YOUR
+// MOVEMENT, SO IT IS UNDER YOUR OWN RESPONSIBILITY TO ENSURE NOBODY GETS HURT
+// AND NOTHING GETS DAMAGED. PLAY CAREFULLY AND CHECK YOUR SURROUNDINGS BEFORE
+// PLAYING.
+
 /**
+ * ParticleWeighting.cpp
+ *
  * Class to calculate decision of containing a color in hsv space or not.
  * This is done via unmoving particles, because the color
  * from one pixel and the one next to it will not change often.
@@ -126,7 +157,17 @@ void ParticleWeighting::setFactorV(double value)
     factorV = value;
 }
 
-ParticleWeighting::ParticleWeighting(const uint16_t &numParticles, const double &minWidth, const double &maxWidth, const double &minHeight, const double &maxHeight, const uint16_t &maxWeight, const uint16_t &cols, const uint32_t bound, const std::vector<double> &factors, const std::vector<uint16_t> &hsvBest)
+ParticleWeighting::ParticleWeighting(
+    const uint16_t &numParticles,
+    const double &minWidth,
+    const double &maxWidth,
+    const double &minHeight,
+    const double &maxHeight,
+    const uint16_t &maxWeight,
+    const uint16_t &cols,
+    const uint32_t bound,
+    const std::vector<double> &factors,
+    const std::vector<uint16_t> &hsvBest)
 {
     minWidth_ = minWidth;
     maxWidth_ = maxWidth;
@@ -160,11 +201,26 @@ uint32_t ParticleWeighting::calculateSumWeights(const uint8_t * const pixelPtr)
 
     for (int i = 0; i < particlesX.size(); ++i) {
         //        calculate probability of being correct
-        v_h =  hue - pixelPtr[particlesY[i]*cols_*hsvChannels + particlesX[i]*hsvChannels + 0];
-        v_s =  sat - pixelPtr[particlesY[i]*cols_*hsvChannels + particlesX[i]*hsvChannels + 1];
-        v_v =  val - pixelPtr[particlesY[i]*cols_*hsvChannels + particlesX[i]*hsvChannels + 2];
+        v_h =
+            hue - pixelPtr[
+         particlesY[i] * cols_ * hsvChannels
+         + particlesX[i] * hsvChannels];
 
-        prediction = 1 / (1 + pow(v_h,2)*factorH + pow(v_s,2)*factorS+ pow(v_v,2)*factorV);
+        v_s =
+            sat - pixelPtr[
+         particlesY[i] * cols_ * hsvChannels
+         + particlesX[i] * hsvChannels + 1];
+
+        v_v =
+            val - pixelPtr[
+         particlesY[i] * cols_ * hsvChannels
+         + particlesX[i] * hsvChannels + 2];
+
+        prediction = 1
+                     / (1
+                        + pow(v_h, 2) * factorH
+                        + pow(v_s, 2) * factorS
+                        + pow(v_v, 2)*factorV);
 
         if (prediction < 0.5)
             particlesW[i] = 1;
@@ -184,7 +240,7 @@ void ParticleWeighting::update()
     uint16_t step = num_pixels / particlesX.size();
 
     for (int i = 0; i < particlesX.size(); ++i) {
-        particlesX[i] = ((i*step) % int(diff)) + minWidth_;
+        particlesX[i] = ((i*step) % static_cast<int>(diff)) + minWidth_;
         particlesY[i] = ((i*step) / diff) + minHeight_;
         particlesW[i] = 1;
     }
@@ -200,7 +256,7 @@ bool ParticleWeighting::is_color(const uint8_t * const pixelPtr)
 
 std::vector<uint16_t> ParticleWeighting::getHsv() const
 {
-    std::vector<uint16_t> hsv(3,0);
+    std::vector<uint16_t> hsv(3, 0);
     hsv[0] = hue;
     hsv[1] = sat;
     hsv[2] = val;
@@ -221,7 +277,7 @@ bool ParticleWeighting::setHsv(const std::vector<uint16_t> &hsv)
 
 std::vector<double> ParticleWeighting::getFactors() const
 {
-    std::vector<double> factors(3,0);
+    std::vector<double> factors(3, 0);
     factors[0] = factorH;
     factors[1] = factorS;
     factors[2] = factorV;
@@ -244,7 +300,7 @@ void ParticleWeighting::getParticle(
     const uint16_t &idx_,
     uint16_t backX,
     uint16_t backY,
-    uint16_t backW, 
+    uint16_t backW,
     bool alright) const
 {
     if (idx_ < particlesX.size()) {
