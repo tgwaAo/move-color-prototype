@@ -49,24 +49,24 @@ public:
     /**
      * @brief Constructs a continuous matrix of particles in given area
      * and initializes necessary attributes.
-     * @param num_particles_ Number of particles.
-     * @param min_width Where width starts.
-     * @param max_width_ Where width ends.
-     * @param min_height_ Where height starts.
-     * @param max_height_ Where height ends.
-     * @param max_weight_ Weight of a particle without error.
+     * @param numParticles_ Number of particles.
+     * @param minWidth_ Where width starts.
+     * @param maxWidth_ Where width ends.
+     * @param minHeight_ Where height starts.
+     * @param maxHeight_ Where height ends.
+     * @param maxWeight_ Weight of a particle without error.
      * @param cols_ Number of horizontal pixels.
      * @param bound_ Minimal number of positive particles.
      * @param factors Factors multiplied by squared error.
      * @param hsvBest HSV values without error.
      */
     ParticleWeighting(
-        const uint16_t &num_particles_,
-        const double &min_width_,
-        const double &max_width_,
-        const double &min_height_,
-        const double &max_height_,
-        const uint16_t &max_weight_,
+        const uint16_t &numParticles_,
+        const double &minWidth_,
+        const double &maxWidth_,
+        const double &minHeight_,
+        const double &maxHeight_,
+        const uint16_t &maxWeight_,
         const uint16_t &cols_,
         const uint32_t bound_,
         const std::vector<double> &factors,
@@ -84,7 +84,7 @@ public:
      * @param pixelPtr Pointer pointing to current image.
      * @return Decision of containing color.
      */
-    bool is_color(const uint8_t *pixelPtr);
+    bool isColor(const uint8_t *pixelPtr);
 
     /**
      * @brief Update position of particles after changed size.
@@ -113,11 +113,11 @@ public:
      * @param change_y_ Next y position of particle.
      * @param change_w_ Next weight of particle.
      */
-    void set_particle(
-    const uint16_t &idx_,
-    const uint16_t &change_x_,
-    const uint16_t &change_y_,
-    const uint16_t &change_w_);
+    void setParticle(
+        const uint16_t &idx_,
+        const uint16_t &changeX_,
+        const uint16_t &changeY_,
+        const uint16_t &changeW_);
 
     /**
      * @brief Get sum of weights.
@@ -290,24 +290,25 @@ public:
     bool setFactors(const std::vector<double> &factors);
 
 private:
+    const uint8_t HSV_CHANNELS = 3;
+
     std::vector<uint16_t> particlesX;
     std::vector<uint16_t> particlesY;
     std::vector<uint16_t> particlesW;
-    uint32_t bound_;
+    uint32_t bound;
     uint32_t sumWeights;
-    uint16_t maxWeight_;
-    uint16_t minWidth_;
-    uint16_t minHeight_;
-    uint16_t maxWidth_;
-    uint16_t maxHeight_;
-    uint16_t cols_;
+    uint16_t maxWeight;
+    uint16_t minWidth;
+    uint16_t minHeight;
+    uint16_t maxWidth;
+    uint16_t maxHeight;
+    uint16_t cols;
     uint16_t hue;
     uint16_t sat;
     uint16_t val;
     double factorH;
     double factorS;
     double factorV;
-    uint8_t hsvChannels;
 };
 
 #endif  // PARTICLE_WEIGHTING_H

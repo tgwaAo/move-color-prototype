@@ -43,12 +43,12 @@ CalibrationHandler::CalibrationHandler(
     float textScale,
     cv::Scalar textColor,
     uint8_t textThickness)
-    : title_(title),
-      distanceText2Border_(distanceText2Border),
-      font_(font),
-      textScale_(textScale),
-      textColor_(textColor),
-      textThickness_(textThickness)
+    : title(title),
+      distanceText2Border(distanceText2Border),
+      font(font),
+      textScale(textScale),
+      textColor(textColor),
+      textThickness(textThickness)
 {
     hsvPtr = 0;
 
@@ -74,136 +74,78 @@ bool CalibrationHandler::calibrate(
     /***************************************************************
      * Let user select positives.
      * ************************************************************/
-    cv::setMouseCallback(title_, clickAndCrop, this);
+    cv::setMouseCallback(title, clickAndCrop, this);
 
-    img->copyTo(imgCopy);
-    cv::putText(
-        imgCopy,
-        "Select ONLY good color",
-        cv::Point(distanceText2Border_, imgCopy.rows-distanceText2Border_),
-        font_,
-        textScale_,
-        textColor_,
-        textThickness_);
+    if (!drawRectangle("Select ONLY good color", img))
+        return false;
 
-    int key;
-    std::vector<cv::Point> truePositiveSquare;
-    const uint8_t WAIT_TIME = 20;
-
-    if (squarePoints.size() == 2)
-        std::cout << "here";
-
-    while (true) {
-        cv::imshow(title_, imgCopy);
-
-        // Draw rectangle.
-        if (squarePoints.size() == POINTS_OF_RECTANGLE) {
-            img->copyTo(imgCopy);
-            cv::putText(
-                imgCopy,
-                "Select ONLY good color",
-                cv::Point(
-                    distanceText2Border_,
-                    imgCopy.rows-distanceText2Border_),
-                font_,
-                textScale_,
-                textColor_,
-                textThickness_);
-            cv::rectangle(
-                imgCopy,
-                squarePoints[0],
-                squarePoints[1],
-                cv::Scalar(0, 0, 0),
-                2);
-        }
-
-        key = cv::waitKey(WAIT_TIME);
-
-        if (key == KEY_R) {
-            for (int i = 0; i < POINTS_OF_RECTANGLE; ++i) {
-                squarePoints.pop_back();
-            }
-            img->copyTo(imgCopy);
-            cv::putText(
-                imgCopy,
-                "Select ONLY good color",
-                cv::Point(
-                    distanceText2Border_,
-                    imgCopy.rows-distanceText2Border_),
-                font_,
-                textScale_,
-                textColor_,
-                textThickness_);
-        } else if (key == KEY_ACCEPT) {
-            truePositiveSquare = squarePoints;
-            break;
-        } else if (key == KEY_ESC) {
-            return false;
-        }
-    }
+    std::vector<cv::Point> truePositiveSquare = squarePoints;
+    squarePoints.pop_back();
+    squarePoints.pop_back();
 
     /******************************************************************
      * Let user select non-negatives (more than all positives).
      * ***************************************************************/
-    squarePoints.pop_back();
-    squarePoints.pop_back();
-    img->copyTo(imgCopy);
-    cv::putText(imgCopy,
-                "Select MORE than good color!",
-                cv::Point(
-                    distanceText2Border_,
-                    imgCopy.rows-distanceText2Border_),
-                font_,
-                textScale_,
-                textColor_,
-                textThickness_);
+//    img->copyTo(imgCopy);
+//    cv::putText(imgCopy,
+//                "Select MORE than good color!",
+//                cv::Point(
+//                    distanceText2Border,
+//                    imgCopy.rows - distanceText2Border),
+//                font,
+//                textScale,
+//                textColor,
+//                textThickness);
+//
+//    while (true) {
+//        cv::imshow(title, imgCopy);
+//
+//        if (squarePoints.size() == POINTS_OF_RECTANGLE) {
+//            img->copyTo(imgCopy);
+//            cv::putText(
+//                imgCopy,
+//                "Select MORE than good color!",
+//                cv::Point(
+//                    distanceText2Border,
+//                    imgCopy.rows - distanceText2Border),
+//                font,
+//                textScale,
+//                textColor,
+//                textThickness);
+//            cv::rectangle(
+//                imgCopy,
+//                squarePoints[0],
+//                squarePoints[1],
+//                cv::Scalar(0, 0, 0),
+//                2);
+//        }
+//
+//        key = cv::waitKey(WAIT_TIME);
+//
+//        if (key == KEY_R) {
+//            for (int i = 0; i < POINTS_OF_RECTANGLE; ++i) {
+//                squarePoints.pop_back();
+//            }
+//            img->copyTo(imgCopy);
+//            cv::putText(
+//                imgCopy,
+//                "Select MORE than good color!",
+//                cv::Point(
+//                    distanceText2Border,
+//                    imgCopy.rows - distanceText2Border),
+//                font,
+//                textScale,
+//                textColor,
+//                textThickness);
+//        } else if (key == KEY_ACCEPT) {
+//            break;
+//        } else if (key == KEY_ESC) {
+//            return false;
+//        }
+//    }
 
-    while (true) {
-        cv::imshow(title_, imgCopy);
-
-        if (squarePoints.size() == POINTS_OF_RECTANGLE) {
-            img->copyTo(imgCopy);
-            cv::putText(
-                imgCopy,
-                "Select MORE than good color!",
-                cv::Point(
-                    distanceText2Border_,
-                    imgCopy.rows-distanceText2Border_),
-                font_,
-                textScale_,
-                textColor_,
-                textThickness_);
-            cv::rectangle(
-                imgCopy,
-                squarePoints[0],
-                squarePoints[1],
-                cv::Scalar(0, 0, 0),
-                2);
-        }
-
-        key = cv::waitKey(WAIT_TIME);
-
-        if (key == KEY_R) {
-            for (int i = 0; i < POINTS_OF_RECTANGLE; ++i) {
-                squarePoints.pop_back();
-            }
-            img->copyTo(imgCopy);
-            cv::putText(
-                imgCopy,
-                "Select MORE than good color!",
-                cv::Point(
-                    distanceText2Border_,
-                    imgCopy.rows-distanceText2Border_),
-                font_,
-                textScale_,
-                textColor_,
-                textThickness_);
-        } else if (key == KEY_ACCEPT) {
-            break;
-        } else if (key == KEY_ESC) {
-            return false;
-        }
-    }
+    if (!drawRectangle("Select MORE than good color!", img))
+        return false;
 
     /*************************************************************
      * Calculate sizes for preallocation
@@ -213,12 +155,12 @@ bool CalibrationHandler::calibrate(
         imgCopy,
         "Calibrating ...",
         cv::Point(
-            distanceText2Border_,
-            imgCopy.rows-distanceText2Border_),
-        font_,
-        textScale_,
-        textColor_,
-        textThickness_);
+            distanceText2Border,
+            imgCopy.rows - distanceText2Border),
+        font,
+        textScale,
+        textColor,
+        textThickness);
 
     uint16_t smallestX, biggestX, smallestY, biggestY;
 
@@ -346,8 +288,8 @@ bool CalibrationHandler::calibrate(
         }
     }
 
-    cv::imshow(title_, imgCopy);
-    key = cv::waitKey(0);
+    cv::imshow(title, imgCopy);
+    int16_t key = cv::waitKey(0);
 
     if (key == KEY_ESC) {
         return false;
@@ -356,12 +298,12 @@ bool CalibrationHandler::calibrate(
     cv::putText(
         imgCopy,
         "Calculating ...",
-        cv::Point(distanceText2Border_, imgCopy.rows-distanceText2Border_),
-        font_,
-        textScale_,
-        textColor_,
-        textThickness_);
-    cv::imshow(title_, imgCopy);
+        cv::Point(distanceText2Border, imgCopy.rows - distanceText2Border),
+        font,
+        textScale,
+        textColor,
+        textThickness);
+    cv::imshow(title, imgCopy);
     cv::waitKey(WAIT_TIME);
 
     /**********************************************************
@@ -373,23 +315,29 @@ bool CalibrationHandler::calibrate(
 
     for (int i = 0; i < hueHist.size(); ++i) {
         if (maxHue < hueHist(i)) {
-            hsvColor_(0) = i;
+            hsvIntern(0) = i;
             maxHue = hueHist(i);
         }
 
         if (maxSat < satHist(i)) {
-            hsvColor_(1) = i;
+            hsvIntern(1) = i;
             maxSat = satHist(i);
         }
 
         if (maxVal < valHist(i)) {
-            hsvColor_(2) = i;
+            hsvIntern(2) = i;
             maxVal = valHist(i);
         }
     }
 
-    std::cout << "hsv = " << hsvColor_(0) << " "
-              << hsvColor_(1) << " " << hsvColor_(2) << std::endl;
+    std::cout
+            << "hsv = "
+            << hsvIntern(0)
+            << " "
+            << hsvIntern(1)
+            << " "
+            << hsvIntern(2)
+            << std::endl;
 
     /*************************************************************
      * Start calibration for factors (tolerances) of colors
@@ -400,11 +348,11 @@ bool CalibrationHandler::calibrate(
     std::cout
             << "Factors for bright = "
             << std::endl
-            << factorsColor_(0)
+            << factorsIntern(0)
             << " "
-            << factorsColor_(1)
+            << factorsIntern(1)
             << " "
-            << factorsColor_(2)
+            << factorsIntern(2)
             << std::endl;
 
     /***************************************************************
@@ -414,12 +362,12 @@ bool CalibrationHandler::calibrate(
     bool acceptValues =  visualizeResult();
 
     if (acceptValues) {
-        (*hsvColor)[0] = hsvColor_(0);
-        (*hsvColor)[1] = hsvColor_(1);
-        (*hsvColor)[2] = hsvColor_(2);
-        (*factorsColor)[0] = factorsColor_[0];
-        (*factorsColor)[1] = factorsColor_[1];
-        (*factorsColor)[2] = factorsColor_[2];
+        (*hsvColor)[0] = hsvIntern(0);
+        (*hsvColor)[1] = hsvIntern(1);
+        (*hsvColor)[2] = hsvIntern(2);
+        (*factorsColor)[0] = factorsIntern[0];
+        (*factorsColor)[1] = factorsIntern[1];
+        (*factorsColor)[2] = factorsIntern[2];
     }
 
     *hsvPtr = 0;
@@ -464,22 +412,22 @@ double CalibrationHandler::getPrediction(
     const uint16_t &col)
 {
     if (hsvPtr != 0) {
-        int16_t errHue = hsvColor_(0) - hsvPtr[
+        int16_t errHue = hsvIntern(0) - hsvPtr[
                       row * imgCopy.cols * HSV_CHANNELS
                       + col * HSV_CHANNELS];
-        int16_t errSat = hsvColor_(1) - hsvPtr[
+        int16_t errSat = hsvIntern(1) - hsvPtr[
                       row * imgCopy.cols * HSV_CHANNELS
                       + col * HSV_CHANNELS
                       + 1];
-        int16_t errVal = hsvColor_(2) - hsvPtr[
+        int16_t errVal = hsvIntern(2) - hsvPtr[
                       row * imgCopy.cols * HSV_CHANNELS
                       + col * HSV_CHANNELS
                       + 2];
 
         return getProbability(
-                   pow(errHue, 2) * factorsColor_(0)
-                   + pow(errSat, 2) * factorsColor_(1)
-                   + pow(errVal, 2) * factorsColor_(2));
+                   pow(errHue, 2) * factorsIntern(0)
+                   + pow(errSat, 2) * factorsIntern(1)
+                   + pow(errVal, 2) * factorsIntern(2));
     } else {
         return -1;
     }
@@ -487,7 +435,7 @@ double CalibrationHandler::getPrediction(
 
 void CalibrationHandler::calculate(const uint64_t &startGoodValues)
 {
-    factorsColor_ = {
+    factorsIntern = {
         START_VALUE_FACTORS,
         START_VALUE_FACTORS,
         START_VALUE_FACTORS
@@ -497,28 +445,28 @@ void CalibrationHandler::calculate(const uint64_t &startGoodValues)
     double errSat;
     double errVal;
     Eigen::MatrixXd A(hsvValues.rows(), hsvValues.cols());
-    double sum_denominator;
+    double sumDenominator;
     Eigen::BDCSVD<Eigen::MatrixXd> svd_solver;
     Eigen::Vector3d dx;
     uint16_t iterations = 0;
 
     while (iterations < maxIteration) {
         for (int i = 0; i < hsvValues.rows(); ++i) {
-            errHue = hsvColor_[0] - hsvValues(i, 0);
-            errSat = hsvColor_[1] - hsvValues(i, 1);
-            errVal = hsvColor_[2] - hsvValues(i, 2);
-            sum_denominator = 1
-                              + pow(errHue, 2) * factorsColor_(0)
-                              + pow(errSat, 2) * factorsColor_(1)
-                              + pow(errVal, 2) * factorsColor_(2);
-            A(i, 0) = -pow(errHue, 2) / pow(sum_denominator, 2);
-            A(i, 1) = -pow(errSat, 2) / pow(sum_denominator, 2);
-            A(i, 2) = -pow(errVal, 2) / pow(sum_denominator, 2);
+            errHue = hsvIntern[0] - hsvValues(i, 0);
+            errSat = hsvIntern[1] - hsvValues(i, 1);
+            errVal = hsvIntern[2] - hsvValues(i, 2);
+            sumDenominator = 1
+                             + pow(errHue, 2) * factorsIntern(0)
+                             + pow(errSat, 2) * factorsIntern(1)
+                             + pow(errVal, 2) * factorsIntern(2);
+            A(i, 0) = -pow(errHue, 2) / pow(sumDenominator, 2);
+            A(i, 1) = -pow(errSat, 2) / pow(sumDenominator, 2);
+            A(i, 2) = -pow(errVal, 2) / pow(sumDenominator, 2);
         }
 
         dx = svd_solver.compute(
                  A, Eigen::ComputeThinU|Eigen::ComputeThinV).solve(results);
-        factorsColor_ += dx;
+        factorsIntern += dx;
 
         if (dx(0) < 0) dx(0) *= -1;
         if (dx(1) < 0) dx(1) *= -1;
@@ -600,7 +548,7 @@ bool CalibrationHandler::visualizeResult()
     }
 
     std::cout << "False positives in image = " << falsePositives << std::endl;
-    cv::imshow(title_, imgCopy);
+    cv::imshow(title, imgCopy);
 
     int key;
 
@@ -609,7 +557,7 @@ bool CalibrationHandler::visualizeResult()
 
         if (key == KEY_S)
             return true;
-        else if (key == 27)
+        else if (key == KEY_ESC)
             return false;
     }
 }
@@ -618,18 +566,18 @@ uint64_t CalibrationHandler::getFalsePositives(const uint64_t &startGoodValues)
 {
     uint64_t falsePositives = 0;
     double prediction;
-    int16_t v_h;
-    int16_t v_s;
-    int16_t v_v;
+    int16_t errHue;
+    int16_t errSat;
+    int16_t errVal;
 
     for (uint64_t i = 0; i < startGoodValues; ++i) {
-        v_h = hsvColor_(0) - hsvValues(i, 0);
-        v_s = hsvColor_(1) - hsvValues(i, 1);
-        v_v = hsvColor_(2) - hsvValues(i, 2);
+        errHue = hsvIntern(0) - hsvValues(i, 0);
+        errSat = hsvIntern(1) - hsvValues(i, 1);
+        errVal = hsvIntern(2) - hsvValues(i, 2);
         prediction = getProbability(
-                         pow(v_h, 2) * factorsColor_(0)
-                         + pow(v_s, 2) * factorsColor_(1)
-                         + pow(v_v, 2) * factorsColor_(2));
+                         pow(errHue, 2) * factorsIntern(0)
+                         + pow(errSat, 2) * factorsIntern(1)
+                         + pow(errVal, 2) * factorsIntern(2));
 
         if (prediction >= 0.5)
             ++falsePositives;
@@ -704,9 +652,9 @@ void CalibrationHandler::clickAndCrop(int event, int x, int y)
     }
 }
 
-void CalibrationHandler::setFont(const uint8_t& font_)
+void CalibrationHandler::setFont(const uint8_t& font)
 {
-    this->font_ = font_;
+    this->font = font;
 }
 
 void CalibrationHandler::setMaxIteration(const uint16_t& maxIteration)
@@ -729,29 +677,29 @@ void CalibrationHandler::setPosDist(const uint8_t& posDist)
     this->posDist = posDist;
 }
 
-void CalibrationHandler::setTextColor(const cv::Scalar& textColor_)
+void CalibrationHandler::setTextColor(const cv::Scalar& textColor)
 {
-    this->textColor_ = textColor_;
+    this->textColor = textColor;
 }
 
-void CalibrationHandler::setTextScale(float textScale_)
+void CalibrationHandler::setTextScale(float textScale)
 {
-    this->textScale_ = textScale_;
+    this->textScale = textScale;
 }
 
-void CalibrationHandler::setTextThickness(const uint8_t& textThickness_)
+void CalibrationHandler::setTextThickness(const uint8_t& textThickness)
 {
-    this->textThickness_ = textThickness_;
+    this->textThickness = textThickness;
 }
 
-void CalibrationHandler::setTitle(const std::string& title_)
+void CalibrationHandler::setTitle(const std::string& title)
 {
-    this->title_ = title_;
+    this->title = title;
 }
 
 const uint8_t& CalibrationHandler::getFont() const
 {
-    return font_;
+    return font;
 }
 
 const uint16_t& CalibrationHandler::getMaxIteration() const
@@ -775,20 +723,83 @@ const uint8_t& CalibrationHandler::getPosDist() const
 
 const cv::Scalar& CalibrationHandler::getTextColor() const
 {
-    return textColor_;
+    return textColor;
 }
 
 float CalibrationHandler::getTextScale() const
 {
-    return textScale_;
+    return textScale;
 }
 
 const uint8_t& CalibrationHandler::getTextThickness() const
 {
-    return textThickness_;
+    return textThickness;
 }
 
 const std::string& CalibrationHandler::getTitle() const
 {
-    return title_;
+    return title;
+}
+
+bool CalibrationHandler::drawRectangle(std::string description, cv::Mat *img)
+{
+    img->copyTo(imgCopy);
+    cv::putText(
+        imgCopy,
+        "Select ONLY good color",
+        cv::Point(distanceText2Border, imgCopy.rows-distanceText2Border),
+        font,
+        textScale,
+        textColor,
+        textThickness);
+
+    int key;
+
+    while (true) {
+        cv::imshow(title, imgCopy);
+
+        // Draw rectangle.
+        if (squarePoints.size() == POINTS_OF_RECTANGLE) {
+            img->copyTo(imgCopy);
+            cv::putText(
+                imgCopy,
+                description,
+                cv::Point(
+                    distanceText2Border,
+                    imgCopy.rows - distanceText2Border),
+                font,
+                textScale,
+                textColor,
+                textThickness);
+            cv::rectangle(
+                imgCopy,
+                squarePoints[0],
+                squarePoints[1],
+                cv::Scalar(0, 0, 0),
+                2);
+        }
+
+        key = cv::waitKey(WAIT_TIME);
+
+        if (key == KEY_R) {
+            for (int i = 0; i < POINTS_OF_RECTANGLE; ++i) {
+                squarePoints.pop_back();
+            }
+            img->copyTo(imgCopy);
+            cv::putText(
+                imgCopy,
+                "Select ONLY good color",
+                cv::Point(
+                    distanceText2Border,
+                    imgCopy.rows - distanceText2Border),
+                font,
+                textScale,
+                textColor,
+                textThickness);
+        } else if (key == KEY_ACCEPT) {
+            return true;
+        } else if (key == KEY_ESC) {
+            return false;
+        }
+    }
 }

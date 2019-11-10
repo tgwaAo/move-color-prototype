@@ -145,15 +145,15 @@ private:
      */
     void newPos(uint8_t idx);
 
-    uint8_t radius_;
-    cv::Scalar color_;
-    std::vector<float> circleTimeStates_;
+    const uint8_t SIZE_OF_TIME_STATES = 3;
+    
+    uint8_t radius;
+    cv::Scalar color;
+    std::vector<float> circleTimeStates;
     std::vector<Circle> allCircles;
     std::mt19937 eng;
     std::uniform_int_distribution<uint16_t> randomUpDownIdx;
     std::uniform_int_distribution<uint16_t> randomLeftRightIdx;
-
-    const uint8_t SIZE_OF_TIME_STATES = 3;
 };
 
 #endif // CIRCLEHANDLER_H

@@ -49,52 +49,52 @@ uint32_t ParticleWeighting::getSumWeights() const
 
 uint16_t ParticleWeighting::getMaxWeight() const
 {
-    return maxWeight_;
+    return maxWeight;
 }
 
 void ParticleWeighting::setMaxWeight(const uint16_t &value)
 {
-    maxWeight_ = value;
+    maxWeight = value;
 }
 
 uint16_t ParticleWeighting::getMinWidth() const
 {
-    return minWidth_;
+    return minWidth;
 }
 
 void ParticleWeighting::setMinWidth(const uint16_t &value)
 {
-    minWidth_ = value;
+    minWidth = value;
 }
 
 uint16_t ParticleWeighting::getMinHeight() const
 {
-    return minHeight_;
+    return minHeight;
 }
 
 void ParticleWeighting::setMinHeight(const uint16_t &value)
 {
-    minHeight_ = value;
+    minHeight = value;
 }
 
 uint16_t ParticleWeighting::getMaxWidth() const
 {
-    return maxWidth_;
+    return maxWidth;
 }
 
 void ParticleWeighting::setMaxWidth(const uint16_t &value)
 {
-    maxWidth_ = value;
+    maxWidth = value;
 }
 
 uint16_t ParticleWeighting::getMaxHeight() const
 {
-    return maxHeight_;
+    return maxHeight;
 }
 
 void ParticleWeighting::setMaxHeight(const uint16_t &value)
 {
-    maxHeight_ = value;
+    maxHeight = value;
 }
 
 uint16_t ParticleWeighting::getHue() const
@@ -169,20 +169,26 @@ ParticleWeighting::ParticleWeighting(
     const std::vector<double> &factors,
     const std::vector<uint16_t> &hsvBest)
 {
-    minWidth_ = minWidth;
-    maxWidth_ = maxWidth;
-    minHeight_ = minHeight;
-    maxHeight_ = maxHeight;
-    maxWeight_ = maxWeight;
-    factorH = factors[0];
-    factorS = factors[1];
-    factorV = factors[2];
-    hue = hsvBest[0];
-    sat = hsvBest[1];
-    val = hsvBest[2];
-    cols_ = cols;
-    bound_ = bound;
-    hsvChannels = 3;
+    this->minWidth = minWidth;
+    this->maxWidth = maxWidth;
+    this->minHeight = minHeight;
+    this->maxHeight = maxHeight;
+    this->maxWeight = maxWeight;
+
+    if (factors.size() == HSV_CHANNELS) {
+        factorH = factors[0];
+        factorS = factors[1];
+        factorV = factors[2];
+    }
+
+    if (hsvBest.size() == HSV_CHANNELS) {
+        hue = hsvBest[0];
+        sat = hsvBest[1];
+        val = hsvBest[2];
+    }
+
+    this->cols = cols;
+    this->bound = bound;
 
     particlesX.resize(numParticles);
     particlesY.resize(numParticles);
@@ -193,39 +199,40 @@ ParticleWeighting::ParticleWeighting(
 
 uint32_t ParticleWeighting::calculateSumWeights(const uint8_t * const pixelPtr)
 {
-    int16_t v_h;
-    int16_t v_s;
-    int16_t v_v;
+    int16_t errHue;
+    int16_t errSat;
+    int16_t errVal;
+
     double prediction;
     sumWeights = 0;
 
     for (int i = 0; i < particlesX.size(); ++i) {
         //        calculate probability of being correct
-        v_h =
+        errHue =
             hue - pixelPtr[
-         particlesY[i] * cols_ * hsvChannels
-         + particlesX[i] * hsvChannels];
+         particlesY[i] * cols * HSV_CHANNELS
+         + particlesX[i] * HSV_CHANNELS];
 
-        v_s =
+        errSat =
             sat - pixelPtr[
-         particlesY[i] * cols_ * hsvChannels
-         + particlesX[i] * hsvChannels + 1];
+         particlesY[i] * cols * HSV_CHANNELS
+         + particlesX[i] * HSV_CHANNELS + 1];
 
-        v_v =
+        errVal =
             val - pixelPtr[
-         particlesY[i] * cols_ * hsvChannels
-         + particlesX[i] * hsvChannels + 2];
+         particlesY[i] * cols * HSV_CHANNELS
+         + particlesX[i] * HSV_CHANNELS + 2];
 
         prediction = 1
                      / (1
-                        + pow(v_h, 2) * factorH
-                        + pow(v_s, 2) * factorS
-                        + pow(v_v, 2)*factorV);
+                        + pow(errHue, 2) * factorH
+                        + pow(errSat, 2) * factorS
+                        + pow(errVal, 2) * factorV);
 
         if (prediction < 0.5)
             particlesW[i] = 1;
         else
-            particlesW[i] = maxWeight_;
+            particlesW[i] = maxWeight;
 
         sumWeights += particlesW[i];
     }
@@ -235,20 +242,20 @@ uint32_t ParticleWeighting::calculateSumWeights(const uint8_t * const pixelPtr)
 
 void ParticleWeighting::update()
 {
-    uint16_t diff = maxWidth_ - minWidth_;
-    uint32_t num_pixels = diff * (maxHeight_-minHeight_);
+    uint16_t diff = maxWidth - minWidth;
+    uint32_t num_pixels = diff * (maxHeight - minHeight);
     uint16_t step = num_pixels / particlesX.size();
 
     for (int i = 0; i < particlesX.size(); ++i) {
-        particlesX[i] = ((i*step) % static_cast<int>(diff)) + minWidth_;
-        particlesY[i] = ((i*step) / diff) + minHeight_;
+        particlesX[i] = ((i*step) % static_cast<int>(diff)) + minWidth;
+        particlesY[i] = ((i*step) / diff) + minHeight;
         particlesW[i] = 1;
     }
 }
 
-bool ParticleWeighting::is_color(const uint8_t * const pixelPtr)
+bool ParticleWeighting::isColor(const uint8_t * const pixelPtr)
 {
-    if (calculateSumWeights(pixelPtr) < bound_)
+    if (calculateSumWeights(pixelPtr) < bound)
         return false;
     else
         return true;
@@ -265,7 +272,7 @@ std::vector<uint16_t> ParticleWeighting::getHsv() const
 
 bool ParticleWeighting::setHsv(const std::vector<uint16_t> &hsv)
 {
-    if (hsv.size() == hsvChannels) {
+    if (hsv.size() == HSV_CHANNELS) {
         hue = hsv[0];
         sat = hsv[1];
         val = hsv[2];
@@ -286,7 +293,7 @@ std::vector<double> ParticleWeighting::getFactors() const
 
 bool ParticleWeighting::setFactors(const std::vector<double> &factors)
 {
-    if (factors.size() == hsvChannels) {
+    if (factors.size() == HSV_CHANNELS) {
         factorH = factors[0];
         factorS = factors[1];
         factorV = factors[2];

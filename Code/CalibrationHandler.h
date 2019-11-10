@@ -82,45 +82,45 @@ public:
      * @brief Calibrates params. Values without error are found using histograms,
      * factors for predictions are calculated using eigens BDCSVD.
      * @param img Image used to visualize steps and to get values for calibration.
-     * @param hsvColor Values to decide, whether a color is inside
+     * @param hsvIntern Values to decide, whether a color is inside
      *                  bright color spectrum or not.
-     * @param factorsColor Factors to calculate prediction of dark color spectrum.
+     * @param factorsIntern Factors to calculate prediction of dark color spectrum.
      * @return Acception of new values.
      */
     bool calibrate(
         cv::Mat *img,
-        std::vector<uint16_t> *hsvColor,
-        std::vector<double> *factorsColor);
+        std::vector<uint16_t> *hsvIntern,
+        std::vector<double> *factorsIntern);
 
     /**
      * @brief Set title of shown window.
-     * @param title_ Title of shown window.
+     * @param title Title of shown window.
      */
-    void setTitle(const std::string& title_);
+    void setTitle(const std::string& title);
 
     /**
      * @brief Set font of explanation text.
-     * @param font_ Font of explanation text.
+     * @param font Font of explanation text.
      */
-    void setFont(const uint8_t& font_);
+    void setFont(const uint8_t& font);
 
     /**
      * @brief Set color of explanation text.
-     * @param textColor_ Color of explanation text.
+     * @param textColor Color of explanation text.
      */
-    void setTextColor(const cv::Scalar& textColor_);
+    void setTextColor(const cv::Scalar& textColor);
 
     /**
      * @brief Set scale of explanation text.
-     * @param textScale_ Scale of explanation text.
+     * @param textScale Scale of explanation text.
      */
-    void setTextScale(float textScale_);
+    void setTextScale(float textScale);
 
     /**
      * @brief Set thickness of explanation text.
-     * @param textThickness_ Thickness of explanation text.
+     * @param textThickness Thickness of explanation text.
      */
-    void setTextThickness(const uint8_t& textThickness_);
+    void setTextThickness(const uint8_t& textThickness);
 
     /**
      * @brief Set maximum of iterations in calibration.
@@ -201,6 +201,9 @@ public:
     const uint8_t& getPosDist() const;
 
 private:
+
+    bool drawRectangle(std::string description, cv::Mat *img);
+
     /**
      * @brief Find min. and max. x- and y-values of a rectangle.
      * @param square Rectangle representation as two points.
@@ -307,14 +310,15 @@ private:
     const int16_t KEY_ESC = 27;
     const uint8_t POINTS_OF_RECTANGLE = 2;
     const double START_VALUE_FACTORS = 0.0003;
+    const uint8_t WAIT_TIME = 20;
 
     cv::Mat imgCopy;
-    std::string title_;
-    uint16_t distanceText2Border_;
-    uint8_t font_;
-    float textScale_;
-    cv::Scalar textColor_;
-    uint8_t textThickness_;
+    std::string title;
+    uint16_t distanceText2Border;
+    uint8_t font;
+    float textScale;
+    cv::Scalar textColor;
+    uint8_t textThickness;
     bool drawActive;
 
     uint8_t negDist;
@@ -331,8 +335,8 @@ private:
     double minError;
     uint16_t maxIteration;
 
-    Eigen::Vector3i hsvColor_;
-    Eigen::Vector3d factorsColor_;
+    Eigen::Vector3i hsvIntern;
+    Eigen::Vector3d factorsIntern;
 };
 
 #endif  // CALIBRATIONHANDLER_H

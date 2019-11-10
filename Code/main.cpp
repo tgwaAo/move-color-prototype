@@ -57,23 +57,24 @@
  * @return Code of user input. 0 for replay, 1 for end of game and 2 for calibration.
  */
 uint8_t gameplay(
-    std::unique_ptr<cv::VideoCapture> cap,
+    cv::VideoCapture *cap,
     cv::Mat *mirror,
     const std::string &title,
     const uint8_t corner2center,
-    std::unique_ptr<CircleHandler> posHandler,
-    std::unique_ptr<CircleHandler> negHandler,
+    CircleHandler *posHandler,
+    CircleHandler *negHandler,
     const uint8_t maxDistance,
-    std::unique_ptr<std::vector<std::vector<ParticleWeighting>
-    > > weightingMatrix);
+    std::vector<std::vector
+    <ParticleWeighting>> *weightingMatrix);
+
 /**
- * @brief Take a photo after 5 seconds.
- * @param cap Camera to shot photo.
- * @param image Image to save picture.
- * @param title Title shown on counting down.
- */
+* @brief Take a photo after 5 seconds.
+* @param cap Camera to shot photo.
+* @param image Image to save picture.
+* @param title Title shown on counting down.
+*/
 void photoWithTimer(
-    std::unique_ptr<cv::VideoCapture> cap,
+    cv::VideoCapture *cap,
     cv::Mat *image,
     const std::string &title);
 
@@ -101,7 +102,7 @@ int main()
     /*******************************************************************
      * Set camera up and initialize variables.
      * ****************************************************************/
-    std::unique_ptr<cv::VideoCapture> cap(new cv::VideoCapture(1));
+    std::unique_ptr<cv::VideoCapture> cap(new cv::VideoCapture(0));
 
     if (!cap->isOpened()) {
         return -1;
@@ -143,7 +144,7 @@ int main()
 
         settings_file.close();
     } else {
-        photoWithTimer(std::move(cap), mirror, TITLE);
+        photoWithTimer(cap.get(), mirror, TITLE);
         if (calibrator.calibrate(mirror, &hsvColor, &factorsColor))
             saveCalibration(SETTINGS_FILENAME, hsvColor, factorsColor);
     }
@@ -230,23 +231,24 @@ int main()
 
     while (run) {
         keyCode = gameplay(
-                      std::move(cap),
+                      cap.get(),
                       mirror,
                       TITLE,
                       CORNER_2_CENTER,
-                      std::move(posHandler),
-                      std::move(negHandler),
+                      posHandler.get(),
+                      negHandler.get(),
                       MAX_DISTANCE,
-                      std::move(weightingMatrix));
+                      weightingMatrix.get());
 
         switch (keyCode) {
         case CODE_END:
             run = false;
             break;
         case CODE_CALIBRATE:
-            photoWithTimer(std::move(cap),
-                           mirror,
-                           TITLE);
+            photoWithTimer(
+                cap.get(),
+                mirror,
+                TITLE);
 
             if (calibrator.calibrate(mirror, &hsvColor, &factorsColor)) {
                 saveCalibration(SETTINGS_FILENAME, hsvColor, factorsColor);
@@ -269,15 +271,15 @@ int main()
 }
 
 uint8_t gameplay(
-    std::unique_ptr<cv::VideoCapture> cap,
+    cv::VideoCapture *cap,
     cv::Mat *mirror,
     const std::string &title,
     const uint8_t corner2center,
-    std::unique_ptr<CircleHandler> posHandler,
-    std::unique_ptr<CircleHandler> negHandler,
+    CircleHandler *posHandler,
+    CircleHandler *negHandler,
     const uint8_t maxDistance,
-    std::unique_ptr<std::vector<std::vector
-    <ParticleWeighting>>> weightingMatrix)
+    std::vector<std::vector
+    <ParticleWeighting>> *weightingMatrix)
 {
     cv::Mat frame;
     cv::Mat hsv;
@@ -310,7 +312,7 @@ uint8_t gameplay(
 
         for (int i = 0; i < (*weightingMatrix).size(); ++i) {
             for (int j = 0; j < (*weightingMatrix)[i].size(); ++j) {
-                goodArea = (*weightingMatrix)[i][j].is_color(pixelPtr_hsv);
+                goodArea = (*weightingMatrix)[i][j].isColor(pixelPtr_hsv);
 
                 if (goodArea) {
                     color = GOOD_COLOR;
@@ -404,7 +406,7 @@ uint8_t gameplay(
 
 // Take photo after 3 seconds.
 void photoWithTimer(
-    std::unique_ptr<cv::VideoCapture> cap,
+    cv::VideoCapture *cap,
     cv::Mat *image,
     const std::string &title)
 {
@@ -420,6 +422,7 @@ void photoWithTimer(
     while (leftSeconds > 0) {
         *cap >> frame;
         cv::flip(frame, *image, 1);
+
         leftSeconds = minTimePassed - static_cast<float>(clock() - timeStart)
                       / CLOCKS_PER_SEC;
         cv::putText(
@@ -430,6 +433,7 @@ void photoWithTimer(
             1.2,
             cv::Scalar(255, 255, 0),
             2);
+
         cv::imshow(title, *image);
         cv::waitKey(1);
     }
