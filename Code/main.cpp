@@ -73,10 +73,11 @@ uint8_t gameplay(
 * @param image Image to save picture.
 * @param title Title shown on counting down.
 */
-void photoWithTimer(
+bool photoWithTimer(
     cv::VideoCapture *cap,
     cv::Mat *image,
-    const std::string &title);
+    const std::string &title,
+    int16_t keyAbort);
 
 /**
  * @brief Load last highscore and return current highscore.
@@ -124,7 +125,7 @@ int main()
 
     struct stat buffer;
     const std::string SETTINGS_FILENAME = "hsv.txt";
-
+    const int16_t keyAbort = 27;
     CalibrationHandler calibrator(TITLE);
     cv::Mat *mirror = new cv::Mat;
 
@@ -144,9 +145,9 @@ int main()
 
         settings_file.close();
     } else {
-        photoWithTimer(cap.get(), mirror, TITLE);
-        if (calibrator.calibrate(mirror, &hsvColor, &factorsColor))
-            saveCalibration(SETTINGS_FILENAME, hsvColor, factorsColor);
+        if (photoWithTimer(cap.get(), mirror, TITLE, keyAbort))
+            if (calibrator.calibrate(mirror, &hsvColor, &factorsColor))
+                saveCalibration(SETTINGS_FILENAME, hsvColor, factorsColor);
     }
 
     /************************************************************
@@ -245,21 +246,21 @@ int main()
             run = false;
             break;
         case CODE_CALIBRATE:
-            photoWithTimer(
-                cap.get(),
-                mirror,
-                TITLE);
+            if (photoWithTimer(
+                    cap.get(),
+                    mirror,
+                    TITLE,
+                    keyAbort))
+                if (calibrator.calibrate(mirror, &hsvColor, &factorsColor)) {
+                    saveCalibration(SETTINGS_FILENAME, hsvColor, factorsColor);
 
-            if (calibrator.calibrate(mirror, &hsvColor, &factorsColor)) {
-                saveCalibration(SETTINGS_FILENAME, hsvColor, factorsColor);
-
-                for (int i = 0; i < HEIGHT / MAX_DISTANCE; ++i) {
-                    for (int j = 0; j < WIDTH / MAX_DISTANCE; ++j) {
-                        (*weightingMatrix)[i][j].setHsv(hsvColor);
-                        (*weightingMatrix)[i][j].setFactors(factorsColor);
+                    for (int i = 0; i < HEIGHT / MAX_DISTANCE; ++i) {
+                        for (int j = 0; j < WIDTH / MAX_DISTANCE; ++j) {
+                            (*weightingMatrix)[i][j].setHsv(hsvColor);
+                            (*weightingMatrix)[i][j].setFactors(factorsColor);
+                        }
                     }
                 }
-            }
             break;
         }
     }
@@ -353,7 +354,9 @@ uint8_t gameplay(
             cv::imshow(title, *mirror);
             key = cv::waitKey(1);
 
-            if (key == KEY_ESC)
+            if (key == KEY_R)
+                return 0;
+            else if (key == KEY_ESC)
                 break;
             else if (key == KEY_C)
                 return 2;
@@ -394,6 +397,8 @@ uint8_t gameplay(
             if (key != -1) {
                 if (key == KEY_R)
                     return 0;
+                else if (key == KEY_C)
+                    return 2;
                 else
                     break;
             }
@@ -405,10 +410,11 @@ uint8_t gameplay(
 }
 
 // Take photo after 3 seconds.
-void photoWithTimer(
+bool photoWithTimer(
     cv::VideoCapture *cap,
     cv::Mat *image,
-    const std::string &title)
+    const std::string &title,
+    int16_t keyAbort)
 {
     /***********************************************************
      *  Wait a few seconds to give the user time to get in position.
@@ -418,6 +424,7 @@ void photoWithTimer(
     int8_t leftSeconds = minTimePassed - static_cast<float>(clock() - timeStart)
                          / CLOCKS_PER_SEC;
     cv::Mat frame;
+    int16_t key;
 
     while (leftSeconds > 0) {
         *cap >> frame;
@@ -435,11 +442,15 @@ void photoWithTimer(
             2);
 
         cv::imshow(title, *image);
-        cv::waitKey(1);
+        key = cv::waitKey(1);
+
+        if (key == keyAbort)
+            return false;
     }
 
     *cap >> frame;
     cv::flip(frame, *image, 1);
+    return true;
 }
 
 int16_t loadHighscore(const std::string &filename, int16_t hits)
