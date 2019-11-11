@@ -16,3 +16,5 @@ while calibration:
 r = select rectangles again
 enter = accept
 esc = abort
+
+PLEASE BE CAREFUL WHILE PLAYING AND MAKE SURE TO READ THE LICENSE.
