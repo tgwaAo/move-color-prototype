@@ -37,6 +37,7 @@
 #include <sys/stat.h>
 #include <vector>
 #include <sstream>
+#include <iomanip>
 #include <random>
 #include <opencv2/opencv.hpp>
 
@@ -292,11 +293,11 @@ uint8_t gameplay(
     const cv::Scalar GOOD_COLOR(255, 0, 0);
     std::random_device rd;
     std::mt19937 eng(rd());
-
-    int key;
+    int16_t key;
     bool goodArea;
     float leftSeconds;
     int16_t hits = 0;
+    
     const int16_t KEY_ESC = 27;
     const int16_t KEY_C = 99;
     const int16_t KEY_R = 114;
@@ -341,16 +342,24 @@ uint8_t gameplay(
             }
         }
 
-        putText(
+        cv::putText(
             *mirror,
             "Hits= " + std::to_string(hits),
-            cv::Point(10,
-                      mirror->rows - 10),
+            cv::Point(10, mirror->rows - 10),
             cv::FONT_HERSHEY_SIMPLEX,
             1.2,
-            cv::Scalar(255,
-                       255,
-                       0));
+            cv::Scalar(255, 255, 0));
+
+        leftSeconds = gameTime - static_cast<float>(clock() - timeStart)
+                      / CLOCKS_PER_SEC;
+        
+        cv::putText(
+            *mirror,
+            "Time left= " + std::to_string(leftSeconds),
+            cv::Point(200, mirror->rows - 10),
+            cv::FONT_HERSHEY_SIMPLEX,
+            1.2,
+            cv::Scalar(255,255,0));
 
         if (cv::getWindowProperty(title, cv::WND_PROP_VISIBLE)) {
             cv::imshow(title, *mirror);
@@ -364,8 +373,6 @@ uint8_t gameplay(
                 return 2;
         }
 
-        leftSeconds = gameTime - static_cast<float>(clock() - timeStart)
-                      / CLOCKS_PER_SEC;
 
         if (leftSeconds <= 0) break;
     }
@@ -418,9 +425,6 @@ bool photoWithTimer(
     const std::string &title,
     int16_t keyAbort)
 {
-    /***********************************************************
-     *  Wait a few seconds to give the user time to get in position.
-     * ********************************************************/
     const uint8_t minTimePassed = 3;
     clock_t timeStart = clock();
     int8_t leftSeconds = minTimePassed - static_cast<float>(clock() - timeStart)
