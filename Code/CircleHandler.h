@@ -85,7 +85,7 @@ public:
      * @param y Current y-value to check hit.
      * @return Number of hits.
      */
-    uint8_t checkHit(const uint16_t &x, const uint16_t &y);
+    uint8_t checkHit(const uint16_t x, const uint16_t y);
 
     /**
      * @class Circle
@@ -146,7 +146,7 @@ private:
     void newPos(uint8_t idx);
 
     const uint8_t SIZE_OF_TIME_STATES = 3;
-    
+
     uint8_t radius;
     cv::Scalar color;
     std::vector<float> circleTimeStates;
@@ -156,4 +156,4 @@ private:
     std::uniform_int_distribution<uint16_t> randomLeftRightIdx;
 };
 
-#endif // CIRCLEHANDLER_H
+#endif  // CIRCLEHANDLER_H

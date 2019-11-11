@@ -49,26 +49,26 @@ public:
     /**
      * @brief Constructs a continuous matrix of particles in given area
      * and initializes necessary attributes.
-     * @param numParticles_ Number of particles.
-     * @param minWidth_ Where width starts.
-     * @param maxWidth_ Where width ends.
-     * @param minHeight_ Where height starts.
-     * @param maxHeight_ Where height ends.
-     * @param maxWeight_ Weight of a particle without error.
-     * @param cols_ Number of horizontal pixels.
-     * @param bound_ Minimal number of positive particles.
+     * @param numParticles Number of particles.
+     * @param minWidth Where width starts.
+     * @param maxWidth Where width ends.
+     * @param minHeight Where height starts.
+     * @param maxHeight Where height ends.
+     * @param maxWeight Weight of a particle without error.
+     * @param cols Number of horizontal pixels.
+     * @param bound Minimal number of positive particles.
      * @param factors Factors multiplied by squared error.
      * @param hsvBest HSV values without error.
      */
     ParticleWeighting(
-        const uint16_t &numParticles_,
-        const double &minWidth_,
-        const double &maxWidth_,
-        const double &minHeight_,
-        const double &maxHeight_,
-        const uint16_t &maxWeight_,
-        const uint16_t &cols_,
-        const uint32_t bound_,
+        const uint16_t numParticles,
+        const double minWidth,
+        const double maxWidth,
+        const double minHeight,
+        const double maxHeight,
+        const uint16_t maxWeight,
+        const uint16_t cols,
+        const uint32_t bound,
         const std::vector<double> &factors,
         const std::vector<uint16_t> &hsvBest);
 
@@ -77,14 +77,14 @@ public:
      * @param pixelPtr Pointer pointing to current image.
      * @return Sum of weights of particles.
      */
-    uint32_t calculateSumWeights(const uint8_t *pixelPtr);
+    uint32_t calculateSumWeights(const uint8_t *const pixelPtr);
 
     /**
      * @brief Decide, wheter area contains color or not.
      * @param pixelPtr Pointer pointing to current image.
      * @return Decision of containing color.
      */
-    bool isColor(const uint8_t *pixelPtr);
+    bool isColor(const uint8_t *const pixelPtr);
 
     /**
      * @brief Update position of particles after changed size.
@@ -93,14 +93,14 @@ public:
 
     /**
      * @brief Get values of a particle.
-     * @param idx_ Index of wanted particle.
+     * @param idx Index of wanted particle.
      * @param backX X position of particle.
      * @param backY Y position of particle.
      * @param backW Weight of particle.
      * @param alright Is alright, if idx_ is in valid range.
      */
     void getParticle(
-        const uint16_t &idx_,
+        const uint16_t idx,
         uint16_t backX,
         uint16_t backY,
         uint16_t backW,
@@ -108,16 +108,16 @@ public:
 
     /**
      * @brief Set values of a particle.
-     * @param idx_ Index of interesting particle.
-     * @param change_x_ Next x position of particle.
-     * @param change_y_ Next y position of particle.
-     * @param change_w_ Next weight of particle.
+     * @param idx Index of interesting particle.
+     * @param changeX Next x position of particle.
+     * @param changeY Next y position of particle.
+     * @param changeW Next weight of particle.
      */
     void setParticle(
-        const uint16_t &idx_,
-        const uint16_t &changeX_,
-        const uint16_t &changeY_,
-        const uint16_t &changeW_);
+        const uint16_t idx,
+        const uint16_t changeX,
+        const uint16_t changeY,
+        const uint16_t changeW);
 
     /**
      * @brief Get sum of weights.
@@ -127,9 +127,9 @@ public:
 
     /**
      * @brief Set sum of weights.
-     * @param sum_weights New sum of weights.
+     * @param sumWeights New sum of weights.
      */
-    void setSumWeights(const uint32_t& sumWeights);
+    void setSumWeights(const uint32_t sumWeights);
 
     /**
      * @brief Get weight of no error.
@@ -139,9 +139,9 @@ public:
 
     /**
      * @brief Set maximum possible weight.
-     * @param value Maximum possible weight.
+     * @param maxWeight Maximum possible weight.
      */
-    void setMaxWeight(const uint16_t &value);
+    void setMaxWeight(const uint16_t maxWeight);
 
     /**
      * @brief Get horizontal start of area.
@@ -151,9 +151,9 @@ public:
 
     /**
      * @brief Set horizontal start of area.
-     * @param value Horizontal start of area.
+     * @param minWidth Horizontal start of area.
      */
-    void setMinWidth(const uint16_t &value);
+    void setMinWidth(const uint16_t minWidth);
 
     /**
      * @brief Get vertical start of area.
@@ -163,9 +163,9 @@ public:
 
     /**
      * @brief Set vertical start of area.
-     * @param value Vertical start of area.
+     * @param minHeight Vertical start of area.
      */
-    void setMinHeight(const uint16_t &value);
+    void setMinHeight(const uint16_t minHeight);
 
     /**
      * @brief Get horizontal end of area.
@@ -175,9 +175,9 @@ public:
 
     /**
      * @brief Set horizontal end of area.
-     * @param value Horizontal end of area.
+     * @param maxWidth Horizontal end of area.
      */
-    void setMaxWidth(const uint16_t &value);
+    void setMaxWidth(const uint16_t maxWidth);
 
     /**
      * @brief Get vertical end of area.
@@ -187,81 +187,9 @@ public:
 
     /**
      * @brief Set vertical end of area.
-     * @param value Vertical end of area.
+     * @param maxHeight Vertical end of area.
      */
-    void setMaxHeight(const uint16_t &value);
-
-    /**
-     * @brief Get optimal hue.
-     * @return Optimal value.
-     */
-    uint16_t getHue() const;
-
-    /**
-     * @brief Set optimal hue.
-     * @param value Optimal hue.
-     */
-    void setHue(const uint16_t &value);
-
-    /**
-     * @brief Get optimal saturation.
-     * @return Optimal saturation.
-     */
-    uint16_t getSat() const;
-
-    /**
-     * @brief Set optimal saturation.
-     * @param value Optimal saturation.
-     */
-    void setSat(const uint16_t &value);
-
-    /**
-     * @brief Get optimal saturation.
-     * @return Optimal saturation.
-     */
-    uint16_t getVal() const;
-
-    /**
-     * @brief Set optimal value
-     * @param value
-     */
-    void setVal(const uint16_t &value);
-
-    /**
-     * @brief Get factor multiplied by squared hue error.
-     * @return Factor multiplied by squared hue error.
-     */
-    double getFactorH() const;
-
-    /**
-     * @brief Set factor multiplied by squared hue error.
-     * @param value Factor multiplied by squared hue error.
-     */
-    void setFactorH(double value);
-
-    /**
-     * @brief Get factor multiplied by squared saturation error.
-     * @return Factor multiplied by squared saturation error.
-     */
-    double getFactorS() const;
-
-    /**
-     * @brief Set factor multiplied by squared saturation error.
-     * @param value Factor multiplied by squared saturation error.
-     */
-    void setFactorS(double value);
-
-    /**
-     * @brief Get factor multiplied by squared value error.
-     * @return Factor multiplied by squared value error.
-     */
-    double getFactorV() const;
-
-    /**
-     * @brief Set factor multiplied by squared value error.
-     * @param value Factor multiplied by squared value error.
-     */
-    void setFactorV(double value);
+    void setMaxHeight(const uint16_t maxHeight);
 
     /**
      * @brief Get vector of optimal hsv values.

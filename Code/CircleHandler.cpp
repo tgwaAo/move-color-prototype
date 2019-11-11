@@ -81,7 +81,7 @@ CircleHandler::~CircleHandler()
 {
 }
 
-void CircleHandler::updateCircles(cv::Mat *img)
+void CircleHandler::updateCircles(cv::Mat *const img)
 {
     float leftSeconds;
     cv::Scalar usedColor;
@@ -115,7 +115,7 @@ void CircleHandler::updateCircles(cv::Mat *img)
     }
 }
 
-uint8_t CircleHandler::checkHit(const uint16_t &x, const uint16_t &y)
+uint8_t CircleHandler::checkHit(const uint16_t x, const uint16_t y)
 {
     double dist;
     uint16_t hits = 0;

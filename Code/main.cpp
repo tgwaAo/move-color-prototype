@@ -72,6 +72,8 @@ uint8_t gameplay(
 * @param cap Camera to shot photo.
 * @param image Image to save picture.
 * @param title Title shown on counting down.
+* @param keyAbort Key to abort timer.
+* @return False after abort.
 */
 bool photoWithTimer(
     cv::VideoCapture *cap,
@@ -103,7 +105,7 @@ int main()
     /*******************************************************************
      * Set camera up and initialize variables.
      * ****************************************************************/
-    std::unique_ptr<cv::VideoCapture> cap(new cv::VideoCapture(0));
+    std::unique_ptr<cv::VideoCapture> cap(new cv::VideoCapture(1));
 
     if (!cap->isOpened()) {
         return -1;

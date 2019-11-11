@@ -89,26 +89,26 @@ public:
      */
     bool calibrate(
         cv::Mat *img,
-        std::vector<uint16_t> *hsvIntern,
-        std::vector<double> *factorsIntern);
+        std::vector<uint16_t> *const hsvIntern,
+        std::vector<double> *const factorsIntern);
 
     /**
      * @brief Set title of shown window.
      * @param title Title of shown window.
      */
-    void setTitle(const std::string& title);
+    void setTitle(const std::string &title);
 
     /**
      * @brief Set font of explanation text.
      * @param font Font of explanation text.
      */
-    void setFont(const uint8_t& font);
+    void setFont(const uint8_t font);
 
     /**
      * @brief Set color of explanation text.
      * @param textColor Color of explanation text.
      */
-    void setTextColor(const cv::Scalar& textColor);
+    void setTextColor(const cv::Scalar textColor);
 
     /**
      * @brief Set scale of explanation text.
@@ -120,13 +120,13 @@ public:
      * @brief Set thickness of explanation text.
      * @param textThickness Thickness of explanation text.
      */
-    void setTextThickness(const uint8_t& textThickness);
+    void setTextThickness(const uint8_t textThickness);
 
     /**
      * @brief Set maximum of iterations in calibration.
      * @param maxIteration Max. iterations in calibration.
      */
-    void setMaxIteration(const uint16_t& maxIteration);
+    void setMaxIteration(const uint16_t maxIteration);
 
     /**
      * @brief Set minimum of false positives.
@@ -138,31 +138,31 @@ public:
      * @brief Set distance of negative colors picked in image.
      * @param negDist Distance of negative colors picked in image.
      */
-    void setNegDist(const uint8_t& negDist);
+    void setNegDist(const uint8_t negDist);
 
     /**
      * @brief Set distance of positive colors picked in image.
      * @param posDist Distance of positive colors picked in image.
      */
-    void setPosDist(const uint8_t& posDist);
+    void setPosDist(const uint8_t posDist);
 
     /**
      * @brief Get title of shown window.
      * @return Title of shown window.
      */
-    const std::string& getTitle() const;
+    std::string getTitle() const;
 
     /**
      * @brief Get font of shown explanation text.
      * @return Font of shown explanation text.
      */
-    const uint8_t& getFont() const;
+    uint8_t getFont() const;
 
     /**
      * @brief Get color of explanation text.
      * @return Color of explanation text.
      */
-    const cv::Scalar& getTextColor() const;
+    cv::Scalar getTextColor() const;
 
     /**
      * @brief Get scale of explanation text.
@@ -174,13 +174,13 @@ public:
      * @brief Get thickness of explanation text.
      * @return Thickness of explanation text.
      */
-    const uint8_t& getTextThickness() const;
+    uint8_t getTextThickness() const;
 
     /**
      * @brief Get maximum iterations in calculation.
      * @return Maximum iterations in calculation.
      */
-    const uint16_t& getMaxIteration() const;
+    uint16_t getMaxIteration() const;
 
     /**
      * @brief Get minimal false positives in calculation needed to stop.
@@ -192,16 +192,21 @@ public:
      * @brief Get distance of negative colors picked in image.
      * @return Distance of negative colors picked in image.
      */
-    const uint8_t& getNegDist() const;
+    uint8_t getNegDist() const;
 
     /**
      * @brief Get distance of positive colors picked in image.
      * @return Distance of positive colors picked in image.
      */
-    const uint8_t& getPosDist() const;
+    uint8_t getPosDist() const;
 
 private:
-
+    /**
+     * @brief Draw rectangle to get roi.
+     * @param description String to describe goal.
+     * @param img Image to draw rectangle.
+     * @return Returns false for abort.
+     */
     bool drawRectangle(std::string description, cv::Mat *img);
 
     /**
@@ -274,7 +279,7 @@ private:
      * @param row Row of point in image.
      * @param col Column of point in image.
      */
-    void addPointInImg(const uint16_t &row, const uint16_t &col);
+    void addPointInImg(const uint16_t row, const uint16_t col);
 
     /**
      * @brief Function to handle mouse callback in image.

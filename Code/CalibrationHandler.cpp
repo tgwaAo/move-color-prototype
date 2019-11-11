@@ -67,9 +67,9 @@ CalibrationHandler::~CalibrationHandler()
 }
 
 bool CalibrationHandler::calibrate(
-    cv::Mat *img,
-    std::vector<uint16_t> *hsvColor,
-    std::vector<double> *factorsColor)
+    cv::Mat *const img,
+    std::vector<uint16_t> *const hsvColor,
+    std::vector<double> *const factorsColor)
 {
     /***************************************************************
      * Let user select positives.
@@ -86,64 +86,6 @@ bool CalibrationHandler::calibrate(
     /******************************************************************
      * Let user select non-negatives (more than all positives).
      * ***************************************************************/
-//    img->copyTo(imgCopy);
-//    cv::putText(imgCopy,
-//                "Select MORE than good color!",
-//                cv::Point(
-//                    distanceText2Border,
-//                    imgCopy.rows - distanceText2Border),
-//                font,
-//                textScale,
-//                textColor,
-//                textThickness);
-//
-//    while (true) {
-//        cv::imshow(title, imgCopy);
-//
-//        if (squarePoints.size() == POINTS_OF_RECTANGLE) {
-//            img->copyTo(imgCopy);
-//            cv::putText(
-//                imgCopy,
-//                "Select MORE than good color!",
-//                cv::Point(
-//                    distanceText2Border,
-//                    imgCopy.rows - distanceText2Border),
-//                font,
-//                textScale,
-//                textColor,
-//                textThickness);
-//            cv::rectangle(
-//                imgCopy,
-//                squarePoints[0],
-//                squarePoints[1],
-//                cv::Scalar(0, 0, 0),
-//                2);
-//        }
-//
-//        key = cv::waitKey(WAIT_TIME);
-//
-//        if (key == KEY_R) {
-//            for (int i = 0; i < POINTS_OF_RECTANGLE; ++i) {
-//                squarePoints.pop_back();
-//            }
-//            img->copyTo(imgCopy);
-//            cv::putText(
-//                imgCopy,
-//                "Select MORE than good color!",
-//                cv::Point(
-//                    distanceText2Border,
-//                    imgCopy.rows - distanceText2Border),
-//                font,
-//                textScale,
-//                textColor,
-//                textThickness);
-//        } else if (key == KEY_ACCEPT) {
-//            break;
-//        } else if (key == KEY_ESC) {
-//            return false;
-//        }
-//    }
-
     if (!drawRectangle("Select MORE than good color!", img))
         return false;
 
@@ -380,10 +322,10 @@ bool CalibrationHandler::calibrate(
 
 void CalibrationHandler::findMinMaxXY(
     const std::vector<cv::Point> &square,
-    uint16_t *smallestX,
-    uint16_t *biggestX,
-    uint16_t *smallestY,
-    uint16_t *biggestY)
+    uint16_t *const smallestX,
+    uint16_t *const biggestX,
+    uint16_t *const smallestY,
+    uint16_t *const biggestY)
 {
     if (square[0].x < square[1].x) {
         *smallestX = square[0].x;
@@ -611,7 +553,7 @@ void CalibrationHandler::fillMatricesWithBadValues(
         badColor);
 }
 
-void CalibrationHandler::addPointInImg(const uint16_t &row, const uint16_t &col)
+void CalibrationHandler::addPointInImg(const uint16_t row, const uint16_t col)
 {
     double prediction = getPrediction(row, col);
 
@@ -652,12 +594,12 @@ void CalibrationHandler::clickAndCrop(int event, int x, int y)
     }
 }
 
-void CalibrationHandler::setFont(const uint8_t& font)
+void CalibrationHandler::setFont(const uint8_t font)
 {
     this->font = font;
 }
 
-void CalibrationHandler::setMaxIteration(const uint16_t& maxIteration)
+void CalibrationHandler::setMaxIteration(const uint16_t maxIteration)
 {
     this->maxIteration = maxIteration;
 }
@@ -667,17 +609,17 @@ void CalibrationHandler::setMinError(double minError)
     this->minError = minError;
 }
 
-void CalibrationHandler::setNegDist(const uint8_t& negDist)
+void CalibrationHandler::setNegDist(const uint8_t negDist)
 {
     this->negDist = negDist;
 }
 
-void CalibrationHandler::setPosDist(const uint8_t& posDist)
+void CalibrationHandler::setPosDist(const uint8_t posDist)
 {
     this->posDist = posDist;
 }
 
-void CalibrationHandler::setTextColor(const cv::Scalar& textColor)
+void CalibrationHandler::setTextColor(const cv::Scalar textColor)
 {
     this->textColor = textColor;
 }
@@ -687,22 +629,22 @@ void CalibrationHandler::setTextScale(float textScale)
     this->textScale = textScale;
 }
 
-void CalibrationHandler::setTextThickness(const uint8_t& textThickness)
+void CalibrationHandler::setTextThickness(const uint8_t textThickness)
 {
     this->textThickness = textThickness;
 }
 
-void CalibrationHandler::setTitle(const std::string& title)
+void CalibrationHandler::setTitle(const std::string &title)
 {
     this->title = title;
 }
 
-const uint8_t& CalibrationHandler::getFont() const
+uint8_t CalibrationHandler::getFont() const
 {
     return font;
 }
 
-const uint16_t& CalibrationHandler::getMaxIteration() const
+uint16_t CalibrationHandler::getMaxIteration() const
 {
     return maxIteration;
 }
@@ -711,17 +653,18 @@ double CalibrationHandler::getMinError() const
 {
     return minError;
 }
-const uint8_t& CalibrationHandler::getNegDist() const
+
+uint8_t CalibrationHandler::getNegDist() const
 {
     return negDist;
 }
 
-const uint8_t& CalibrationHandler::getPosDist() const
+uint8_t CalibrationHandler::getPosDist() const
 {
     return posDist;
 }
 
-const cv::Scalar& CalibrationHandler::getTextColor() const
+cv::Scalar CalibrationHandler::getTextColor() const
 {
     return textColor;
 }
@@ -731,17 +674,17 @@ float CalibrationHandler::getTextScale() const
     return textScale;
 }
 
-const uint8_t& CalibrationHandler::getTextThickness() const
+uint8_t CalibrationHandler::getTextThickness() const
 {
     return textThickness;
 }
 
-const std::string& CalibrationHandler::getTitle() const
+std::string CalibrationHandler::getTitle() const
 {
     return title;
 }
 
-bool CalibrationHandler::drawRectangle(std::string description, cv::Mat *img)
+bool CalibrationHandler::drawRectangle(std::string description, cv::Mat *const img)
 {
     img->copyTo(imgCopy);
     cv::putText(
