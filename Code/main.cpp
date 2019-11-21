@@ -106,7 +106,7 @@ int main()
     /*******************************************************************
      * Set camera up and initialize variables.
      * ****************************************************************/
-    std::unique_ptr<cv::VideoCapture> cap(new cv::VideoCapture(1));
+    std::unique_ptr<cv::VideoCapture> cap(new cv::VideoCapture(0));
 
     if (!cap->isOpened()) {
         return -1;
@@ -191,18 +191,14 @@ int main()
     /******************************************************************
      * Define circle data.
      * ***************************************************************/
-    uint8_t targetRadius = 30;
-    std::uniform_int_distribution<uint16_t> randomUpDown(
-        targetRadius,
-        HEIGHT - targetRadius);
-    std::uniform_int_distribution<uint16_t> randomLeftRight(
-        targetRadius,
-        WIDTH - targetRadius);
+    uint8_t targetRadius = 40;
 
     /********************************************************
      * Circle and timer stuff. (Circles have timers)
      * *****************************************************/
-    std::vector<float> stateTimes(3, 2);
+    std::vector<float> stateTimes(3, 1);
+    stateTimes[2] = 3;
+    
     std::unique_ptr<CircleHandler> posHandler(
         new CircleHandler(
             7,
