@@ -69,7 +69,7 @@ uint8_t gameplay(
     <ParticleWeighting>> *weightingMatrix);
 
 /**
-* @brief Take a photo after 5 seconds.
+* @brief Take a photo after 3 seconds.
 * @param cap Camera to shot photo.
 * @param image Image to save picture.
 * @param title Title shown on counting down.
