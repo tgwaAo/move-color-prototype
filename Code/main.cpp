@@ -198,7 +198,7 @@ int main()
      * *****************************************************/
     std::vector<float> stateTimes(3, 1);
     stateTimes[2] = 3;
-    
+
     std::unique_ptr<CircleHandler> posHandler(
         new CircleHandler(
             7,
@@ -293,7 +293,7 @@ uint8_t gameplay(
     bool goodArea;
     float leftSeconds;
     int16_t hits = 0;
-    
+
     const int16_t KEY_ESC = 27;
     const int16_t KEY_C = 99;
     const int16_t KEY_R = 114;
@@ -348,7 +348,7 @@ uint8_t gameplay(
 
         leftSeconds = gameTime - static_cast<float>(clock() - timeStart)
                       / CLOCKS_PER_SEC;
-        
+
         cv::putText(
             *mirror,
             "Time left= " + std::to_string(leftSeconds),
@@ -368,8 +368,6 @@ uint8_t gameplay(
             else if (key == KEY_C)
                 return 2;
         }
-
-
         if (leftSeconds <= 0) break;
     }
 
@@ -422,18 +420,20 @@ bool photoWithTimer(
     int16_t keyAbort)
 {
     const uint8_t minTimePassed = 3;
-    clock_t timeStart = clock();
-    int8_t leftSeconds = minTimePassed - static_cast<float>(clock() - timeStart)
-                         / CLOCKS_PER_SEC;
     cv::Mat frame;
     int16_t key;
+
+    double timeStart = cv::getTickCount();
+    int8_t leftSeconds = minTimePassed - (cv::getTickCount() - timeStart)
+                         / cv::getTickFrequency();
 
     while (leftSeconds > 0) {
         *cap >> frame;
         cv::flip(frame, *image, 1);
 
-        leftSeconds = minTimePassed - static_cast<float>(clock() - timeStart)
-                      / CLOCKS_PER_SEC;
+        leftSeconds = minTimePassed - (cv::getTickCount() - timeStart)
+                      / cv::getTickFrequency();
+
         cv::putText(
             *image,
             "Countdown= " + std::to_string(leftSeconds),

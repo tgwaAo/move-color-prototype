@@ -689,7 +689,7 @@ bool CalibrationHandler::drawRectangle(std::string description, cv::Mat *const i
     img->copyTo(imgCopy);
     cv::putText(
         imgCopy,
-        "Select ONLY good color",
+        description,
         cv::Point(distanceText2Border, imgCopy.rows-distanceText2Border),
         font,
         textScale,
