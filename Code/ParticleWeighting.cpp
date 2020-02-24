@@ -87,7 +87,7 @@ uint32_t ParticleWeighting::calculateSumWeights(const uint8_t *const pixelPtr)
     double prediction;
     sumWeights = 0;
 
-    for (int i = 0; i < particlesX.size(); ++i) {
+    for (uint32_t i = 0; i < particlesX.size(); ++i) {
         //        calculate probability of being correct
         errHue =
             hue - pixelPtr[
@@ -127,7 +127,7 @@ void ParticleWeighting::update()
     uint32_t num_pixels = diff * (maxHeight - minHeight);
     uint16_t step = num_pixels / particlesX.size();
 
-    for (int i = 0; i < particlesX.size(); ++i) {
+    for (uint32_t i = 0; i < particlesX.size(); ++i) {
         particlesX[i] = ((i*step) % static_cast<int>(diff)) + minWidth;
         particlesY[i] = ((i*step) / diff) + minHeight;
         particlesW[i] = 1;

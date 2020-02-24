@@ -44,7 +44,7 @@
 #include "CalibrationHandler.h"
 #include "CircleHandler.h"
 #include "ParticleWeighting.h"
-
+ 
 /**
  * @brief A single play.
  * @param cap Camera for acquisition of pictures.
@@ -106,7 +106,7 @@ int main()
     /*******************************************************************
      * Set camera up and initialize variables.
      * ****************************************************************/
-    std::unique_ptr<cv::VideoCapture> cap(new cv::VideoCapture(0));
+    std::unique_ptr<cv::VideoCapture> cap(new cv::VideoCapture(2));
 
     if (!cap->isOpened()) {
         return -1;
@@ -211,9 +211,9 @@ int main()
     for (uint8_t i = 0; i < stateTimes.size(); ++i)
         stateTimes[i] = 5;
 
-    targetRadius = 20;
+    targetRadius = 30;
     std::unique_ptr<CircleHandler> negHandler(
-        new CircleHandler(14,
+        new CircleHandler(5,
                           targetRadius,
                           stateTimes,
                           cv::Scalar(0, 0, 254),
@@ -310,8 +310,8 @@ uint8_t gameplay(
         posHandler->updateCircles(std::move(mirror));
         negHandler->updateCircles(std::move(mirror));
 
-        for (int i = 0; i < (*weightingMatrix).size(); ++i) {
-            for (int j = 0; j < (*weightingMatrix)[i].size(); ++j) {
+        for (uint32_t i = 0; i < (*weightingMatrix).size(); ++i) {
+            for (uint32_t j = 0; j < (*weightingMatrix)[i].size(); ++j) {
                 goodArea = (*weightingMatrix)[i][j].isColor(pixelPtr_hsv);
 
                 if (goodArea) {
@@ -331,7 +331,7 @@ uint8_t gameplay(
                     hits += posHandler->checkHit(
                                 j * maxDistance + corner2center,
                                 i * maxDistance + corner2center);
-                    hits -= negHandler->checkHit(
+                    hits -= 5 * negHandler->checkHit(
                                 j * maxDistance + corner2center,
                                 i * maxDistance + corner2center);
                 }
