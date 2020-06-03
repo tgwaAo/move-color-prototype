@@ -36,7 +36,7 @@
 
 #include <sys/stat.h>
 #include <vector>
-#include <sstream>
+#include <fstream>
 #include <iomanip>
 #include <random>
 #include <opencv2/opencv.hpp>
@@ -106,7 +106,23 @@ int main()
     /*******************************************************************
      * Set camera up and initialize variables.
      * ****************************************************************/
-    std::unique_ptr<cv::VideoCapture> cap(new cv::VideoCapture(2));
+    struct stat buffer;
+    const std::string CAM_FILENAME = "cam.txt";
+    int camNbr;
+
+    if (stat(CAM_FILENAME.c_str(), &buffer) == 0) {
+        std::ifstream cam_file;
+        cam_file.open(CAM_FILENAME);
+
+        cam_file >> camNbr;
+
+        cam_file.close();
+    } else {
+        camNbr = 0;
+    } 
+
+
+    std::unique_ptr<cv::VideoCapture> cap(new cv::VideoCapture(camNbr));
 
     if (!cap->isOpened()) {
         return -1;
@@ -126,7 +142,6 @@ int main()
     std::vector<uint16_t> hsvColor(3, 0);
     std::vector<double> factorsColor(3, 1000000);
 
-    struct stat buffer;
     const std::string SETTINGS_FILENAME = "hsv.txt";
     const int16_t keyAbort = 27;
     CalibrationHandler calibrator(TITLE);
