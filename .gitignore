@@ -1,4 +1,8 @@
-Debug/
-Move_Color_Prototype.mk
-Move_Color_Prototype.txt
-compile_flags.txt
+Code/Move_Color_Prototype.cbp
+Code/Move_Color_Prototype.depend
+Code/Move_Color_Prototype.layout
+Code/bin/
+Code/highscore.txt
+Code/hsv.txt
+Code/obj
+
