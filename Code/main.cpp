@@ -39,12 +39,18 @@
 #include <fstream>
 #include <iomanip>
 #include <random>
-#include <opencv2/opencv.hpp>
+
+//#include <opencv2/opencv.hpp>
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/videoio.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/imgcodecs.hpp>
 
 #include "CalibrationHandler.h"
 #include "CircleHandler.h"
 #include "ParticleWeighting.h"
- 
+
 /**
  * @brief A single play.
  * @param cap Camera for acquisition of pictures.
@@ -81,6 +87,14 @@ bool photoWithTimer(
     cv::Mat *image,
     const std::string &title,
     int16_t keyAbort);
+
+bool waitAndShowSeconds(
+    cv::VideoCapture *cap,
+    cv::Mat *image,
+    const std::string &title,
+    int16_t keyAbort,
+    const uint8_t &secondsToWait);
+
 
 /**
  * @brief Load last highscore and return current highscore.
@@ -119,12 +133,24 @@ int main()
         cam_file.close();
     } else {
         camNbr = 0;
-    } 
+    }
 
 
     std::unique_ptr<cv::VideoCapture> cap(new cv::VideoCapture(camNbr));
 
-    if (!cap->isOpened()) {
+    if (cap->isOpened() == false) {
+        cv::Mat errorImage{cv::Size(640,480), CV_8UC3, cv::Scalar(0, 0, 0)};
+        cv::putText(
+            errorImage,
+            "Camera " +  std::to_string(camNbr) + " could not be opened.",
+            cv::Point(10, errorImage.rows - 10),
+            cv::FONT_HERSHEY_SIMPLEX,
+            1.2,
+            cv::Scalar(255, 255, 0)
+        );
+        cv::imshow("Error", errorImage);
+        cv::waitKey(0);
+        cv::destroyAllWindows();
         return -1;
     }
 
@@ -314,6 +340,10 @@ uint8_t gameplay(
     const int16_t KEY_R = 114;
     const uint8_t gameTime = 60;
 
+    if (!waitAndShowSeconds(cap, mirror, title, KEY_ESC, 3)) {
+        return 1;
+    }
+
     clock_t timeStart = clock();
 
     while (true) {
@@ -427,26 +457,26 @@ uint8_t gameplay(
     return 1;
 }
 
-// Take photo after 3 seconds.
-bool photoWithTimer(
+
+bool waitAndShowSeconds(
     cv::VideoCapture *cap,
     cv::Mat *image,
     const std::string &title,
-    int16_t keyAbort)
+    int16_t keyAbort,
+    const uint8_t &secondsToWait)
 {
-    const uint8_t minTimePassed = 3;
     cv::Mat frame;
     int16_t key;
 
     double timeStart = cv::getTickCount();
-    int8_t leftSeconds = minTimePassed - (cv::getTickCount() - timeStart)
+    int8_t leftSeconds = secondsToWait - (cv::getTickCount() - timeStart)
                          / cv::getTickFrequency();
 
     while (leftSeconds > 0) {
         *cap >> frame;
         cv::flip(frame, *image, 1);
 
-        leftSeconds = minTimePassed - (cv::getTickCount() - timeStart)
+        leftSeconds = secondsToWait - (cv::getTickCount() - timeStart)
                       / cv::getTickFrequency();
 
         cv::putText(
@@ -463,6 +493,52 @@ bool photoWithTimer(
 
         if (key == keyAbort)
             return false;
+    }
+
+    return true;
+}
+
+
+// Take photo after 3 seconds.
+bool photoWithTimer(
+    cv::VideoCapture *cap,
+    cv::Mat *image,
+    const std::string &title,
+    int16_t keyAbort)
+{
+    const uint8_t minTimePassed = 3;
+    cv::Mat frame;
+//    int16_t key;
+
+//    double timeStart = cv::getTickCount();
+//    int8_t leftSeconds = minTimePassed - (cv::getTickCount() - timeStart)
+//                         / cv::getTickFrequency();
+//
+//    while (leftSeconds > 0) {
+//        *cap >> frame;
+//        cv::flip(frame, *image, 1);
+//
+//        leftSeconds = minTimePassed - (cv::getTickCount() - timeStart)
+//                      / cv::getTickFrequency();
+//
+//        cv::putText(
+//            *image,
+//            "Countdown= " + std::to_string(leftSeconds),
+//            cv::Point(10, image->rows - 10),
+//            cv::FONT_HERSHEY_SIMPLEX,
+//            1.2,
+//            cv::Scalar(255, 255, 0),
+//            2);
+//
+//        cv::imshow(title, *image);
+//        key = cv::waitKey(1);
+//
+//        if (key == keyAbort)
+//            return false;
+//    }
+
+    if (!waitAndShowSeconds(cap, image, title, keyAbort, minTimePassed)) {
+        return false;
     }
 
     *cap >> frame;
