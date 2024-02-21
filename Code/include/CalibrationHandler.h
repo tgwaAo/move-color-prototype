@@ -38,6 +38,8 @@
 #include <vector>
 #include <string>
 #include <opencv2/opencv.hpp>
+#include <fstream>
+
 
 // Define own matrix to save space
 typedef Eigen::Matrix<
@@ -252,7 +254,7 @@ private:
      *        or decline.
      * @return User decision, if values should be used or older values are kept.
      */
-    bool visualizeResult();
+    bool visualizeResult(cv::Mat *const img);
 
     /**
      * @brief Calculate number of false positives.
@@ -312,6 +314,7 @@ private:
     const int16_t KEY_ACCEPT = 13;
     const int16_t KEY_S = 115;
     const int16_t KEY_R = 114;
+    const int16_t KEY_D = 100;
     const int16_t KEY_ESC = 27;
     const uint8_t POINTS_OF_RECTANGLE = 2;
     const double START_VALUE_FACTORS = 0.0003;

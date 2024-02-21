@@ -39,6 +39,15 @@
 #include <fstream>
 #include <iomanip>
 #include <random>
+#include <dirent.h>
+
+#ifdef WINDOWS
+    #include <direct.h>
+    #define GetCurrentDir _getcwd
+#else
+    #include <unistd.h>
+    #define GetCurrentDir getcwd
+#endif
 
 //#include <opencv2/opencv.hpp>
 #include <opencv2/core.hpp>
@@ -124,6 +133,24 @@ int main()
     const std::string CAM_FILENAME = "cam.txt";
     int camNbr;
 
+
+    char buff[PATH_MAX]; //create string buffer to hold path
+    GetCurrentDir( buff, PATH_MAX );
+    std::cout << "pwd:" << buff << std::endl;
+
+    DIR *dir;
+    struct dirent *ent;
+    if ((dir = opendir (".")) != NULL) {
+      /* print all the files and directories within directory */
+      while ((ent = readdir (dir)) != NULL) {
+        printf ("%s\n", ent->d_name);
+      }
+      closedir (dir);
+    } else {
+      /* could not open directory */
+      return 1;
+    }
+    std::cout << stat(CAM_FILENAME.c_str(), &buffer) << std::endl;
     if (stat(CAM_FILENAME.c_str(), &buffer) == 0) {
         std::ifstream cam_file;
         cam_file.open(CAM_FILENAME);
@@ -135,7 +162,7 @@ int main()
         camNbr = 0;
     }
 
-
+    std::cout << "camNbr:" << camNbr << std::endl;
     std::unique_ptr<cv::VideoCapture> cap(new cv::VideoCapture(camNbr));
 
     if (cap->isOpened() == false) {
@@ -340,7 +367,7 @@ uint8_t gameplay(
     const int16_t KEY_R = 114;
     const uint8_t gameTime = 60;
 
-    if (!waitAndShowSeconds(cap, mirror, title, KEY_ESC, 3)) {
+    if (!waitAndShowSeconds(cap, mirror, title, KEY_ESC, 5)) {
         return 1;
     }
 
@@ -506,7 +533,7 @@ bool photoWithTimer(
     const std::string &title,
     int16_t keyAbort)
 {
-    const uint8_t minTimePassed = 3;
+    const uint8_t minTimePassed = 5;
     cv::Mat frame;
 //    int16_t key;
 

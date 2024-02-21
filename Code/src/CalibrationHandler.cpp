@@ -53,13 +53,15 @@ CalibrationHandler::CalibrationHandler(
     hsvPtr = 0;
 
     negDist = 2;
+//    negDist = 20;
     posDist = 1;
+//    posDist = 5;
 
     badColor = cv::Scalar(0, 0, 255);
     goodColor = cv::Scalar(0, 255, 0);
 
-    minError = 50;
-    maxIteration = 100;
+    minError = 50; // false positives
+    maxIteration = 50;
 }
 
 CalibrationHandler::~CalibrationHandler()
@@ -109,7 +111,7 @@ bool CalibrationHandler::calibrate(
     findMinMaxXY(squarePoints, &smallestX, &biggestX, &smallestY, &biggestY);
 
     // Above square
-    uint16_t numX = ceil(imgCopy.cols/negDist);
+    uint16_t numX = ceil(imgCopy.cols/ static_cast<float>(negDist));
     uint16_t numY = ceil(smallestY / static_cast<float>(negDist));
     uint64_t numAll = numX * numY;
 
@@ -184,13 +186,13 @@ bool CalibrationHandler::calibrate(
      * Collect positive values and create histograms.
      * *****************************************************/
     uint64_t goodValuesStart = counter;
-    results = Eigen::VectorXd(numAll);
+    results = Eigen::VectorXd::Zero(numAll);
     Eigen::VectorXi hueHist = Eigen::VectorXi::Zero(256);
     Eigen::VectorXi satHist = Eigen::VectorXi::Zero(256);
     Eigen::VectorXi valHist = Eigen::VectorXi::Zero(256);
 
-    for (uint32_t col = goodSmallestX; col < goodBiggestX; ++col) {
-        for (uint32_t row = goodSmallestY; row < goodBiggestY; ++row) {
+    for (uint32_t col = goodSmallestX; col < goodBiggestX; col += posDist) {
+        for (uint32_t row = goodSmallestY; row < goodBiggestY; row += posDist) {
             line(imgCopy, cv::Point(col, row), cv::Point(col, row), goodColor);
 
             // Fill histograms.
@@ -224,7 +226,7 @@ bool CalibrationHandler::calibrate(
                                             + col * HSV_CHANNELS
                                             + 2];
 
-                results(counter) = 1;
+                results(counter) = 0.9;
                 ++counter;
             }
         }
@@ -301,7 +303,7 @@ bool CalibrationHandler::calibrate(
      * Visualisation of bright color search and optional save.
      * ************************************************************/
     img->copyTo(imgCopy);
-    bool acceptValues =  visualizeResult();
+    bool acceptValues =  visualizeResult(img);
 
     if (acceptValues) {
         (*hsvColor)[0] = hsvIntern(0);
@@ -386,14 +388,21 @@ void CalibrationHandler::calculate(const uint64_t &startGoodValues)
     double errHue;
     double errSat;
     double errVal;
-    Eigen::MatrixXd A(hsvValues.rows(), hsvValues.cols());
-    double sumDenominator;
-    Eigen::BDCSVD<Eigen::MatrixXd> svd_solver;
-    Eigen::Vector3d dx;
-    uint16_t iterations = 0;
 
-    while (iterations < maxIteration) {
+
+    Eigen::MatrixXd A(hsvValues.rows(), hsvValues.cols());
+    Eigen::BDCSVD<Eigen::MatrixXd> svd_solver(hsvValues.rows(), hsvValues.cols(), Eigen::ComputeThinU|Eigen::ComputeThinV);
+//    Eigen::MatrixXd A(10,3);
+//    Eigen::BDCSVD<Eigen::MatrixXd> svd_solver(10, 3, Eigen::ComputeThinU|Eigen::ComputeThinV);
+    double sumDenominator;
+    Eigen::Vector3d dx;
+    uint16_t iterations = 1;
+    double minCorrection = 0.01;
+
+    while (iterations <= maxIteration) {
+//        for (int i = 0; i < 10; ++i) {
         for (int i = 0; i < hsvValues.rows(); ++i) {
+            // derivative(1/((x^2+y^2+z^2) +1),x) = -(2 x)/(1 + x^2 + y^2 + z^2)^2
             errHue = hsvIntern[0] - hsvValues(i, 0);
             errSat = hsvIntern[1] - hsvValues(i, 1);
             errVal = hsvIntern[2] - hsvValues(i, 2);
@@ -401,23 +410,58 @@ void CalibrationHandler::calculate(const uint64_t &startGoodValues)
                              + pow(errHue, 2) * factorsIntern(0)
                              + pow(errSat, 2) * factorsIntern(1)
                              + pow(errVal, 2) * factorsIntern(2);
-            A(i, 0) = -pow(errHue, 2) / pow(sumDenominator, 2);
-            A(i, 1) = -pow(errSat, 2) / pow(sumDenominator, 2);
-            A(i, 2) = -pow(errVal, 2) / pow(sumDenominator, 2);
+            A(i, 0) = -(errHue * 2) / pow(sumDenominator, 2);
+            A(i, 1) = -(errSat * 2) / pow(sumDenominator, 2);
+            A(i, 2) = -(errVal * 2) / pow(sumDenominator, 2);
         }
 
-        dx = svd_solver.compute(
-                 A, Eigen::ComputeThinU|Eigen::ComputeThinV).solve(results);
+//        std::cout << A.rows() << " " << A.cols() << std::endl;
+//        std::cout << results.rows() << " " << results.cols() << std::endl;
+
+        //dx = svd_solver.compute(
+        //         A, Eigen::ComputeThinU|Eigen::ComputeThinV).solve(results);
+//        std::ofstream Afile;
+//        Afile.open("Afile.txt");
+//        Afile << A << std::endl;
+//        Afile.close();
+//
+//        std::ofstream resultsFile;
+//        resultsFile.open("results.txt");
+//        resultsFile << results << std::endl;
+//        resultsFile.close();
+
+        svd_solver.compute(A);
+
+        if (svd_solver.info() != Eigen::Success) {
+            std::cout << "could not compute" << std::endl;
+        }
+
+//       Eigen::VectorXd res= results.head(10);
+//        dx = svd_solver.solve(res);
+        dx = svd_solver.solve(results);
+
+        if (svd_solver.info() != Eigen::Success) {
+            std::cout << "could not solve" << std::endl;
+        }
+//        std::cout << "A:" << std::endl << A << std::endl;
+//        std::cout << "res:" << std::endl << res << std::endl;
+
         factorsIntern += dx;
 
         if (dx(0) < 0) dx(0) *= -1;
         if (dx(1) < 0) dx(1) *= -1;
         if (dx(2) < 0) dx(2) *= -1;
 
+        std::cout << "dx: " << std::endl << dx << std::endl;
 
-        if (getFalsePositives(startGoodValues) < minError) {
-            break;
+        if (dx(0) < minCorrection && dx(1) < minCorrection && dx(2) < minCorrection) {
+            if (getFalsePositives(startGoodValues) < minError) {
+                break;
+            }
         }
+//        if (getFalsePositives(startGoodValues) < minError) {
+//            break;
+//        }
 
         ++iterations;
     }
@@ -429,21 +473,21 @@ void CalibrationHandler::calculate(const uint64_t &startGoodValues)
 }
 
 
-bool CalibrationHandler::visualizeResult()
+bool CalibrationHandler::visualizeResult(cv::Mat *const img)
 {
-    uint64_t falsePositives = 0;
+//    uint64_t falsePositives = 0;
 
     for (uint16_t col = 0; col < imgCopy.cols; col += negDist) {
         // Above
         for (uint16_t row = 0; row < squarePoints[0].y; row += negDist) {
             addPointInImg(row, col);
-            ++falsePositives;
+//            ++falsePositives;
         }
 
         // Below
         for (int row = squarePoints[1].y; row < imgCopy.rows; row += negDist) {
             addPointInImg(row, col);
-            ++falsePositives;
+//            ++falsePositives;
         }
     }
 
@@ -451,13 +495,13 @@ bool CalibrationHandler::visualizeResult()
     for (int row = squarePoints[0].y; row < squarePoints[1].y; row += negDist) {
         for (int col = 0; col < squarePoints[0].x; col += negDist) {
             addPointInImg(row, col);
-            ++falsePositives;
+//            ++falsePositives;
         }
 
         // Right
         for (int col = squarePoints[1].x; col < imgCopy.cols; col += negDist) {
             addPointInImg(row, col);
-            ++falsePositives;
+//            ++falsePositives;
         }
     }
 
@@ -489,19 +533,37 @@ bool CalibrationHandler::visualizeResult()
         }
     }
 
-    std::cout << "False positives in image = " << falsePositives << std::endl;
+//    std::cout << "False positives in image = " << falsePositives << std::endl;
     cv::imshow(title, imgCopy);
 
     int key;
 
-    while (true) {
+//    while (true) {
         key = cv::waitKey(0);
 
-        if (key == KEY_S)
+        if (key == KEY_D) {
+            cv::imwrite("debug_image.jpg", *img);
+            std::ofstream save_file;
+            save_file.open("debug_hsv.txt");
+
+            save_file << unsigned(hsvIntern(0)) << std::endl;
+            save_file << unsigned(hsvIntern(1)) << std::endl;
+            save_file << unsigned(hsvIntern(2)) << std::endl;
+            save_file << factorsIntern(0) << std::endl;
+            save_file << factorsIntern(1) << std::endl;
+            save_file << factorsIntern(2) << std::endl;
+
+            save_file.close();
+        }
+        else if (key == KEY_S) {
             return true;
-        else if (key == KEY_ESC)
+        }
+        else if (key == KEY_ESC) {
             return false;
-    }
+
+        }
+//    }
+        return false;
 }
 
 uint64_t CalibrationHandler::getFalsePositives(const uint64_t &startGoodValues)
