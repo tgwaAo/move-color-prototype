@@ -27,8 +27,8 @@
 // AND NOTHING GETS DAMAGED. PLAY CAREFULLY AND CHECK YOUR SURROUNDINGS BEFORE
 // PLAYING.
 
-#ifndef CALIBRATIONHANDLER_H
-#define CALIBRATIONHANDLER_H
+#ifndef CODE_INCLUDE_CALIBRATIONHANDLER_H_
+#define CODE_INCLUDE_CALIBRATIONHANDLER_H_
 
 #define EIGEN_MPL2_ONLY
 
@@ -37,8 +37,8 @@
 #include <eigen3/Eigen/Dense>
 #include <vector>
 #include <string>
-#include <opencv2/opencv.hpp>
 #include <fstream>
+#include <opencv2/opencv.hpp>
 
 
 // Define own matrix to save space
@@ -55,9 +55,8 @@ Eigen::RowMajor> Matrix8u;
  * @file CalibrationHandler.h
  * @brief Class to handle calibration. Marked areas of an image are used to calibrate values with eigens BDCSVD.
  */
-class CalibrationHandler
-{
-public:
+class CalibrationHandler {
+ public:
     /**
      * @brief Constructor with a variable list of possible parameters.
      * @param title Title of windows shown.
@@ -91,8 +90,8 @@ public:
      */
     bool calibrate(
         cv::Mat *img,
-        std::vector<uint16_t> *const hsvIntern,
-        std::vector<double> *const factorsIntern);
+        std::vector<double> *const optimalValuesIntern,
+        std::vector<double> *const errorFactorsIntern);
 
     /**
      * @brief Set title of shown window.
@@ -125,16 +124,28 @@ public:
     void setTextThickness(const uint8_t textThickness);
 
     /**
-     * @brief Set maximum of iterations in calibration.
-     * @param maxIteration Max. iterations in calibration.
+     * @brief Set maximum of iterations in calibration of error factors.
+     * @param maxIteration Max. iterations in calibration of error factors.
      */
-    void setMaxIteration(const uint16_t maxIteration);
+    void setMaxIterationFactors(const uint16_t maxIterationFactors);
 
     /**
-     * @brief Set minimum of false positives.
-     * @param minError Minimum of false positives.
+     * @brief Set minimum of false positives in factor calibration.
+     * @param minError Minimum of false positives in factor clibration.
      */
-    void setMinError(double minError);
+    void setMinErrorFactors(const double minErrorFactors);
+
+    /**
+    * @brief Set minimum border to finish calibration of factors.
+    * @param minCorrection Factors Minimum correction border to finish calibration of factors.
+    */
+    void setMinCorrectionFactors(const double minCorrectionFactors);
+
+    /**
+    * @brief Set start index of positive values in matrix of input points.
+    * @param startIdxPositives Start index of positives in matrix of input points.
+    */
+    void setStartIdxPositives(const uint64_t startIdxPositives);
 
     /**
      * @brief Set distance of negative colors picked in image.
@@ -179,16 +190,46 @@ public:
     uint8_t getTextThickness() const;
 
     /**
-     * @brief Get maximum iterations in calculation.
-     * @return Maximum iterations in calculation.
+     * @brief Get maximum iterations in calculation of optimal values.
+     * @return Maximum iterations in calculation of optimal values.
      */
-    uint16_t getMaxIteration() const;
+    uint16_t getMaxIterationOptimalValues() const;
+
+    /**
+     * @brief Get maximum iterations in calculation of error factors.
+     * @return Maximum iterations in calculation of error factors.
+     */
+    uint16_t getMaxIterationFactors() const;
 
     /**
      * @brief Get minimal false positives in calculation needed to stop.
      * @return Minimal false positives in calculation needed to stop.
      */
-    double getMinError() const;
+    double getMinErrorOptimalValues() const;
+
+    /**
+     * @brief Get minimal false positives in calculation needed to stop.
+     * @return Minimal false positives in calculation needed to stop.
+     */
+    double getMinErrorFactors() const;
+
+    /**
+    * @brief Get minimal correction border needed to stop calculation of optimal values.
+    * @return Minimal correction border needed to stop calculation of optimal values.
+    */
+    double getMinCorrectionOptimalValues() const;
+
+    /**
+    * @brief Get minimal correction border needed to stop calculation of factors.
+    * @return Minimal correction border needed to stop calculation of factors.
+    */
+    double getMinCorrectionFactors() const;
+
+    /**
+    * @brief Get start index of positives in matrix of input points.
+    * @return Start index of positives in matrix of input points.
+    */
+    uint64_t getStartIdxPositives() const;
 
     /**
      * @brief Get distance of negative colors picked in image.
@@ -202,7 +243,7 @@ public:
      */
     uint8_t getPosDist() const;
 
-private:
+ private:
     /**
      * @brief Draw rectangle to get roi.
      * @param description String to describe goal.
@@ -231,7 +272,7 @@ private:
      * @param err2 Squared error used to calculate probability.
      * @return Calculated probability of being searched color.
      */
-    double getProbability(const double err2);
+    double getProbability(const double squaredError);
 
     /**
      * @brief Predict pixel being bright or dark searched color. Use higher value.
@@ -242,12 +283,15 @@ private:
     double getPrediction(const uint16_t &row, const uint16_t &col);
 
     /**
-     * @brief Calculate factors to predict being searched color or not using eigens BDCSVD.
-     *        Result is returned, if number of false positives is lower than bound or
-     *        max. iterations are reached.
-     * @param startGoodValues Index of begin of good values.
+     * @brief Calculate values to predict being searched color or not using eigens BDCSVD.
      */
-    void calculate(const uint64_t &startGoodValues);
+    void calculate();
+
+    /**
+    * @brief Calculate factors to decide the estimated propability of a correct color.
+    * @return True, if no error occured.
+    */
+    bool calculateFactors();
 
     /**
      * @brief Visualization of predicted result and user decision to accept new values
@@ -317,7 +361,7 @@ private:
     const int16_t KEY_D = 100;
     const int16_t KEY_ESC = 27;
     const uint8_t POINTS_OF_RECTANGLE = 2;
-    const double START_VALUE_FACTORS = 0.0003;
+    const double START_VALUE_FACTORS = 1e-3;
     const uint8_t WAIT_TIME = 20;
 
     cv::Mat imgCopy;
@@ -340,11 +384,14 @@ private:
     Eigen::VectorXd results;
     std::vector<Matrix8u> allGoodValues;
 
-    double minError;
-    uint16_t maxIteration;
+    uint64_t startIdxPositives;
 
-    Eigen::Vector3i hsvIntern;
-    Eigen::Vector3d factorsIntern;
+    double minErrorFactors;
+    double minCorrectionFactors;
+    uint16_t maxIterationFactors;
+
+    Eigen::Vector3d optimalValuesIntern;
+    Eigen::Vector3d errorFactorsIntern;
 };
 
-#endif  // CALIBRATIONHANDLER_H
+#endif  // CODE_INCLUDE_CALIBRATIONHANDLER_H_
