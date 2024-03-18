@@ -22,6 +22,7 @@ gameplay.
 Controls:
 r = replay
 c = calibrate
+d = debug
 esc = end (gameplay and result)
 
 while calibration:
