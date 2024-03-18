@@ -1,0 +1,4 @@
+List of controls:
+v4l2-ctl -l
+Set values:
+v4l2-ctl -d /dev/video2 -c auto_exposure=1
