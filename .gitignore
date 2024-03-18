@@ -4,5 +4,8 @@ Code/Move_Color_Prototype.layout
 Code/bin/
 Code/highscore.txt
 Code/hsv.txt
+Code/cam.txt
 Code/obj
-
+.ipynb_checkpoints/
+debug_hsv.txt
+debug_image.jpg
