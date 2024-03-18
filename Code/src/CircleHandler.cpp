@@ -35,8 +35,7 @@
 
 #include "CircleHandler.h"
 
-CircleHandler::CircleHandler()
-{
+CircleHandler::CircleHandler() {
     CircleHandler(10, 10, std::vector<float>(3, 3), 0, 640, 480);
 }
 
@@ -44,8 +43,7 @@ CircleHandler::CircleHandler(const uint8_t numCircles, const uint8_t radius,
                              const std::vector<float> &circleTimeStates,
                              const cv::Scalar& color,
                              const uint16_t width,
-                             const uint16_t height)
-{
+                             const uint16_t height) {
     if (circleTimeStates.size() == SIZE_OF_TIME_STATES) {
         this->circleTimeStates = circleTimeStates;
     } else {
@@ -77,12 +75,9 @@ CircleHandler::CircleHandler(const uint8_t numCircles, const uint8_t radius,
     }
 }
 
-CircleHandler::~CircleHandler()
-{
-}
+CircleHandler::~CircleHandler() {}
 
-void CircleHandler::updateCircles(cv::Mat *const img)
-{
+void CircleHandler::updateCircles(cv::Mat *const img) {
     float leftSeconds;
     cv::Scalar usedColor;
 
@@ -115,8 +110,7 @@ void CircleHandler::updateCircles(cv::Mat *const img)
     }
 }
 
-uint8_t CircleHandler::checkHit(const uint16_t x, const uint16_t y)
-{
+uint8_t CircleHandler::checkHit(const uint16_t x, const uint16_t y) {
     double dist;
     uint16_t hits = 0;
 
@@ -137,8 +131,7 @@ uint8_t CircleHandler::checkHit(const uint16_t x, const uint16_t y)
     return hits;
 }
 
-void CircleHandler::newPos(uint8_t idx)
-{
+void CircleHandler::newPos(uint8_t idx) {
     allCircles[idx].point.x = radius + 2 * radius * randomLeftRightIdx(eng);
     allCircles[idx].point.y = radius + 2 * radius * randomUpDownIdx(eng);
     allCircles[idx].timerStart = clock();
@@ -146,34 +139,28 @@ void CircleHandler::newPos(uint8_t idx)
 }
 
 void CircleHandler::setCircleTimeStates(
-    const std::vector<float>& circleTimeStates)
-{
+    const std::vector<float>& circleTimeStates) {
     if (circleTimeStates.size() == SIZE_OF_TIME_STATES) {
         this->circleTimeStates = circleTimeStates;
     }
 }
 
-void CircleHandler::setColor(const cv::Scalar& color)
-{
+void CircleHandler::setColor(const cv::Scalar& color) {
     this->color = color;
 }
 
-void CircleHandler::setRadius(const uint8_t radius)
-{
+void CircleHandler::setRadius(const uint8_t radius) {
     this->radius = radius;
 }
 
-std::vector<float> CircleHandler::getCircleTimeStates() const
-{
+std::vector<float> CircleHandler::getCircleTimeStates() const {
     return circleTimeStates;
 }
 
-cv::Scalar CircleHandler::getColor() const
-{
+cv::Scalar CircleHandler::getColor() const {
     return color;
 }
 
-uint8_t CircleHandler::getRadius() const
-{
+uint8_t CircleHandler::getRadius() const {
     return radius;
 }

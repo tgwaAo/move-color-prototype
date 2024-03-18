@@ -27,8 +27,8 @@
 // AND NOTHING GETS DAMAGED. PLAY CAREFULLY AND CHECK YOUR SURROUNDINGS BEFORE
 // PLAYING.
 
-#ifndef PARTICLE_WEIGHTING_H
-#define PARTICLE_WEIGHTING_H
+#ifndef CODE_INCLUDE_PARTICLEWEIGHTING_H_
+#define CODE_INCLUDE_PARTICLEWEIGHTING_H_
 
 
 #include <math.h>
@@ -43,9 +43,8 @@
  * @file ParticleWeighting.h
  * @brief Decide, whether a color is in this area or not via particles.
  */
-class ParticleWeighting
-{
-public:
+class ParticleWeighting {
+ public:
     /**
      * @brief Constructs a continuous matrix of particles in given area
      * and initializes necessary attributes.
@@ -70,7 +69,7 @@ public:
         const uint16_t cols,
         const uint32_t bound,
         const std::vector<double> &factors,
-        const std::vector<uint16_t> &hsvBest);
+        const std::vector<double> &optimalHsvValues);
 
     /**
      * @brief Calculate sum of weights.
@@ -195,14 +194,14 @@ public:
      * @brief Get vector of optimal hsv values.
      * @return Vector of optimal hsv values.
      */
-    std::vector<uint16_t> getHsv() const;
+    std::vector<double> getHsv() const;
 
     /**
      * @brief Set optimal hsv values.
      * @param hsv Optimal hsv values.
      * @return Returns true, if input vector has a length of 3.
      */
-    bool setHsv(const std::vector<uint16_t> &hsv);
+    bool setHsv(const std::vector<double> &hsv);
 
     /**
      * @brief Get factors of squared errors of hsv values.
@@ -217,7 +216,7 @@ public:
      */
     bool setFactors(const std::vector<double> &factors);
 
-private:
+ private:
     const uint8_t HSV_CHANNELS = 3;
 
     std::vector<uint16_t> particlesX;
@@ -239,4 +238,4 @@ private:
     double factorV;
 };
 
-#endif  // PARTICLE_WEIGHTING_H
+#endif  // CODE_INCLUDE_PARTICLEWEIGHTING_H_

@@ -27,8 +27,8 @@
 // AND NOTHING GETS DAMAGED. PLAY CAREFULLY AND CHECK YOUR SURROUNDINGS BEFORE
 // PLAYING.
 
-#ifndef CIRCLEHANDLER_H
-#define CIRCLEHANDLER_H
+#ifndef CODE_INCLUDE_CIRCLEHANDLER_H_
+#define CODE_INCLUDE_CIRCLEHANDLER_H_
 
 #include <random>
 #include <vector>
@@ -41,9 +41,8 @@
  * @file CircleHandler.h
  * @brief Class handles circles and enables hits of them (gameplay).
  */
-class CircleHandler
-{
-public:
+class CircleHandler {
+ public:
     /**
      * @brief Default constructor calling other constructor with 10 circles
      *        with a radius of ten. The time of each state is 3 seconds and
@@ -138,7 +137,7 @@ public:
      */
     uint8_t getRadius() const;
 
-private:
+ private:
     /**
      * @brief New position, state and new time of a circle.
      * @param idx Index of changed circle.
@@ -156,4 +155,4 @@ private:
     std::uniform_int_distribution<uint16_t> randomLeftRightIdx;
 };
 
-#endif  // CIRCLEHANDLER_H
+#endif  // CODE_INCLUDE_CIRCLEHANDLER_H_
