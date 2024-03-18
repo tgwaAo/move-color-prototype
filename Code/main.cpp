@@ -35,11 +35,11 @@
  */
 
 #include <sys/stat.h>
+#include <dirent.h>
 #include <vector>
 #include <fstream>
 #include <iomanip>
 #include <random>
-#include <dirent.h>
 
 #ifdef WINDOWS
     #include <direct.h>
@@ -49,7 +49,6 @@
     #define GetCurrentDir getcwd
 #endif
 
-//#include <opencv2/opencv.hpp>
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/videoio.hpp>
@@ -97,6 +96,15 @@ bool photoWithTimer(
     const std::string &title,
     int16_t keyAbort);
 
+/**
+* @brief Count down and display left seconds.
+* @param cap Camera to shot photo.
+* @param image Image to store the picture.
+* @param title Title shown on counting down.
+* @param keyAbort Key to abort timer.
+* @param secondsToWait Seconds before function returns.
+* @return False after abort and true after countdown.
+*/
 bool waitAndShowSeconds(
     cv::VideoCapture *cap,
     cv::Mat *image,
@@ -121,11 +129,10 @@ int16_t loadHighscore(const std::string &filename, int16_t hits);
  */
 void saveCalibration(
     const std::string &filename,
-    const std::vector<uint16_t> &hsvColor,
+    const std::vector<double> &hsvColor,
     const std::vector<double> &factorsColor);
 
-int main()
-{
+int main() {
     /*******************************************************************
      * Set camera up and initialize variables.
      * ****************************************************************/
@@ -133,24 +140,6 @@ int main()
     const std::string CAM_FILENAME = "cam.txt";
     int camNbr;
 
-
-    char buff[PATH_MAX]; //create string buffer to hold path
-    GetCurrentDir( buff, PATH_MAX );
-    std::cout << "pwd:" << buff << std::endl;
-
-    DIR *dir;
-    struct dirent *ent;
-    if ((dir = opendir (".")) != NULL) {
-      /* print all the files and directories within directory */
-      while ((ent = readdir (dir)) != NULL) {
-        printf ("%s\n", ent->d_name);
-      }
-      closedir (dir);
-    } else {
-      /* could not open directory */
-      return 1;
-    }
-    std::cout << stat(CAM_FILENAME.c_str(), &buffer) << std::endl;
     if (stat(CAM_FILENAME.c_str(), &buffer) == 0) {
         std::ifstream cam_file;
         cam_file.open(CAM_FILENAME);
@@ -166,15 +155,14 @@ int main()
     std::unique_ptr<cv::VideoCapture> cap(new cv::VideoCapture(camNbr));
 
     if (cap->isOpened() == false) {
-        cv::Mat errorImage{cv::Size(640,480), CV_8UC3, cv::Scalar(0, 0, 0)};
+        cv::Mat errorImage{cv::Size(640, 480), CV_8UC3, cv::Scalar(0, 0, 0)};
         cv::putText(
             errorImage,
             "Camera " +  std::to_string(camNbr) + " could not be opened.",
             cv::Point(10, errorImage.rows - 10),
             cv::FONT_HERSHEY_SIMPLEX,
             1.2,
-            cv::Scalar(255, 255, 0)
-        );
+            cv::Scalar(255, 255, 0));
         cv::imshow("Error", errorImage);
         cv::waitKey(0);
         cv::destroyAllWindows();
@@ -192,33 +180,41 @@ int main()
     cv::resizeWindow(TITLE, WIDTH, HEIGHT);
 
     // Just wrong values for an aborted calibration at first start.
-    std::vector<uint16_t> hsvColor(3, 0);
-    std::vector<double> factorsColor(3, 1000000);
+    std::vector<double> optimalHsvColor(3, 0);
+    std::vector<double> factorsColor(3, 0);
 
     const std::string SETTINGS_FILENAME = "hsv.txt";
     const int16_t keyAbort = 27;
     CalibrationHandler calibrator(TITLE);
-    cv::Mat *mirror = new cv::Mat;
+    std::unique_ptr<cv::Mat> mirror(new cv::Mat);
 
     /*********************************************************************
      * Load configuration or calibrate a new.
      * ******************************************************************/
     if (stat(SETTINGS_FILENAME.c_str(), &buffer) == 0) {
-        std::ifstream settings_file;
-        settings_file.open(SETTINGS_FILENAME);
+        std::ifstream settingsFile;
+        settingsFile.open(SETTINGS_FILENAME);
 
-        settings_file >> hsvColor[0];
-        settings_file >> hsvColor[1];
-        settings_file >> hsvColor[2];
-        settings_file >> factorsColor[0];
-        settings_file >> factorsColor[1];
-        settings_file >> factorsColor[2];
+        settingsFile >> optimalHsvColor[0];
+        settingsFile >> optimalHsvColor[1];
+        settingsFile >> optimalHsvColor[2];
+        settingsFile >> factorsColor[0];
+        settingsFile >> factorsColor[1];
+        settingsFile >> factorsColor[2];
 
-        settings_file.close();
+        settingsFile.close();
     } else {
-        if (photoWithTimer(cap.get(), mirror, TITLE, keyAbort))
-            if (calibrator.calibrate(mirror, &hsvColor, &factorsColor))
-                saveCalibration(SETTINGS_FILENAME, hsvColor, factorsColor);
+        if (photoWithTimer(cap.get(), mirror.get(), TITLE, keyAbort)) {
+            if (calibrator.calibrate(
+                    mirror.get(),
+                    &optimalHsvColor,
+                    &factorsColor)) {
+                saveCalibration(
+            SETTINGS_FILENAME,
+            optimalHsvColor,
+            factorsColor);
+            }
+        }
     }
 
     /************************************************************
@@ -244,7 +240,7 @@ int main()
                                     WIDTH,
                                     NUM_PARTICLES * MAX_WEIGHT * 4 / 10,
                                     factorsColor,
-                                    hsvColor))));
+                                    optimalHsvColor))));
 
     for (int i = 0; i < HEIGHT / MAX_DISTANCE; ++i) {
         for (int j = 0; j < WIDTH / MAX_DISTANCE; ++j) {
@@ -300,7 +296,7 @@ int main()
     while (run) {
         keyCode = gameplay(
                       cap.get(),
-                      mirror,
+                      mirror.get(),
                       TITLE,
                       CORNER_2_CENTER,
                       posHandler.get(),
@@ -315,15 +311,21 @@ int main()
         case CODE_CALIBRATE:
             if (photoWithTimer(
                     cap.get(),
-                    mirror,
+                    mirror.get(),
                     TITLE,
                     keyAbort))
-                if (calibrator.calibrate(mirror, &hsvColor, &factorsColor)) {
-                    saveCalibration(SETTINGS_FILENAME, hsvColor, factorsColor);
+                if (calibrator.calibrate(
+                        mirror.get(),
+                        &optimalHsvColor,
+                        &factorsColor)) {
+                    saveCalibration(
+                        SETTINGS_FILENAME,
+                        optimalHsvColor,
+                        factorsColor);
 
                     for (int i = 0; i < HEIGHT / MAX_DISTANCE; ++i) {
                         for (int j = 0; j < WIDTH / MAX_DISTANCE; ++j) {
-                            (*weightingMatrix)[i][j].setHsv(hsvColor);
+                            (*weightingMatrix)[i][j].setHsv(optimalHsvColor);
                             (*weightingMatrix)[i][j].setFactors(factorsColor);
                         }
                     }
@@ -332,9 +334,8 @@ int main()
         }
     }
 
+    cap->release();
     cv::destroyAllWindows();
-    delete mirror;
-
     return 0;
 }
 
@@ -347,8 +348,7 @@ uint8_t gameplay(
     CircleHandler *negHandler,
     const uint8_t maxDistance,
     std::vector<std::vector
-    <ParticleWeighting>> *weightingMatrix)
-{
+    <ParticleWeighting>> *weightingMatrix) {
     cv::Mat frame;
     cv::Mat hsv;
     uint8_t *pixelPtr_hsv;
@@ -364,6 +364,7 @@ uint8_t gameplay(
 
     const int16_t KEY_ESC = 27;
     const int16_t KEY_C = 99;
+    const int16_t KEY_D = 100;
     const int16_t KEY_R = 114;
     const uint8_t gameTime = 60;
 
@@ -427,18 +428,38 @@ uint8_t gameplay(
             cv::Point(200, mirror->rows - 10),
             cv::FONT_HERSHEY_SIMPLEX,
             1.2,
-            cv::Scalar(255,255,0));
+            cv::Scalar(255, 255, 0));
 
         if (cv::getWindowProperty(title, cv::WND_PROP_VISIBLE)) {
             cv::imshow(title, *mirror);
             key = cv::waitKey(1);
 
-            if (key == KEY_R)
+            if (key == KEY_R) {
                 return 0;
-            else if (key == KEY_ESC)
+            } else if (key == KEY_ESC) {
                 break;
-            else if (key == KEY_C)
+            } else if (key == KEY_C) {
                 return 2;
+            } else if (key == KEY_D) {
+                cv::imwrite("debug_image.jpg", *mirror);
+                std::ofstream saveFile;
+                saveFile.open("debug_hsv.txt");
+
+                saveFile << (*weightingMatrix)[0][0].getHsv()[0] << std::endl;
+                saveFile << (*weightingMatrix)[0][0].getHsv()[1] << std::endl;
+                saveFile << (*weightingMatrix)[0][0].getHsv()[2] << std::endl;
+                saveFile <<
+                    (*weightingMatrix)[0][0].getFactors()[0]
+                    << std::endl;
+                saveFile <<
+                    (*weightingMatrix)[0][0].getFactors()[1]
+                    << std::endl;
+                saveFile <<
+                    (*weightingMatrix)[0][0].getFactors()[2]
+                    << std::endl;
+
+                saveFile.close();
+            }
         }
         if (leftSeconds <= 0) break;
     }
@@ -490,8 +511,7 @@ bool waitAndShowSeconds(
     cv::Mat *image,
     const std::string &title,
     int16_t keyAbort,
-    const uint8_t &secondsToWait)
-{
+    const uint8_t &secondsToWait) {
     cv::Mat frame;
     int16_t key;
 
@@ -508,7 +528,7 @@ bool waitAndShowSeconds(
 
         cv::putText(
             *image,
-            "Countdown= " + std::to_string(leftSeconds),
+            "countdown= " + std::to_string(leftSeconds),
             cv::Point(10, image->rows - 10),
             cv::FONT_HERSHEY_SIMPLEX,
             1.2,
@@ -521,7 +541,6 @@ bool waitAndShowSeconds(
         if (key == keyAbort)
             return false;
     }
-
     return true;
 }
 
@@ -531,38 +550,9 @@ bool photoWithTimer(
     cv::VideoCapture *cap,
     cv::Mat *image,
     const std::string &title,
-    int16_t keyAbort)
-{
+    int16_t keyAbort) {
     const uint8_t minTimePassed = 5;
     cv::Mat frame;
-//    int16_t key;
-
-//    double timeStart = cv::getTickCount();
-//    int8_t leftSeconds = minTimePassed - (cv::getTickCount() - timeStart)
-//                         / cv::getTickFrequency();
-//
-//    while (leftSeconds > 0) {
-//        *cap >> frame;
-//        cv::flip(frame, *image, 1);
-//
-//        leftSeconds = minTimePassed - (cv::getTickCount() - timeStart)
-//                      / cv::getTickFrequency();
-//
-//        cv::putText(
-//            *image,
-//            "Countdown= " + std::to_string(leftSeconds),
-//            cv::Point(10, image->rows - 10),
-//            cv::FONT_HERSHEY_SIMPLEX,
-//            1.2,
-//            cv::Scalar(255, 255, 0),
-//            2);
-//
-//        cv::imshow(title, *image);
-//        key = cv::waitKey(1);
-//
-//        if (key == keyAbort)
-//            return false;
-//    }
 
     if (!waitAndShowSeconds(cap, image, title, keyAbort, minTimePassed)) {
         return false;
@@ -573,8 +563,7 @@ bool photoWithTimer(
     return true;
 }
 
-int16_t loadHighscore(const std::string &filename, int16_t hits)
-{
+int16_t loadHighscore(const std::string &filename, int16_t hits) {
     struct stat buffer;
     int16_t highscore;
 
@@ -613,9 +602,8 @@ int16_t loadHighscore(const std::string &filename, int16_t hits)
 
 void saveCalibration(
     const std::string &filename,
-    const std::vector<uint16_t> &hsvColor,
-    const std::vector<double> &factorsColor)
-{
+    const std::vector<double> &hsvColor,
+    const std::vector<double> &factorsColor) {
     std::ofstream save_file;
     save_file.open(filename);
 
