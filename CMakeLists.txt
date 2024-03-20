@@ -9,7 +9,14 @@ file(GLOB SOURCES
     "Code/src/*.cpp"
 )
 
-add_executable(${PROJECT_NAME} ${SOURCES})
+include_directories(
+    "${CMAKE_SOURCE_DIR}/Code/include"
+    "${CMAKE_SOURCE_DIR}/Code/src"
+)
+
+add_executable(${PROJECT_NAME} ${SOURCES}
+    Code/main.cpp
+    Code/include/CalibrationHandler.h Code/include/CircleHandler.h Code/include/ParticleWeighting.h)
 
 target_link_libraries( ${PROJECT_NAME} ${OpenCV_LIBS} )
 target_link_libraries (${PROJECT_NAME} Eigen3::Eigen)
