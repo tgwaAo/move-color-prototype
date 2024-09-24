@@ -9,3 +9,5 @@ Code/obj
 .ipynb_checkpoints/
 debug_hsv.txt
 debug_image.jpg
+CMakeLists.txt.user
+build

@@ -60,6 +60,7 @@ CircleHandler::CircleHandler(const uint8_t numCircles, const uint8_t radius,
         std::uniform_int_distribution<uint16_t>(
             0,
             std::round((width - 2 * radius) / (2 * radius)));
+
     randomUpDownIdx =
         std::uniform_int_distribution<uint16_t>(0,
                 std::round((height - 2 * radius) / (2 * radius)));

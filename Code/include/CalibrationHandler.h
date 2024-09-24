@@ -38,6 +38,8 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <unordered_map>
+#include <random>
 #include <opencv2/opencv.hpp>
 
 
@@ -244,6 +246,7 @@ class CalibrationHandler {
     uint8_t getPosDist() const;
 
  private:
+
     /**
      * @brief Draw rectangle to get roi.
      * @param description String to describe goal.
@@ -272,7 +275,14 @@ class CalibrationHandler {
      * @param err2 Squared error used to calculate probability.
      * @return Calculated probability of being searched color.
      */
-    double getProbability(const double squaredError);
+//    double getProbability(const double squaredError);
+    double getProbability(
+            const int16_t errHue,
+            const int16_t errSat,
+            const int16_t errVal,
+            const double factorHue,
+            const double factorSat,
+            const double factorVal);
 
     /**
      * @brief Predict pixel being bright or dark searched color. Use higher value.
@@ -306,6 +316,13 @@ class CalibrationHandler {
      * @return Number of false positives.
      */
     uint64_t getFalsePositives(const uint64_t &startGoodValues);
+
+    /**
+     * @brief Calculate number of false negatives.
+     * @param startGoodValues End of calculation. Only false positives are interesting.
+     * @return Number of false negatives.
+     */
+    uint64_t getFalseNegatives(const uint64_t &startGoodValues);
 
     /**
      * @brief Fill bright and dark matrices with bad values.

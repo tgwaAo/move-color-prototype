@@ -1,5 +1,6 @@
 cmake_minimum_required (VERSION 3.0)
 project (Move_Color_Prototype CXX)
+
 find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 find_package( OpenCV REQUIRED )
 include_directories( ${OpenCV_INCLUDE_DIRS} )
