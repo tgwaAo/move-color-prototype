@@ -246,7 +246,6 @@ class CalibrationHandler {
     uint8_t getPosDist() const;
 
  private:
-
     /**
      * @brief Draw rectangle to get roi.
      * @param description String to describe goal.
@@ -302,6 +301,14 @@ class CalibrationHandler {
     * @return True, if no error occured.
     */
     bool calculateFactors();
+
+    /**
+     * @brief Check the correction of factors.
+     * @return True if the correction is small enough, else false.
+     */
+    bool checkCorrectionOfFactors(
+        const Eigen::VectorXd& dx,
+        const bool& withoutHue);
 
     /**
      * @brief Visualization of predicted result and user decision to accept new values

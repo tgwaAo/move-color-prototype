@@ -222,23 +222,18 @@ bool CalibrationHandler::calibrate(
                                             + col * HSV_CHANNELS
                                             + 1]
                         + normalDist(eng);
-;
+
                 hsvValues(counter, 2) = hsvPtr[
                                             row * imgCopy.cols * HSV_CHANNELS
                                             + col * HSV_CHANNELS
                                             + 2]
-                        + normalDist(eng);                        ;
+                        + normalDist(eng);
 
                 results(counter) = .99;
                 ++counter;
             }
         }
     }
-
-//    std::ofstream hsvValuesFile;
-//    hsvValuesFile.open("hsvValues.txt");
-//    hsvValuesFile << hsvValues << std::endl;
-//    hsvValuesFile.close();
 
     cv::imshow(title, imgCopy);
     int16_t key = cv::waitKey(0);
@@ -353,10 +348,6 @@ void CalibrationHandler::findMinMaxXY(
     }
 }
 
-//double CalibrationHandler::getProbability(const double squaredError) {
-//    return (1 / (1 + squaredError) );
-//}
-
 double CalibrationHandler::getProbability(
         const int16_t errHue,
         const int16_t errSat,
@@ -364,7 +355,6 @@ double CalibrationHandler::getProbability(
         const double factorHue,
         const double factorSat,
         const double factorVal) {
-
     if (factorHue == 0)
         return (1 / (1
                  + (pow(errSat, 2) * factorSat
@@ -393,11 +383,13 @@ double CalibrationHandler::getPrediction(
                       + col * HSV_CHANNELS
                       + 2];
 
-//        return getProbability(
-//                   pow(errHue, 2) * errorFactorsIntern(0)
-//                   + pow(errSat, 2) * errorFactorsIntern(1)
-//                   + pow(errVal, 2) * errorFactorsIntern(2));
-        return getProbability(errHue, errSat, errVal, errorFactorsIntern(0), errorFactorsIntern(1), errorFactorsIntern(2));
+        return getProbability(
+            errHue,
+            errSat,
+            errVal,
+            errorFactorsIntern(0),
+            errorFactorsIntern(1),
+            errorFactorsIntern(2));
     } else {
         return -1;
     }
@@ -408,12 +400,6 @@ void CalibrationHandler::calculate() {
     setMaxIterationFactors(50);
     setMinErrorFactors(80);  // false positives
     setMinCorrectionFactors(1e-3);
-
-//    errorFactorsIntern = {
-//        START_VALUE_FACTORS,
-//        START_VALUE_FACTORS,
-//        START_VALUE_FACTORS
-//    };
 
     if (!calculateFactors()) {
         std::cout << "could not calculate factors" << std::endl;
@@ -431,10 +417,6 @@ bool CalibrationHandler::calculateFactors() {
     double factorSat;
     double factorVal;
 
-    double pseudoVarianceHue;
-    double pseudoVarianceSat;
-    double pseudoVarianceVal;
-
     double errSumHue = 0;
     double errSumSat = 0;
     double errSumVal = 0;
@@ -448,115 +430,22 @@ bool CalibrationHandler::calculateFactors() {
         errSumVal += pow(errVal, 2);
     }
 
-//    pseudoVarianceHue = errSumHue / (hsvValues.rows() - 1);
-//    pseudoVarianceSat = errSumSat / (hsvValues.rows() - 1);
-//    pseudoVarianceVal = errSumVal / (hsvValues.rows() - 1);
-
-//    std::cout << "pseudoVarianceHue: " << pseudoVarianceHue << std::endl
-//         << "pseudoVarianceSat: " << pseudoVarianceSat << std::endl
-//         << "pseudoVarianceVal: " << pseudoVarianceVal << std::endl;
-
     bool withoutHue = false;
-    uint8_t usedEntries = 3;
+    uint8_t usedEntries;
 
     if (optimalValuesIntern(1) < 30) {
-        factorHue = 0;
         withoutHue = true;
+        factorHue = 0;
         usedEntries = 2;
 
-    } else
+    } else {
         factorHue = .001;
-//    else if (pseudoVarianceHue == 0) {
-//        factorHue = .001;
-//    } else
-//        factorHue = .001; // pseudoVarianceHue;
-
-//    if (pseudoVarianceSat == 0)
-//        factorSat = .001;
-//    else
-//        factorSat = .001; // pseudoVarianceSat;
-
-//    if (pseudoVarianceVal == 0)
-//        factorVal = .001;
-//    else
-//        factorVal = .001; // pseudoVarianceVal;
-
-//    double factorsStart = .000001;
-//    uint8_t posEnd = 5;
-//    uint8_t multipliedFactor = 10;
-//    uint64_t errorSum;
-//    std::unordered_map<uint64_t, std::vector<double> > ransacDictionary; // unordered_map?
-
-//    if (withoutHue) {
-//        for (uint8_t posSat = 0; posSat <= posEnd; ++posSat) {
-//            for (uint8_t posVal = 0; posVal <= posEnd; ++posVal) {
-//                factorSat = factorsStart * pow(multipliedFactor, posSat);
-//                factorVal = factorsStart * pow(multipliedFactor, posVal);
-
-//                errorFactorsIntern = {
-//                    factorHue,
-//                    factorSat,
-//                    factorVal
-//                };
-
-//                errorSum = getFalsePositives(getStartIdxPositives());
-//                errorSum += getFalseNegatives(getStartIdxPositives());
-
-//                ransacDictionary.insert({errorSum, {factorHue, factorSat, factorVal}});
-//            }
-//        }
-//    } else {
-//        for (uint16_t posHue = 1; posHue <= posEnd; posHue *= multipliedFactor) {
-//            for (uint16_t posSat = 1; posSat <= posEnd; posSat *= multipliedFactor) {
-//                for (uint16_t posVal = 1; posVal <= posEnd; posVal *= multipliedFactor) {
-//                    factorHue = factorsStart * posHue;
-//                    factorSat = factorsStart * posSat;
-//                    factorVal = factorsStart * posVal;
-
-//                    errorFactorsIntern = {
-//                        factorHue,
-//                        factorSat,
-//                        factorVal
-//                    };
-
-//                    errorSum = getFalsePositives(getStartIdxPositives());
-//                    errorSum += getFalseNegatives(getStartIdxPositives());
-
-//                    ransacDictionary.insert({errorSum, {factorHue, factorSat, factorVal}});
-//                }
-//            }
-//        }
-//    }
-
-//    if (ransacDictionary.empty())
-//        return false;
-//    uint64_t currentMinError = 1e9;
-//    std::vector<double> currentMinFactors;
-//    for (auto &it : ransacDictionary) {
-//        if (it.first < currentMinError)
-//            currentMinError = it.first;
-//            currentMinFactors = it.second;
-//    }
-//    errorFactorsIntern(currentMinFactors);
-
-//    errorSum = getFalsePositives(getStartIdxPositives());
-//    errorSum += getFalseNegatives(getStartIdxPositives());
-
-//    if (errorSum == 0) {
-//        std::cout
-//                << "used iterations for calculation of error factors = "
-//                << unsigned(0)
-//                << std::endl;
-//        return true;
-//    }
+        usedEntries = 3;
+    }
 
     factorSat = .001;
     factorVal = .001;
 
-
-//    std::cout << "factorHue: " << factorHue << std::endl
-//         << "factorSat: " << factorSat << std::endl
-//         << "factorVal: " << factorVal << std::endl;
     errorFactorsIntern = {
         factorHue,
         factorSat,
@@ -568,15 +457,14 @@ bool CalibrationHandler::calculateFactors() {
     Eigen::BDCSVD<Eigen::MatrixXd> svdSolver(hsvValues.rows(), usedEntries,
         Eigen::ComputeThinU|Eigen::ComputeThinV);
 
-    double calculatedResult;
     Eigen::VectorXd errorResults(results.rows());
 
+    double calculatedResult;
     double sumDenominator;
     double squaredSumDenominator;
+    uint64_t numberFalsePositives;
 
     uint16_t iterations = 0;
-
-    std::cout << "positive start idx: " << getStartIdxPositives() << std::endl;
 
     while (iterations < getMaxIterationFactors()) {
         // derivative(1/(1+(u*(x-a)^2+v*(y-b)^2+w*(z-c)^2)), u)
@@ -593,7 +481,13 @@ bool CalibrationHandler::calculateFactors() {
 
                 A(i, 0) = -pow(errSat, 2) / squaredSumDenominator;
                 A(i, 1) = -pow(errVal, 2) / squaredSumDenominator;
-                calculatedResult = getProbability(0, errSat, errVal, errorFactorsIntern(0), errorFactorsIntern(1), errorFactorsIntern(2));
+                calculatedResult = getProbability(
+                    0,
+                    errSat,
+                    errVal,
+                    errorFactorsIntern(0),
+                    errorFactorsIntern(1),
+                    errorFactorsIntern(2));
                 errorResults(i) = results(i) - calculatedResult;
             }
         } else {
@@ -611,7 +505,13 @@ bool CalibrationHandler::calculateFactors() {
                 A(i, 0) = -pow(errHue, 2) / squaredSumDenominator;
                 A(i, 1) = -pow(errSat, 2) / squaredSumDenominator;
                 A(i, 2) = -pow(errVal, 2) / squaredSumDenominator;
-                calculatedResult = getProbability(errHue, errSat, errVal, errorFactorsIntern(0), errorFactorsIntern(1), errorFactorsIntern(2));
+                calculatedResult = getProbability(
+                    errHue,
+                    errSat,
+                    errVal,
+                    errorFactorsIntern(0),
+                    errorFactorsIntern(1),
+                    errorFactorsIntern(2));
                 errorResults(i) = results(i) - calculatedResult;
             }
         }
@@ -629,32 +529,6 @@ bool CalibrationHandler::calculateFactors() {
             return false;
         }
 
-        //std::cout << dx << std::endl;
-//        std::ofstream AFile;
-//        AFile.open("_A.txt" + std::to_string(iterations));
-//        AFile << A << std::endl;
-//        AFile.close();
-
-//        std::ofstream resultFile;
-//        resultFile.open("_results.txt" + std::to_string(iterations));
-//        resultFile << results << std::endl;
-//        resultFile.close();
-
-//        std::ofstream errorResultFile;
-//        errorResultFile.open("_errorResults.txt" + std::to_string(iterations));
-//        errorResultFile << errorResults << std::endl;
-//        errorResultFile.close();
-
-//        std::ofstream dxFile;
-//        dxFile.open("_dx.txt" + std::to_string(iterations));
-//        dxFile << dx << std::endl;
-//        dxFile.close();
-
-//        std::ofstream factorFile;
-//        factorFile.open("_internFactors.txt" + std::to_string(iterations));
-//        factorFile << errorFactorsIntern << std::endl;
-//        factorFile.close();
-
         if (withoutHue) {
             errorFactorsIntern(1) += dx(0);
             errorFactorsIntern(2) += dx(1);
@@ -664,19 +538,18 @@ bool CalibrationHandler::calculateFactors() {
         for (uint8_t pos = 0; pos < usedEntries; ++pos)
             if (dx(pos) < 0) dx(pos) *= -1;
 
-        //std::cout << dx << std::endl;
-
         ++iterations;
 
-        if (dx(0) < getMinCorrectionFactors() && dx(1) < getMinCorrectionFactors()) {
-            if (withoutHue || dx(2) < getMinCorrectionFactors()) {
-                if (getMinErrorFactors() != -1) {
-                    if (getFalsePositives(getStartIdxPositives()) < getMinErrorFactors()) {
-                        break;
-                    }
-                } else {
+        if (checkCorrectionOfFactors(dx, withoutHue)) {
+            if (getMinErrorFactors() != -1) {
+                numberFalsePositives = getFalsePositives(
+                            getStartIdxPositives());
+
+                if (numberFalsePositives < getMinErrorFactors()) {
                     break;
                 }
+            } else {
+                break;
             }
         }
     }
@@ -686,6 +559,18 @@ bool CalibrationHandler::calculateFactors() {
             << unsigned(iterations)
             << std::endl;
     return true;
+}
+
+
+bool CalibrationHandler::checkCorrectionOfFactors(
+        const Eigen::VectorXd& dx, const bool& withoutHue) {
+    if (dx(0) < getMinCorrectionFactors() &&
+            dx(1) < getMinCorrectionFactors()) {
+        if (withoutHue || dx(2) < getMinCorrectionFactors()) {
+            return true;
+        }
+    }
+    return false;
 }
 
 
@@ -767,7 +652,9 @@ bool CalibrationHandler::visualizeResult(cv::Mat *const img) {
     return false;
 }
 
-uint64_t CalibrationHandler::getFalsePositives(const uint64_t &startGoodValues) {
+
+uint64_t CalibrationHandler::getFalsePositives(
+        const uint64_t &startGoodValues) {
     uint64_t falsePositives = 0;
     double prediction;
     int16_t errHue;
@@ -778,11 +665,14 @@ uint64_t CalibrationHandler::getFalsePositives(const uint64_t &startGoodValues) 
         errHue = optimalValuesIntern(0) - hsvValues(i, 0);
         errSat = optimalValuesIntern(1) - hsvValues(i, 1);
         errVal = optimalValuesIntern(2) - hsvValues(i, 2);
-//        prediction = getProbability(
-//             pow(errHue, 2) * errorFactorsIntern(0)
-//             + pow(errSat, 2) * errorFactorsIntern(1)
-//             + pow(errVal, 2) * errorFactorsIntern(2));
-        prediction = getProbability(errHue, errSat, errVal, errorFactorsIntern(0), errorFactorsIntern(1), errorFactorsIntern(2));
+
+        prediction = getProbability(
+                    errHue,
+                    errSat,
+                    errVal,
+                    errorFactorsIntern(0),
+                    errorFactorsIntern(1),
+                    errorFactorsIntern(2));
         if (prediction >= 0.5) {
             ++falsePositives;
         }
@@ -791,7 +681,8 @@ uint64_t CalibrationHandler::getFalsePositives(const uint64_t &startGoodValues) 
     return falsePositives;
 }
 
-uint64_t CalibrationHandler::getFalseNegatives(const uint64_t &startGoodValues) {
+uint64_t CalibrationHandler::getFalseNegatives(
+        const uint64_t &startGoodValues) {
     uint64_t falseNegatives = 0;
     double prediction;
     int16_t errHue;
@@ -802,11 +693,14 @@ uint64_t CalibrationHandler::getFalseNegatives(const uint64_t &startGoodValues) 
         errHue = optimalValuesIntern(0) - hsvValues(i, 0);
         errSat = optimalValuesIntern(1) - hsvValues(i, 1);
         errVal = optimalValuesIntern(2) - hsvValues(i, 2);
-//        prediction = getProbability(
-//             pow(errHue, 2) * errorFactorsIntern(0)
-//             + pow(errSat, 2) * errorFactorsIntern(1)
-//             + pow(errVal, 2) * errorFactorsIntern(2));
-        prediction = getProbability(errHue, errSat, errVal, errorFactorsIntern(0), errorFactorsIntern(1), errorFactorsIntern(2));
+
+        prediction = getProbability(
+                    errHue,
+                    errSat,
+                    errVal,
+                    errorFactorsIntern(0),
+                    errorFactorsIntern(1),
+                    errorFactorsIntern(2));
         if (prediction < 0.5) {
             ++falseNegatives;
         }
@@ -881,7 +775,8 @@ void CalibrationHandler::setFont(const uint8_t font) {
     this->font = font;
 }
 
-void CalibrationHandler::setMaxIterationFactors(const uint16_t maxIterationFactors) {
+void CalibrationHandler::setMaxIterationFactors(
+        const uint16_t maxIterationFactors) {
     this->maxIterationFactors = maxIterationFactors;
 }
 
@@ -889,11 +784,13 @@ void CalibrationHandler::setMinErrorFactors(const double minErrorFactors) {
     this->minErrorFactors = minErrorFactors;
 }
 
-void CalibrationHandler::setMinCorrectionFactors(const double minCorrectionFactors) {
+void CalibrationHandler::setMinCorrectionFactors(
+        const double minCorrectionFactors) {
     this->minCorrectionFactors = minCorrectionFactors;
 }
 
-void CalibrationHandler::setStartIdxPositives(const uint64_t startIdxPositives) {
+void CalibrationHandler::setStartIdxPositives(
+        const uint64_t startIdxPositives) {
     this->startIdxPositives = startIdxPositives;
 }
 
