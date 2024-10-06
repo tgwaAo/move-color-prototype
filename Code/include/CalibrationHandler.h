@@ -32,6 +32,7 @@
 
 #define EIGEN_MPL2_ONLY
 
+#include <tuple>
 #include <time.h>
 #include <math.h>
 #include <eigen3/Eigen/Dense>
@@ -256,18 +257,9 @@ class CalibrationHandler {
 
     /**
      * @brief Find min. and max. x- and y-values of a rectangle.
-     * @param square Rectangle representation as two points.
-     * @param smallestX Smallest searched x-value.
-     * @param biggestX Biggest searched y-value.
-     * @param smallestY Smallest searched x-value.
-     * @param biggestY Biggest searched y-value.
+     * @return tuple Min and max values of roi.
      */
-    void findMinMaxXY(
-        const std::vector<cv::Point> &square,
-        uint16_t *smallestX,
-        uint16_t *biggestX,
-        uint16_t *smallestY,
-        uint16_t *biggestY);
+    std::tuple<uint16_t, uint16_t, uint16_t, uint16_t> findMinMaxXYAndEmptySquare();
 
     /**
      * @brief Calculate probability to be searched color.

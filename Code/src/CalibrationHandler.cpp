@@ -56,6 +56,11 @@ CalibrationHandler::CalibrationHandler(
 
     badColor = cv::Scalar(0, 0, 255);
     goodColor = cv::Scalar(0, 255, 0);
+
+    Eigen::IOFormat ShortFormat(4);
+    setMaxIterationFactors(50);
+    setMinErrorFactors(80);  // false positives
+    setMinCorrectionFactors(1e-4);
 }
 
 CalibrationHandler::~CalibrationHandler() {}
@@ -67,20 +72,23 @@ bool CalibrationHandler::calibrate(
     /***************************************************************
      * Let user select positives.
      * ************************************************************/
-    cv::setMouseCallback(title, clickAndCrop, this);
+    //cv::setMouseCallback(title, clickAndCrop, this);
 
     if (!drawRectangle("Select ONLY good color", img))
         return false;
 
-    std::vector<cv::Point> truePositiveSquare = squarePoints;
-    squarePoints.pop_back();
-    squarePoints.pop_back();
+
+    uint16_t goodSmallestX, goodBiggestX, goodSmallestY, goodBiggestY;
+    std::tie(goodSmallestX, goodBiggestX, goodSmallestY, goodBiggestY) = findMinMaxXYAndEmptySquare();
 
     /******************************************************************
      * Let user select non-negatives (more than all positives).
      * ***************************************************************/
     if (!drawRectangle("Select MORE than good color!", img))
         return false;
+
+    uint16_t smallestX, biggestX, smallestY, biggestY;
+    std::tie(smallestX, biggestX, smallestY, biggestY) = findMinMaxXYAndEmptySquare();
 
     /*************************************************************
      * Calculate sizes for preallocation
@@ -96,10 +104,6 @@ bool CalibrationHandler::calibrate(
         textScale,
         textColor,
         textThickness);
-
-    uint16_t smallestX, biggestX, smallestY, biggestY;
-
-    findMinMaxXY(squarePoints, &smallestX, &biggestX, &smallestY, &biggestY);
 
     // Above square
     uint16_t numX = ceil(imgCopy.cols/ static_cast<float>(negDist));
@@ -120,14 +124,6 @@ bool CalibrationHandler::calibrate(
     numAll += numX * numY;
 
     // Only good values
-    uint16_t goodSmallestX, goodSmallestY, goodBiggestX, goodBiggestY;
-    findMinMaxXY(
-        truePositiveSquare,
-        &goodSmallestX,
-        &goodBiggestX,
-        &goodSmallestY,
-        &goodBiggestY);
-
     numX = ceil((goodBiggestX - goodSmallestX) / static_cast<float>(posDist));
     numY = ceil((goodBiggestY - goodSmallestY) / static_cast<float>(posDist));
     uint32_t numAllGoodValues = numX * numY;
@@ -318,34 +314,30 @@ bool CalibrationHandler::calibrate(
     }
 
     *hsvPtr = 0;
-    squarePoints.pop_back();
-    squarePoints.pop_back();
-    squarePoints.pop_back();
-
     return acceptValues;
 }
 
-void CalibrationHandler::findMinMaxXY(
-        const std::vector<cv::Point> &square,
-        uint16_t *const smallestX,
-        uint16_t *const biggestX,
-        uint16_t *const smallestY,
-        uint16_t *const biggestY) {
-    if (square[0].x < square[1].x) {
-        *smallestX = square[0].x;
-        *biggestX = square[1].x;
+std::tuple<uint16_t, uint16_t, uint16_t, uint16_t> CalibrationHandler::findMinMaxXYAndEmptySquare() {
+    uint16_t smallestX, biggestX, smallestY, biggestY;
+
+    if (squarePoints[0].x < squarePoints[1].x) {
+        smallestX = squarePoints[0].x;
+        biggestX = squarePoints[1].x;
     } else {
-        *smallestX = square[1].x;
-        *biggestX = square[0].x;
+        smallestX = squarePoints[1].x;
+        biggestX = squarePoints[0].x;
     }
 
-    if (square[0].y < square[1].y) {
-        *smallestY = square[0].y;
-        *biggestY = square[1].y;
+    if (squarePoints[0].y < squarePoints[1].y) {
+        smallestY = squarePoints[0].y;
+        biggestY = squarePoints[1].y;
     } else {
-        *smallestY = square[1].y;
-        *biggestY = square[0].y;
+        smallestY = squarePoints[1].y;
+        biggestY = squarePoints[0].y;
     }
+    squarePoints.pop_back();
+    squarePoints.pop_back();
+    return std::make_tuple(smallestX, biggestX, smallestY, biggestY);
 }
 
 double CalibrationHandler::getProbability(
@@ -396,10 +388,7 @@ double CalibrationHandler::getPrediction(
 }
 
 void CalibrationHandler::calculate() {
-    Eigen::IOFormat ShortFormat(4);
-    setMaxIterationFactors(50);
-    setMinErrorFactors(80);  // false positives
-    setMinCorrectionFactors(1e-3);
+
 
     if (!calculateFactors()) {
         std::cout << "could not calculate factors" << std::endl;
@@ -742,34 +731,34 @@ void CalibrationHandler::addPointInImg(const uint16_t row, const uint16_t col) {
         line(imgCopy, cv::Point(col, row), cv::Point(col, row), goodColor);
 }
 
-void CalibrationHandler::clickAndCrop(
-    int event,
-    int x,
-    int y,
-    int flags,
-    void *userdata) {
-    if (userdata != 0) {
-        CalibrationHandler* handler =
-            reinterpret_cast<CalibrationHandler*>(userdata);
-        handler->clickAndCrop(event, x, y);
-    }
-}
+//void CalibrationHandler::clickAndCrop(
+//    int event,
+//    int x,
+//    int y,
+//    int flags,
+//    void *userdata) {
+//    if (userdata != 0) {
+//        CalibrationHandler* handler =
+//            reinterpret_cast<CalibrationHandler*>(userdata);
+//        handler->clickAndCrop(event, x, y);
+//    }
+//}
 
-void CalibrationHandler::clickAndCrop(int event, int x, int y) {
-    if (event == cv::EVENT_LBUTTONDOWN && squarePoints.size() < 2) {
-        squarePoints.push_back(cv::Point(x, y));
-        squarePoints.push_back(cv::Point(x, y));
-        drawActive = true;
-    } else if (event == cv::EVENT_LBUTTONUP) {
-        drawActive = false;
-    }
+//void CalibrationHandler::clickAndCrop(int event, int x, int y) {
+//    if (event == cv::EVENT_LBUTTONDOWN && squarePoints.size() < 2) {
+//        squarePoints.push_back(cv::Point(x, y));
+//        squarePoints.push_back(cv::Point(x, y));
+//        drawActive = true;
+//    } else if (event == cv::EVENT_LBUTTONUP) {
+//        drawActive = false;
+//    }
 
-    if (event == cv::EVENT_MOUSEMOVE && drawActive) {
-        if (squarePoints.size() == 2) {
-            squarePoints[1] = cv::Point(x, y);
-        }
-    }
-}
+//    if (event == cv::EVENT_MOUSEMOVE && drawActive) {
+//        if (squarePoints.size() == 2) {
+//            squarePoints[1] = cv::Point(x, y);
+//        }
+//    }
+//}
 
 void CalibrationHandler::setFont(const uint8_t font) {
     this->font = font;
@@ -874,53 +863,63 @@ bool CalibrationHandler::drawRectangle(
         textColor,
         textThickness);
 
-    int key;
-
-    while (true) {
-        cv::imshow(title, imgCopy);
-
-        // Draw rectangle.
-        if (squarePoints.size() == POINTS_OF_RECTANGLE) {
-            img->copyTo(imgCopy);
-            cv::putText(
-                imgCopy,
-                description,
-                cv::Point(
-                    distanceText2Border,
-                    imgCopy.rows - distanceText2Border),
-                font,
-                textScale,
-                textColor,
-                textThickness);
-            cv::rectangle(
-                imgCopy,
-                squarePoints[0],
-                squarePoints[1],
-                cv::Scalar(0, 0, 0),
-                2);
-        }
-
-        key = cv::waitKey(WAIT_TIME);
-
-        if (key == KEY_R) {
-            for (int i = 0; i < POINTS_OF_RECTANGLE; ++i) {
-                squarePoints.pop_back();
-            }
-            img->copyTo(imgCopy);
-            cv::putText(
-                imgCopy,
-                "Select ONLY good color",
-                cv::Point(
-                    distanceText2Border,
-                    imgCopy.rows - distanceText2Border),
-                font,
-                textScale,
-                textColor,
-                textThickness);
-        } else if (key == KEY_ACCEPT) {
-            return true;
-        } else if (key == KEY_ESC) {
-            return false;
-        }
+    cv::Rect2d rect = cv::selectROI(title, imgCopy, false, false);
+    if (rect.width == 0 or rect.height == 0) {
+        return false;
     }
+
+    squarePoints.push_back(cv::Point(rect.x, rect.y));
+    squarePoints.push_back(cv::Point(rect.x + rect.width, rect.y + rect.height));
+    return true;
+
+
+//    int key;
+
+//    while (true) {
+//        cv::imshow(title, imgCopy);
+
+//        // Draw rectangle.
+//        if (squarePoints.size() == POINTS_OF_RECTANGLE) {
+//            img->copyTo(imgCopy);
+//            cv::putText(
+//                imgCopy,
+//                description,
+//                cv::Point(
+//                    distanceText2Border,
+//                    imgCopy.rows - distanceText2Border),
+//                font,
+//                textScale,
+//                textColor,
+//                textThickness);
+//            cv::rectangle(
+//                imgCopy,
+//                squarePoints[0],
+//                squarePoints[1],
+//                cv::Scalar(0, 0, 0),
+//                2);
+//        }
+
+//        key = cv::waitKey(WAIT_TIME);
+
+//        if (key == KEY_R) {
+//            for (int i = 0; i < POINTS_OF_RECTANGLE; ++i) {
+//                squarePoints.pop_back();
+//            }
+//            img->copyTo(imgCopy);
+//            cv::putText(
+//                imgCopy,
+//                "Select ONLY good color",
+//                cv::Point(
+//                    distanceText2Border,
+//                    imgCopy.rows - distanceText2Border),
+//                font,
+//                textScale,
+//                textColor,
+//                textThickness);
+//        } else if (key == KEY_ACCEPT) {
+//            return true;
+//        } else if (key == KEY_ESC) {
+//            return false;
+//        }
+//    }
 }
