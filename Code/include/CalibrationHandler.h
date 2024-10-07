@@ -32,19 +32,24 @@
 
 #define EIGEN_MPL2_ONLY
 
-#include <tuple>
 #include <time.h>
 #include <math.h>
+
 #include <eigen3/Eigen/Dense>
+
+#include <tuple>
 #include <vector>
 #include <string>
 #include <fstream>
 #include <unordered_map>
 #include <random>
+
 #include <opencv2/opencv.hpp>
 
 
-// Define own matrix to save space
+/**
+ * @brief Matrix8u Save space with own matrix definition.
+ */
 typedef Eigen::Matrix<
 uint8_t,
 Eigen::Dynamic,
@@ -53,7 +58,6 @@ Eigen::RowMajor> Matrix8u;
 
 /**
  * @class CalibrationHandler
- * @author Uwe Simon
  * @date 08/10/19
  * @file CalibrationHandler.h
  * @brief Class to handle calibration. Marked areas of an image are used to calibrate values with eigens BDCSVD.
@@ -86,9 +90,8 @@ class CalibrationHandler {
      * @brief Calibrates params. Values without error are found using histograms,
      * factors for predictions are calculated using eigens BDCSVD.
      * @param img Image used to visualize steps and to get values for calibration.
-     * @param hsvIntern Values to decide, whether a color is inside
-     *                  bright color spectrum or not.
-     * @param factorsIntern Factors to calculate prediction of dark color spectrum.
+     * @param optimalValuesIntern Internal saved calculated optimal values.
+     * @param errorFactorsIntern Factors to calculate prediction of dark color spectrum.
      * @return Acception of new values.
      */
     bool calibrate(
@@ -128,19 +131,19 @@ class CalibrationHandler {
 
     /**
      * @brief Set maximum of iterations in calibration of error factors.
-     * @param maxIteration Max. iterations in calibration of error factors.
+     * @param maxIterationFactors Max. iterations in calibration of error factors.
      */
     void setMaxIterationFactors(const uint16_t maxIterationFactors);
 
     /**
      * @brief Set minimum of false positives in factor calibration.
-     * @param minError Minimum of false positives in factor clibration.
+     * @param minErrorFactors Minimum of false positives in factor calibration.
      */
     void setMinErrorFactors(const double minErrorFactors);
 
     /**
     * @brief Set minimum border to finish calibration of factors.
-    * @param minCorrection Factors Minimum correction border to finish calibration of factors.
+    * @param minCorrectionFactors Factors Minimum correction border to finish calibration of factors.
     */
     void setMinCorrectionFactors(const double minCorrectionFactors);
 

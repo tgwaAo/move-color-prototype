@@ -38,7 +38,6 @@
 
 /**
  * @class ParticleWeighting
- * @author me
  * @date 09/10/19
  * @file ParticleWeighting.h
  * @brief Decide, whether a color is in this area or not via particles.
@@ -57,7 +56,7 @@ class ParticleWeighting {
      * @param cols Number of horizontal pixels.
      * @param bound Minimal number of positive particles.
      * @param factors Factors multiplied by squared error.
-     * @param hsvBest HSV values without error.
+     * @param optimalHsvValues HSV values closest to ideal values.
      */
     ParticleWeighting(
         const uint16_t numParticles,

@@ -36,7 +36,6 @@
 
 /**
  * @class CircleHandler
- * @author me
  * @date 09/10/19
  * @file CircleHandler.h
  * @brief Class handles circles and enables hits of them (gameplay).
@@ -55,7 +54,7 @@ class CircleHandler {
      * @brief Constructor initializing times of states and active state, color
      *        and number of circles and window of creation.
      * @param numCircles Number of used circles.
-     * @param radius Radius of used circles.
+     * @param radius_ Radius of used circles.
      * @param circleTimeStates Time of each state each circle has.
      * @param color Color of active state (brightest).
      * @param width Width of possible positions in window.
@@ -88,15 +87,24 @@ class CircleHandler {
 
     /**
      * @class Circle
-     * @author me
      * @date 09/10/19
      * @file CircleHandler.h
      * @brief Struct to use circles with a point for position, a timer to switch states
      *        and a current status (invisible, dark = not active, bright = active).
+     *
      */
     struct Circle {
+        /**
+         * @brief point Center of a circle.
+         */
         cv::Point point;
+        /**
+         * @brief timerStart Start of current status.
+         */
         clock_t timerStart;
+        /**
+         * @brief status Current status of circle.
+         */
         uint8_t status;
     };
 

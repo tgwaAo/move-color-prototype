@@ -39,7 +39,8 @@ CircleHandler::CircleHandler() {
     CircleHandler(10, 10, std::vector<float>(3, 3), 0, 640, 480);
 }
 
-CircleHandler::CircleHandler(const uint8_t numCircles, const uint8_t radius,
+CircleHandler::CircleHandler(const uint8_t numCircles,
+                             const uint8_t radius,
                              const std::vector<float> &circleTimeStates,
                              const cv::Scalar& color,
                              const uint16_t width,

@@ -258,7 +258,7 @@ int main() {
     uint8_t targetRadius = 40;
 
     /********************************************************
-     * Circle and timer stuff. (Circles have timers)
+     * Circle and timer (Circles have timers)
      * *****************************************************/
     std::vector<float> stateTimes(3, 1);
     stateTimes[2] = 3;

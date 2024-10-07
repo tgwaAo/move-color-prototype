@@ -48,7 +48,8 @@ ParticleWeighting::ParticleWeighting(
     const uint16_t cols,
     const uint32_t bound,
     const std::vector<double> &factors,
-    const std::vector<double> &optimalHsvValues) {
+    const std::vector<double> &optimalHsvValues
+) {
     this->minWidth = minWidth;
     this->maxWidth = maxWidth;
     this->minHeight = minHeight;
