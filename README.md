@@ -28,32 +28,34 @@ You can find the number in the following way:
 
 #### Linux
 
-1.    Get a list of devices with `ls /dev/vid*`.
+1.    Get a list of devices with  
+      `ls /dev/vid*`
 2.    Choose only even numbers. E.g. the second camera is 2.
 
 #### Mac
 
 *   Install ffmpeg and run  
-    ```ffmpeg -f avfoundation -list_devices true -i \"```
+    ```ffmpeg -f avfoundation -list_devices true -i \"```  
 or  
 *  Try out different numbers
 
-### At game start
+## At game start
 
-If you have not configured the game yet, the calibration will start automatically. Please read the calibration section.
-
+If you have not configured the game yet, the calibration will start automatically. Please read the calibration section.  
+The game will start after the first configuration or at once if a configuration already exists.
 
 ## Calibration
 
-*Note: You can always abort the calibration using ESC, but you have to cancel the selection of pixels with ctrl+c*  
-*Note: Bright or shining colors might be better for a faster detection.*
+*Note: You can always abort the calibration using ESC, but you have to cancel the selection of pixels with ctrl+c.*  
+*Note: Bright or shining colors might be better for a detection of fast movements.*
 
 1.    Take a position that shows you, your surroundings and the tracked color. The tracked color should take a bit of the image while your body should keep distance from the camera.
 1.    Wait for the countdown to finish.
-1.    Select **only** the tracked color with your mouse. It does not have to be the complete area in the picture, but having only your tracked color is important. Press ctrl+c to cancel.
+1.    Select **only** the color with your mouse that has to be tracked. It does not have to be the complete area in the picture, but having only your tracked color is important.  
+      Press ctrl+c to cancel and then ESC if you want to cancel the calibration.
 1.    Accept with enter.
-1.    Select **all** of the tracked color and do not be afraid to have some of the surroundings in the selection. This area will be excluded from the list of negative pixels, so it is only important to have all of the tracked color in it.  
-      Press ctrl+c to cancel.
+1.    Select **all** of the tracked color and do not be afraid to have some of the surroundings in the selection. This area will be excluded from the list of negative pixels, so it is only important to have all of the color in it that should be tracked.  
+      Press ctrl+c to cancel and then ESC if you want to cancel the calibration.
 1.    Accept with enter.
 1.    Look at the selection. The pixels for the negative colors in the calibration are red. The pixels for the positive color in the calibration are green.
 1.    Accept with enter.
@@ -71,12 +73,13 @@ If you have not configured the game yet, the calibration will start automaticall
 
 The game starts with a countdown and then you move a color through the shown window, try to hit the bright green circles and try to avoid bright red circles.  
   
-Every circle has 3 states in order invisible, dark/not active and bright/active. A circle will stay invisible and inactive for one second. You then have 3 seconds to hit it in it's bright state.  
+Every circle has 3 states in this order: invisible, dark/not active and bright/active  
+A circle will stay invisible and inactive for one second. You then have 3 seconds to hit it in it's bright state.  
 When you hit a green circle 1 point is added to your score and then you hit a red circle the score is decreased by 5 points.  
 Your final score and the highscore will be shown after 60 seconds from gamestart. If the values are the same, you either have a new highscore or the current score is as high as your highscore.  
   
-*Tip: The appearing order of the circles is also the order them becoming active. You can plan your movement to hit the green circles faster and to avoid hitting the red circles.*  
-*Tip: Hit the circle as fast as you can to decrease the time of their active state. That means the same circle will show up more often in one round and can be hitten more often.*
+*Tip: The appearing order of the circles is also the order of them becoming active. You can plan your movement to hit the green circles faster and to avoid hitting the red circles.*  
+*Tip: Hit the circle as fast as you can to decrease the time of their active state. That means the same circle will show up more often in one round and can be hit more often.*
 
 ### Controls
 * "r" for replay
