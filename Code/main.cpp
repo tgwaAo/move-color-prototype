@@ -38,6 +38,8 @@
 #include <dirent.h>
 #include <vector>
 #include <fstream>
+#include <iostream>
+#include <sstream>
 #include <iomanip>
 #include <random>
 
@@ -367,6 +369,7 @@ uint8_t gameplay(
     const int16_t KEY_D = 100;
     const int16_t KEY_R = 114;
     const uint8_t gameTime = 60;
+    std::ostringstream timeMessage;
 
     if (!waitAndShowSeconds(cap, mirror, title, KEY_ESC, 5)) {
         return 1;
@@ -422,13 +425,17 @@ uint8_t gameplay(
         leftSeconds = gameTime - static_cast<float>(clock() - timeStart)
                       / CLOCKS_PER_SEC;
 
+        timeMessage << "Time left= " << std::fixed << std::setprecision(2) << leftSeconds;
+
         cv::putText(
             *mirror,
-            "Time left= " + std::to_string(leftSeconds),
+            timeMessage.str(),
             cv::Point(200, mirror->rows - 10),
             cv::FONT_HERSHEY_SIMPLEX,
             1.2,
             cv::Scalar(255, 255, 0));
+
+        timeMessage.str("");
 
         if (cv::getWindowProperty(title, cv::WND_PROP_VISIBLE)) {
             cv::imshow(title, *mirror);
