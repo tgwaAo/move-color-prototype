@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.0)
-project (Move_Color_Prototype CXX)
+project (move-color-prototype CXX)
 
 find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 find_package( OpenCV REQUIRED )
