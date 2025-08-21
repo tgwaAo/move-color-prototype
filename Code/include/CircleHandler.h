@@ -67,7 +67,7 @@ class CircleHandler {
                   const uint16_t height = 480);
 
     /**
-     * @brief Destructor of class
+     * @brief Destructor of class.
      */
     ~CircleHandler();
 

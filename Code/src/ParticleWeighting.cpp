@@ -117,8 +117,15 @@ bool ParticleWeighting::isColor(const uint8_t *const pixelPtr) {
 
         sumWeights += particlesW[idx];
 
-        if (boundary <= sumWeights) return true;
-        else if (failureIdx <= idx) return false; //TODO: correct calculation
+        if (boundary <= sumWeights)
+            return true;
+
+        uint32_t leftParticles = particlesX.size() - idx;
+        uint64_t possiblePositives = leftParticles * maxWeight;
+        uint32_t neededPositives = boundary - sumWeights;
+
+        if (possiblePositives < neededPositives)
+            return false;
     }
     return false;
 }
@@ -171,10 +178,10 @@ bool ParticleWeighting::setFactors(const std::vector<double> &factors) {
 
 void ParticleWeighting::getParticle(
     const uint16_t idx,
-    uint16_t backX,
-    uint16_t backY,
-    uint16_t backW,
-    bool alright) const {
+    uint16_t& backX,
+    uint16_t& backY,
+    uint16_t& backW,
+    bool& alright) const {
     if (idx < particlesX.size()) {
         backX = particlesX[idx];
         backY = particlesY[idx];

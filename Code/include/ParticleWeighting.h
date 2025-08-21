@@ -92,10 +92,10 @@ class ParticleWeighting {
      */
     void getParticle(
         const uint16_t idx,
-        uint16_t backX,
-        uint16_t backY,
-        uint16_t backW,
-        bool alright) const;
+        uint16_t& backX,
+        uint16_t& backY,
+        uint16_t& backW,
+        bool& alright) const;
 
     /**
      * @brief Set values of a particle.

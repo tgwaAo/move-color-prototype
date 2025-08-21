@@ -39,7 +39,6 @@
 #include <vector>
 #include <fstream>
 #include <iomanip>
-#include <random>
 
 #ifdef WINDOWS
     #include <direct.h>
@@ -355,8 +354,6 @@ uint8_t gameplay(
     cv::Scalar color;
     const cv::Scalar BAD_COLOR(0, 0, 255);
     const cv::Scalar GOOD_COLOR(255, 0, 0);
-    std::random_device rd;
-    std::mt19937 eng(rd());
     int16_t key;
     bool goodArea;
     float leftSeconds;
@@ -380,8 +377,8 @@ uint8_t gameplay(
         cvtColor(*mirror, hsv, cv::COLOR_BGR2HSV);
         pixelPtr_hsv = reinterpret_cast<uint8_t*>(hsv.data);
 
-        posHandler->updateCircles(std::move(mirror));
-        negHandler->updateCircles(std::move(mirror));
+        posHandler->updateCircles(mirror);
+        negHandler->updateCircles(mirror);
 
         for (uint32_t i = 0; i < (*weightingMatrix).size(); ++i) {
             for (uint32_t j = 0; j < (*weightingMatrix)[i].size(); ++j) {
