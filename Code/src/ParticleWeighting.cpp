@@ -69,7 +69,7 @@ ParticleWeighting::ParticleWeighting(
     }
 
     this->cols = cols;
-    this->bound = bound;
+    this->boundary = bound;
 
     particlesX.resize(numParticles);
     particlesY.resize(numParticles);
@@ -78,30 +78,31 @@ ParticleWeighting::ParticleWeighting(
     update();
 }
 
-uint32_t ParticleWeighting::calculateSumWeights(const uint8_t *const pixelPtr) {
+bool ParticleWeighting::isColor(const uint8_t *const pixelPtr) {
     int16_t errHue;
     int16_t errSat;
     int16_t errVal;
 
     double prediction;
     sumWeights = 0;
+    uint32_t failureIdx = particlesX.size() - boundary;
 
-    for (uint32_t i = 0; i < particlesX.size(); ++i) {
-        //        calculate probability of being correct
+    for (uint32_t idx = 0; idx < particlesX.size(); ++idx) {
+        // calculate probability of being correct
         errHue =
             hue - pixelPtr[
-         particlesY[i] * cols * HSV_CHANNELS
-         + particlesX[i] * HSV_CHANNELS];
+         particlesY[idx] * cols * HSV_CHANNELS
+         + particlesX[idx] * HSV_CHANNELS];
 
         errSat =
             sat - pixelPtr[
-         particlesY[i] * cols * HSV_CHANNELS
-         + particlesX[i] * HSV_CHANNELS + 1];
+         particlesY[idx] * cols * HSV_CHANNELS
+         + particlesX[idx] * HSV_CHANNELS + 1];
 
         errVal =
             val - pixelPtr[
-         particlesY[i] * cols * HSV_CHANNELS
-         + particlesX[i] * HSV_CHANNELS + 2];
+         particlesY[idx] * cols * HSV_CHANNELS
+         + particlesX[idx] * HSV_CHANNELS + 2];
 
         prediction = 1
                      / (1
@@ -110,14 +111,16 @@ uint32_t ParticleWeighting::calculateSumWeights(const uint8_t *const pixelPtr) {
                         + pow(errVal, 2) * factorV);
 
         if (prediction < 0.5)
-            particlesW[i] = 1;
+            particlesW[idx] = 0;
         else
-            particlesW[i] = maxWeight;
+            particlesW[idx] = maxWeight;
 
-        sumWeights += particlesW[i];
+        sumWeights += particlesW[idx];
+
+        if (boundary <= sumWeights) return true;
+        else if (failureIdx <= idx) return false; //TODO: correct calculation
     }
-
-    return sumWeights;
+    return false;
 }
 
 void ParticleWeighting::update() {
@@ -130,13 +133,6 @@ void ParticleWeighting::update() {
         particlesY[i] = ((i*step) / diff) + minHeight;
         particlesW[i] = 1;
     }
-}
-
-bool ParticleWeighting::isColor(const uint8_t *const pixelPtr) {
-    if (calculateSumWeights(pixelPtr) < bound)
-        return false;
-    else
-        return true;
 }
 
 std::vector<double> ParticleWeighting::getHsv() const {

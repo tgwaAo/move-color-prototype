@@ -71,13 +71,6 @@ class ParticleWeighting {
         const std::vector<double> &optimalHsvValues);
 
     /**
-     * @brief Calculate sum of weights.
-     * @param pixelPtr Pointer pointing to current image.
-     * @return Sum of weights of particles.
-     */
-    uint32_t calculateSumWeights(const uint8_t *const pixelPtr);
-
-    /**
      * @brief Decide, wheter area contains color or not.
      * @param pixelPtr Pointer pointing to current image.
      * @return Decision of containing color.
@@ -221,7 +214,7 @@ class ParticleWeighting {
     std::vector<uint16_t> particlesX;
     std::vector<uint16_t> particlesY;
     std::vector<uint16_t> particlesW;
-    uint32_t bound;
+    uint32_t boundary;
     uint32_t sumWeights;
     uint16_t maxWeight;
     uint16_t minWidth;

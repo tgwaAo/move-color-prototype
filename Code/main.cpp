@@ -221,7 +221,7 @@ int main() {
      * Setup matrices to find colors.
      * *********************************************************/
     const uint16_t NUM_PARTICLES = 30;
-    const uint8_t MAX_WEIGHT = 30;
+    const uint8_t MAX_WEIGHT = 1;  // TODO: check possible removal
     const uint8_t MAX_DISTANCE = 10;
     uint16_t mat_size = HEIGHT / MAX_DISTANCE;
     std::unique_ptr<std::vector<std::vector<ParticleWeighting>
