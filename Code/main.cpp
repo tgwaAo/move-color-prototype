@@ -41,7 +41,6 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
-#include <random>
 
 #ifdef WINDOWS
     #include <direct.h>
@@ -223,7 +222,7 @@ int main() {
      * Setup matrices to find colors.
      * *********************************************************/
     const uint16_t NUM_PARTICLES = 30;
-    const uint8_t MAX_WEIGHT = 30;
+    const uint8_t MAX_WEIGHT = 1;  // TODO: check possible removal
     const uint8_t MAX_DISTANCE = 10;
     uint16_t mat_size = HEIGHT / MAX_DISTANCE;
     std::unique_ptr<std::vector<std::vector<ParticleWeighting>
@@ -357,8 +356,6 @@ uint8_t gameplay(
     cv::Scalar color;
     const cv::Scalar BAD_COLOR(0, 0, 255);
     const cv::Scalar GOOD_COLOR(255, 0, 0);
-    std::random_device rd;
-    std::mt19937 eng(rd());
     int16_t key;
     bool goodArea;
     float leftSeconds;
@@ -383,8 +380,8 @@ uint8_t gameplay(
         cvtColor(*mirror, hsv, cv::COLOR_BGR2HSV);
         pixelPtr_hsv = reinterpret_cast<uint8_t*>(hsv.data);
 
-        posHandler->updateCircles(std::move(mirror));
-        negHandler->updateCircles(std::move(mirror));
+        posHandler->updateCircles(mirror);
+        negHandler->updateCircles(mirror);
 
         for (uint32_t i = 0; i < (*weightingMatrix).size(); ++i) {
             for (uint32_t j = 0; j < (*weightingMatrix)[i].size(); ++j) {
