@@ -32,38 +32,35 @@
 
 #define EIGEN_MPL2_ONLY
 
-#include <time.h>
 #include <math.h>
+#include <time.h>
 
 #include <eigen3/Eigen/Dense>
 
-#include <tuple>
-#include <vector>
-#include <string>
 #include <fstream>
-#include <unordered_map>
 #include <random>
+#include <string>
+#include <tuple>
+#include <unordered_map>
+#include <vector>
 
 #include <opencv2/opencv.hpp>
-
 
 /**
  * @brief Matrix8u Save space with own matrix definition.
  */
-typedef Eigen::Matrix<
-uint8_t,
-Eigen::Dynamic,
-Eigen::Dynamic,
-Eigen::RowMajor> Matrix8u;
+typedef Eigen::Matrix<uint8_t, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>
+    Matrix8u;
 
 /**
  * @class CalibrationHandler
  * @date 08/10/19
  * @file CalibrationHandler.h
- * @brief Class to handle calibration. Marked areas of an image are used to calibrate values with eigens BDCSVD.
+ * @brief Class to handle calibration. Marked areas of an image are used to
+ * calibrate values with eigens BDCSVD.
  */
 class CalibrationHandler {
- public:
+  public:
     /**
      * @brief Constructor with a variable list of possible parameters.
      * @param title Title of windows shown.
@@ -73,13 +70,12 @@ class CalibrationHandler {
      * @param textColor Color of description text.
      * @param textThickness Thickness of description text.
      */
-    CalibrationHandler(
-        std::string title = "Calibration",
-        uint16_t distanceText2Border = 10,
-        uint8_t font = cv::FONT_HERSHEY_SIMPLEX,
-        float textScale = 1.2,
-        cv::Scalar textColor = cv::Scalar(255, 255, 0),
-        uint8_t textThickness = 2);
+    CalibrationHandler(std::string title = "Calibration",
+                       uint16_t distanceText2Border = 10,
+                       uint8_t font = cv::FONT_HERSHEY_SIMPLEX,
+                       float textScale = 1.2,
+                       cv::Scalar textColor = cv::Scalar(255, 255, 0),
+                       uint8_t textThickness = 2);
 
     /**
      * @brief Destoying object.
@@ -87,17 +83,18 @@ class CalibrationHandler {
     ~CalibrationHandler();
 
     /**
-     * @brief Calibrates params. Values without error are found using histograms,
-     * factors for predictions are calculated using eigens BDCSVD.
-     * @param img Image used to visualize steps and to get values for calibration.
+     * @brief Calibrates params. Values without error are found using
+     * histograms, factors for predictions are calculated using eigens BDCSVD.
+     * @param img Image used to visualize steps and to get values for
+     * calibration.
      * @param optimalValuesIntern Internal saved calculated optimal values.
-     * @param errorFactorsIntern Factors to calculate prediction of dark color spectrum.
+     * @param errorFactorsIntern Factors to calculate prediction of dark color
+     * spectrum.
      * @return Acception of new values.
      */
-    bool calibrate(
-        cv::Mat *img,
-        std::vector<double> *const optimalValuesIntern,
-        std::vector<double> *const errorFactorsIntern);
+    bool calibrate(cv::Mat *img,
+                   std::vector<double> *const optimalValuesIntern,
+                   std::vector<double> *const errorFactorsIntern);
 
     /**
      * @brief Set title of shown window.
@@ -131,7 +128,8 @@ class CalibrationHandler {
 
     /**
      * @brief Set maximum of iterations in calibration of error factors.
-     * @param maxIterationFactors Max. iterations in calibration of error factors.
+     * @param maxIterationFactors Max. iterations in calibration of error
+     * factors.
      */
     void setMaxIterationFactors(const uint16_t maxIterationFactors);
 
@@ -142,15 +140,17 @@ class CalibrationHandler {
     void setMinErrorFactors(const double minErrorFactors);
 
     /**
-    * @brief Set minimum border to finish calibration of factors.
-    * @param minCorrectionFactors Factors Minimum correction border to finish calibration of factors.
-    */
+     * @brief Set minimum border to finish calibration of factors.
+     * @param minCorrectionFactors Factors Minimum correction border to finish
+     * calibration of factors.
+     */
     void setMinCorrectionFactors(const double minCorrectionFactors);
 
     /**
-    * @brief Set start index of positive values in matrix of input points.
-    * @param startIdxPositives Start index of positives in matrix of input points.
-    */
+     * @brief Set start index of positive values in matrix of input points.
+     * @param startIdxPositives Start index of positives in matrix of input
+     * points.
+     */
     void setStartIdxPositives(const uint64_t startIdxPositives);
 
     /**
@@ -220,21 +220,24 @@ class CalibrationHandler {
     double getMinErrorFactors() const;
 
     /**
-    * @brief Get minimal correction border needed to stop calculation of optimal values.
-    * @return Minimal correction border needed to stop calculation of optimal values.
-    */
+     * @brief Get minimal correction border needed to stop calculation of
+     * optimal values.
+     * @return Minimal correction border needed to stop calculation of optimal
+     * values.
+     */
     double getMinCorrectionOptimalValues() const;
 
     /**
-    * @brief Get minimal correction border needed to stop calculation of factors.
-    * @return Minimal correction border needed to stop calculation of factors.
-    */
+     * @brief Get minimal correction border needed to stop calculation of
+     * factors.
+     * @return Minimal correction border needed to stop calculation of factors.
+     */
     double getMinCorrectionFactors() const;
 
     /**
-    * @brief Get start index of positives in matrix of input points.
-    * @return Start index of positives in matrix of input points.
-    */
+     * @brief Get start index of positives in matrix of input points.
+     * @return Start index of positives in matrix of input points.
+     */
     uint64_t getStartIdxPositives() const;
 
     /**
@@ -249,7 +252,7 @@ class CalibrationHandler {
      */
     uint8_t getPosDist() const;
 
- private:
+  private:
     /**
      * @brief Draw rectangle to get roi.
      * @param description String to describe goal.
@@ -262,24 +265,25 @@ class CalibrationHandler {
      * @brief Find min. and max. x- and y-values of a rectangle.
      * @return tuple Min and max values of roi.
      */
-    std::tuple<uint16_t, uint16_t, uint16_t, uint16_t> findMinMaxXYAndEmptySquare();
+    std::tuple<uint16_t, uint16_t, uint16_t, uint16_t>
+    findMinMaxXYAndEmptySquare();
 
     /**
      * @brief Calculate probability to be searched color.
      * @param err2 Squared error used to calculate probability.
      * @return Calculated probability of being searched color.
      */
-//    double getProbability(const double squaredError);
-    double getProbability(
-            const int16_t errHue,
-            const int16_t errSat,
-            const int16_t errVal,
-            const double factorHue,
-            const double factorSat,
-            const double factorVal);
+    //    double getProbability(const double squaredError);
+    double getProbability(const int16_t errHue,
+                          const int16_t errSat,
+                          const int16_t errVal,
+                          const double factorHue,
+                          const double factorSat,
+                          const double factorVal);
 
     /**
-     * @brief Predict pixel being bright or dark searched color. Use higher value.
+     * @brief Predict pixel being bright or dark searched color. Use higher
+     * value.
      * @param row Row of pixel.
      * @param col Column of pixel.
      * @return Better pobability of being color.
@@ -287,41 +291,44 @@ class CalibrationHandler {
     double getPrediction(const uint16_t &row, const uint16_t &col);
 
     /**
-     * @brief Calculate values to predict being searched color or not using eigens BDCSVD.
+     * @brief Calculate values to predict being searched color or not using
+     * eigens BDCSVD.
      */
     void calculate();
 
     /**
-    * @brief Calculate factors to decide the estimated propability of a correct color.
-    * @return True, if no error occured.
-    */
+     * @brief Calculate factors to decide the estimated propability of a correct
+     * color.
+     * @return True, if no error occured.
+     */
     bool calculateFactors();
 
     /**
      * @brief Check the correction of factors.
      * @return True if the correction is small enough, else false.
      */
-    bool checkCorrectionOfFactors(
-        const Eigen::VectorXd& dx,
-        const bool& withoutHue);
+    bool checkCorrectionOfFactors(const Eigen::VectorXd &dx,
+                                  const bool &withoutHue);
 
     /**
-     * @brief Visualization of predicted result and user decision to accept new values
-     *        or decline.
+     * @brief Visualization of predicted result and user decision to accept new
+     * values or decline.
      * @return User decision, if values should be used or older values are kept.
      */
     bool visualizeResult(cv::Mat *const img);
 
     /**
      * @brief Calculate number of false positives.
-     * @param startGoodValues End of calculation. Only false positives are interesting.
+     * @param startGoodValues End of calculation. Only false positives are
+     * interesting.
      * @return Number of false positives.
      */
     uint64_t getFalsePositives(const uint64_t &startGoodValues);
 
     /**
      * @brief Calculate number of false negatives.
-     * @param startGoodValues End of calculation. Only false positives are interesting.
+     * @param startGoodValues End of calculation. Only false positives are
+     * interesting.
      * @return Number of false negatives.
      */
     uint64_t getFalseNegatives(const uint64_t &startGoodValues);
@@ -333,11 +340,10 @@ class CalibrationHandler {
      * @param col Number of column of pixel.
      * @param counter Index in matrices to store pixel values.
      */
-    void fillMatricesWithBadValues(
-        const uint16_t &hsvCols,
-        const uint16_t &row,
-        const uint16_t &col,
-        const uint64_t &pos);
+    void fillMatricesWithBadValues(const uint16_t &hsvCols,
+                                   const uint16_t &row,
+                                   const uint16_t &col,
+                                   const uint64_t &pos);
 
     /**
      * @brief Add a point in image in bad color and increase false positives.
@@ -355,20 +361,16 @@ class CalibrationHandler {
     void clickAndCrop(int event, int x, int y);
 
     /**
-     * @brief OpenCV can not handle a member function. This is a hack around to use member
-     *        variables in mouse callback. Needed to use own clickAndCrop.
+     * @brief OpenCV can not handle a member function. This is a hack around to
+     * use member variables in mouse callback. Needed to use own clickAndCrop.
      * @param event Mouse event.
      * @param x X-coordinate in image.
      * @param y Y-coordinate in image.
      * @param flags Keys used.
      * @param userdata Additional data given in setMouseCallback.
      */
-    static void clickAndCrop(
-        int event,
-        int x,
-        int y,
-        int flags,
-        void *userdata);
+    static void
+    clickAndCrop(int event, int x, int y, int flags, void *userdata);
 
     // Used for clickAndCrop
     std::vector<cv::Point> squarePoints;
@@ -413,4 +415,4 @@ class CalibrationHandler {
     Eigen::Vector3d errorFactorsIntern;
 };
 
-#endif  // CODE_INCLUDE_CALIBRATIONHANDLER_H_
+#endif // CODE_INCLUDE_CALIBRATIONHANDLER_H_

@@ -30,9 +30,9 @@
 #ifndef CODE_INCLUDE_CIRCLEHANDLER_H_
 #define CODE_INCLUDE_CIRCLEHANDLER_H_
 
+#include <opencv2/opencv.hpp>
 #include <random>
 #include <vector>
-#include <opencv2/opencv.hpp>
 
 /**
  * @class CircleHandler
@@ -41,7 +41,7 @@
  * @brief Class handles circles and enables hits of them (gameplay).
  */
 class CircleHandler {
- public:
+  public:
     /**
      * @brief Default constructor calling other constructor with 10 circles
      *        with a radius of ten. The time of each state is 3 seconds and
@@ -60,9 +60,10 @@ class CircleHandler {
      * @param width Width of possible positions in window.
      * @param height Height of possible positions in window.
      */
-    CircleHandler(const uint8_t numCircles, const uint8_t radius_,
+    CircleHandler(const uint8_t numCircles,
+                  const uint8_t radius_,
                   const std::vector<float> &circleTimeStates,
-                  const cv::Scalar& color,
+                  const cv::Scalar &color,
                   const uint16_t width = 640,
                   const uint16_t height = 480);
 
@@ -89,8 +90,9 @@ class CircleHandler {
      * @class Circle
      * @date 09/10/19
      * @file CircleHandler.h
-     * @brief Struct to use circles with a point for position, a timer to switch states
-     *        and a current status (invisible, dark = not active, bright = active).
+     * @brief Struct to use circles with a point for position, a timer to switch
+     * states and a current status (invisible, dark = not active, bright =
+     * active).
      *
      */
     struct Circle {
@@ -112,13 +114,13 @@ class CircleHandler {
      * @brief Set times of different states.
      * @param circleTimeStates Possible states of the circles
      */
-    void setCircleTimeStates(const std::vector<float>& circleTimeStates);
+    void setCircleTimeStates(const std::vector<float> &circleTimeStates);
 
     /**
      * @brief Set color of shown circles.
      * @param color Color of shown circles.
      */
-    void setColor(const cv::Scalar& color);
+    void setColor(const cv::Scalar &color);
 
     /**
      * @brief Set radius of shown circles.
@@ -129,7 +131,7 @@ class CircleHandler {
     /**
      * @brief Get time of state at given index.
      * @param idx Index of time state.
-     * @return 
+     * @return
      */
     std::vector<float> getCircleTimeStates() const;
 
@@ -145,7 +147,7 @@ class CircleHandler {
      */
     uint8_t getRadius() const;
 
- private:
+  private:
     /**
      * @brief New position, state and new time of a circle.
      * @param idx Index of changed circle.
@@ -163,4 +165,4 @@ class CircleHandler {
     std::uniform_int_distribution<uint16_t> randomLeftRightIdx;
 };
 
-#endif  // CODE_INCLUDE_CIRCLEHANDLER_H_
+#endif // CODE_INCLUDE_CIRCLEHANDLER_H_

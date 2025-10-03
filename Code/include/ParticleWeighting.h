@@ -30,11 +30,9 @@
 #ifndef CODE_INCLUDE_PARTICLEWEIGHTING_H_
 #define CODE_INCLUDE_PARTICLEWEIGHTING_H_
 
-
-#include <math.h>
 #include <cstdint>
+#include <math.h>
 #include <vector>
-
 
 /**
  * @class ParticleWeighting
@@ -43,7 +41,7 @@
  * @brief Decide, whether a color is in this area or not via particles.
  */
 class ParticleWeighting {
- public:
+  public:
     /**
      * @brief Constructs a continuous matrix of particles in given area
      * and initializes necessary attributes.
@@ -58,17 +56,16 @@ class ParticleWeighting {
      * @param factors Factors multiplied by squared error.
      * @param optimalHsvValues HSV values closest to ideal values.
      */
-    ParticleWeighting(
-        const uint16_t numParticles,
-        const double minWidth,
-        const double maxWidth,
-        const double minHeight,
-        const double maxHeight,
-        const uint16_t maxWeight,
-        const uint16_t cols,
-        const uint32_t bound,
-        const std::vector<double> &factors,
-        const std::vector<double> &optimalHsvValues);
+    ParticleWeighting(const uint16_t numParticles,
+                      const double minWidth,
+                      const double maxWidth,
+                      const double minHeight,
+                      const double maxHeight,
+                      const uint16_t maxWeight,
+                      const uint16_t cols,
+                      const uint32_t bound,
+                      const std::vector<double> &factors,
+                      const std::vector<double> &optimalHsvValues);
 
     /**
      * @brief Decide, wheter area contains color or not.
@@ -90,12 +87,11 @@ class ParticleWeighting {
      * @param backW Weight of particle.
      * @param alright Is alright, if idx_ is in valid range.
      */
-    void getParticle(
-        const uint16_t idx,
-        uint16_t& backX,
-        uint16_t& backY,
-        uint16_t& backW,
-        bool& alright) const;
+    void getParticle(const uint16_t idx,
+                     uint16_t &backX,
+                     uint16_t &backY,
+                     uint16_t &backW,
+                     bool &alright) const;
 
     /**
      * @brief Set values of a particle.
@@ -104,11 +100,10 @@ class ParticleWeighting {
      * @param changeY Next y position of particle.
      * @param changeW Next weight of particle.
      */
-    void setParticle(
-        const uint16_t idx,
-        const uint16_t changeX,
-        const uint16_t changeY,
-        const uint16_t changeW);
+    void setParticle(const uint16_t idx,
+                     const uint16_t changeX,
+                     const uint16_t changeY,
+                     const uint16_t changeW);
 
     /**
      * @brief Get sum of weights.
@@ -208,7 +203,7 @@ class ParticleWeighting {
      */
     bool setFactors(const std::vector<double> &factors);
 
- private:
+  private:
     const uint8_t HSV_CHANNELS = 3;
 
     std::vector<uint16_t> particlesX;
@@ -230,4 +225,4 @@ class ParticleWeighting {
     double factorV;
 };
 
-#endif  // CODE_INCLUDE_PARTICLEWEIGHTING_H_
+#endif // CODE_INCLUDE_PARTICLEWEIGHTING_H_
