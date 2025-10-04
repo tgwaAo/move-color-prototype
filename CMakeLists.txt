@@ -6,18 +6,18 @@ find_package( OpenCV REQUIRED )
 include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 file(GLOB SOURCES
-    "Code/header/*.h"
-    "Code/src/*.cpp"
+    "include/*.h"
+    "src/*.cpp"
 )
 
 include_directories(
-    "${CMAKE_SOURCE_DIR}/Code/include"
-    "${CMAKE_SOURCE_DIR}/Code/src"
+    "${CMAKE_SOURCE_DIR}/include"
+    "${CMAKE_SOURCE_DIR}/src"
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES}
-    Code/main.cpp
-    Code/include/CalibrationHandler.h Code/include/CircleHandler.h Code/include/ParticleWeighting.h)
+    examples/main.cpp
+    include/CalibrationHandler.h include/CircleHandler.h include/ParticleWeighting.h)
 
 target_link_libraries( ${PROJECT_NAME} ${OpenCV_LIBS} )
 target_link_libraries (${PROJECT_NAME} Eigen3::Eigen)
