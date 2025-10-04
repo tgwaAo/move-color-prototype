@@ -1,6 +1,6 @@
 // Modified MIT License
 //
-// Copyright (c) 2019 tgwaAo
+// Copyright (c) 2019 tgwa_ao
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -55,7 +55,7 @@ typedef Eigen::Matrix<uint8_t, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>
 /**
  * @class CalibrationHandler
  * @date 08/10/19
- * @file CalibrationHandler.h
+ * @file Calibration_handler.h
  * @brief Class to handle calibration. Marked areas of an image are used to
  * calibrate values with eigens BDCSVD.
  */
@@ -64,18 +64,18 @@ class CalibrationHandler {
     /**
      * @brief Constructor with a variable list of possible parameters.
      * @param title Title of windows shown.
-     * @param distanceText2Border Distance to left and lower border of window.
+     * @param distance_text_2_Border Distance to left and lower border of window.
      * @param font Font of description text.
-     * @param textScale Scale of description text.
-     * @param textColor Color of description text.
-     * @param textThickness Thickness of description text.
+     * @param text_scale Scale of description text.
+     * @param text_color Color of description text.
+     * @param text_thickness Thickness of description text.
      */
     CalibrationHandler(std::string title = "Calibration",
-                       uint16_t distanceText2Border = 10,
+                       uint16_t distance_text_2_Border = 10,
                        uint8_t font = cv::FONT_HERSHEY_SIMPLEX,
-                       float textScale = 1.2,
-                       cv::Scalar textColor = cv::Scalar(255, 255, 0),
-                       uint8_t textThickness = 2);
+                       float text_scale = 1.2,
+                       cv::Scalar text_color = cv::Scalar(255, 255, 0),
+                       uint8_t text_thickness = 2);
 
     /**
      * @brief Destoying object.
@@ -87,137 +87,137 @@ class CalibrationHandler {
      * histograms, factors for predictions are calculated using eigens BDCSVD.
      * @param img Image used to visualize steps and to get values for
      * calibration.
-     * @param optimalValuesIntern Internal saved calculated optimal values.
-     * @param errorFactorsIntern Factors to calculate prediction of dark color
+     * @param optimal_values_intern Internal saved calculated optimal values.
+     * @param error_factors_intern Factors to calculate prediction of dark color
      * spectrum.
      * @return Acception of new values.
      */
     bool calibrate(cv::Mat *img,
-                   std::vector<double> *const optimalValuesIntern,
-                   std::vector<double> *const errorFactorsIntern);
+                   std::vector<double> *const optimal_values_intern,
+                   std::vector<double> *const error_factors_intern);
 
     /**
      * @brief Set title of shown window.
      * @param title Title of shown window.
      */
-    void setTitle(const std::string &title);
+    void set_title(const std::string &title);
 
     /**
      * @brief Set font of explanation text.
      * @param font Font of explanation text.
      */
-    void setFont(const uint8_t font);
+    void set_font(const uint8_t font);
 
     /**
      * @brief Set color of explanation text.
-     * @param textColor Color of explanation text.
+     * @param text_color Color of explanation text.
      */
-    void setTextColor(const cv::Scalar textColor);
+    void set_text_color(const cv::Scalar text_color);
 
     /**
      * @brief Set scale of explanation text.
-     * @param textScale Scale of explanation text.
+     * @param text_scale Scale of explanation text.
      */
-    void setTextScale(float textScale);
+    void set_text_scale(float text_scale);
 
     /**
      * @brief Set thickness of explanation text.
-     * @param textThickness Thickness of explanation text.
+     * @param text_thickness Thickness of explanation text.
      */
-    void setTextThickness(const uint8_t textThickness);
+    void set_text_thickness(const uint8_t text_thickness);
 
     /**
      * @brief Set maximum of iterations in calibration of error factors.
-     * @param maxIterationFactors Max. iterations in calibration of error
+     * @param max_iteration_factors Max. iterations in calibration of error
      * factors.
      */
-    void setMaxIterationFactors(const uint16_t maxIterationFactors);
+    void set_max_iteration_factors(const uint16_t max_iteration_factors);
 
     /**
      * @brief Set minimum of false positives in factor calibration.
-     * @param minErrorFactors Minimum of false positives in factor calibration.
+     * @param min_error_factors Minimum of false positives in factor calibration.
      */
-    void setMinErrorFactors(const double minErrorFactors);
+    void set_min_error_factors(const double min_error_factors);
 
     /**
      * @brief Set minimum border to finish calibration of factors.
-     * @param minCorrectionFactors Factors Minimum correction border to finish
+     * @param min_correction_factors Factors Minimum correction border to finish
      * calibration of factors.
      */
-    void setMinCorrectionFactors(const double minCorrectionFactors);
+    void set_min_correction_factors(const double min_correction_factors);
 
     /**
      * @brief Set start index of positive values in matrix of input points.
-     * @param startIdxPositives Start index of positives in matrix of input
+     * @param start_idx_positives Start index of positives in matrix of input
      * points.
      */
-    void setStartIdxPositives(const uint64_t startIdxPositives);
+    void set_start_idx_positives(const uint64_t start_idx_positives);
 
     /**
      * @brief Set distance of negative colors picked in image.
-     * @param negDist Distance of negative colors picked in image.
+     * @param neg_dist Distance of negative colors picked in image.
      */
-    void setNegDist(const uint8_t negDist);
+    void set_neg_dist(const uint8_t neg_dist);
 
     /**
      * @brief Set distance of positive colors picked in image.
-     * @param posDist Distance of positive colors picked in image.
+     * @param pos_dist Distance of positive colors picked in image.
      */
-    void setPosDist(const uint8_t posDist);
+    void set_pos_dist(const uint8_t pos_dist);
 
     /**
      * @brief Get title of shown window.
      * @return Title of shown window.
      */
-    std::string getTitle() const;
+    std::string get_title() const;
 
     /**
      * @brief Get font of shown explanation text.
      * @return Font of shown explanation text.
      */
-    uint8_t getFont() const;
+    uint8_t get_font() const;
 
     /**
      * @brief Get color of explanation text.
      * @return Color of explanation text.
      */
-    cv::Scalar getTextColor() const;
+    cv::Scalar get_text_color() const;
 
     /**
      * @brief Get scale of explanation text.
      * @return Scale of explanation text.
      */
-    float getTextScale() const;
+    float get_text_scale() const;
 
     /**
      * @brief Get thickness of explanation text.
      * @return Thickness of explanation text.
      */
-    uint8_t getTextThickness() const;
+    uint8_t get_text_thickness() const;
 
     /**
      * @brief Get maximum iterations in calculation of optimal values.
      * @return Maximum iterations in calculation of optimal values.
      */
-    uint16_t getMaxIterationOptimalValues() const;
+    uint16_t get_max_iteration_optimal_values() const;
 
     /**
      * @brief Get maximum iterations in calculation of error factors.
      * @return Maximum iterations in calculation of error factors.
      */
-    uint16_t getMaxIterationFactors() const;
+    uint16_t get_max_iteration_factors() const;
 
     /**
      * @brief Get minimal false positives in calculation needed to stop.
      * @return Minimal false positives in calculation needed to stop.
      */
-    double getMinErrorOptimalValues() const;
+    double get_min_error_optimal_values() const;
 
     /**
      * @brief Get minimal false positives in calculation needed to stop.
      * @return Minimal false positives in calculation needed to stop.
      */
-    double getMinErrorFactors() const;
+    double get_min_error_factors() const;
 
     /**
      * @brief Get minimal correction border needed to stop calculation of
@@ -225,32 +225,32 @@ class CalibrationHandler {
      * @return Minimal correction border needed to stop calculation of optimal
      * values.
      */
-    double getMinCorrectionOptimalValues() const;
+    double get_min_correction_optimal_values() const;
 
     /**
      * @brief Get minimal correction border needed to stop calculation of
      * factors.
      * @return Minimal correction border needed to stop calculation of factors.
      */
-    double getMinCorrectionFactors() const;
+    double get_min_correction_factors() const;
 
     /**
      * @brief Get start index of positives in matrix of input points.
      * @return Start index of positives in matrix of input points.
      */
-    uint64_t getStartIdxPositives() const;
+    uint64_t get_start_idx_positives() const;
 
     /**
      * @brief Get distance of negative colors picked in image.
      * @return Distance of negative colors picked in image.
      */
-    uint8_t getNegDist() const;
+    uint8_t get_neg_dist() const;
 
     /**
      * @brief Get distance of positive colors picked in image.
      * @return Distance of positive colors picked in image.
      */
-    uint8_t getPosDist() const;
+    uint8_t get_pos_dist() const;
 
   private:
     /**
@@ -259,27 +259,27 @@ class CalibrationHandler {
      * @param img Image to draw rectangle.
      * @return Returns false for abort.
      */
-    bool drawRectangle(std::string description, cv::Mat *img);
+    bool draw_rectangle(std::string description, cv::Mat *img);
 
     /**
      * @brief Find min. and max. x- and y-values of a rectangle.
      * @return tuple Min and max values of roi.
      */
     std::tuple<uint16_t, uint16_t, uint16_t, uint16_t>
-    findMinMaxXYAndEmptySquare();
+    find_min_max_xy_and_empty_square();
 
     /**
      * @brief Calculate probability to be searched color.
      * @param err2 Squared error used to calculate probability.
      * @return Calculated probability of being searched color.
      */
-    //    double getProbability(const double squaredError);
-    double getProbability(const int16_t errHue,
-                          const int16_t errSat,
-                          const int16_t errVal,
-                          const double factorHue,
-                          const double factorSat,
-                          const double factorVal);
+    //    double get_probability(const double squared_error);
+    double get_probability(const int16_t err_hue,
+                          const int16_t err_sat,
+                          const int16_t err_val,
+                          const double factor_hue,
+                          const double factor_sat,
+                          const double factor_val);
 
     /**
      * @brief Predict pixel being bright or dark searched color. Use higher
@@ -288,7 +288,7 @@ class CalibrationHandler {
      * @param col Column of pixel.
      * @return Better pobability of being color.
      */
-    double getPrediction(const uint16_t &row, const uint16_t &col);
+    double get_prediction(const uint16_t &row, const uint16_t &col);
 
     /**
      * @brief Calculate values to predict being searched color or not using
@@ -301,46 +301,46 @@ class CalibrationHandler {
      * color.
      * @return True, if no error occured.
      */
-    bool calculateFactors();
+    bool calculate_factors();
 
     /**
      * @brief Check the correction of factors.
      * @return True if the correction is small enough, else false.
      */
-    bool checkCorrectionOfFactors(const Eigen::VectorXd &dx,
-                                  const bool &withoutHue);
+    bool check_correction_of_factors(const Eigen::VectorXd &dx,
+                                  const bool &without_hue);
 
     /**
      * @brief Visualization of predicted result and user decision to accept new
      * values or decline.
      * @return User decision, if values should be used or older values are kept.
      */
-    bool visualizeResult(cv::Mat *const img);
+    bool visualize_result(cv::Mat *const img);
 
     /**
      * @brief Calculate number of false positives.
-     * @param startGoodValues End of calculation. Only false positives are
+     * @param start_good_values End of calculation. Only false positives are
      * interesting.
      * @return Number of false positives.
      */
-    uint64_t getFalsePositives(const uint64_t &startGoodValues);
+    uint64_t get_false_positives(const uint64_t &start_good_values);
 
     /**
      * @brief Calculate number of false negatives.
-     * @param startGoodValues End of calculation. Only false positives are
+     * @param start_good_values End of calculation. Only false positives are
      * interesting.
      * @return Number of false negatives.
      */
-    uint64_t getFalseNegatives(const uint64_t &startGoodValues);
+    uint64_t get_false_negatives(const uint64_t &start_good_values);
 
     /**
      * @brief Fill bright and dark matrices with bad values.
-     * @param hsvCols Number of cols in image.
+     * @param hsv_cols Number of cols in image.
      * @param row Number of row of pixel.
      * @param col Number of column of pixel.
      * @param counter Index in matrices to store pixel values.
      */
-    void fillMatricesWithBadValues(const uint16_t &hsvCols,
+    void fill_matrices_with_bad_values(const uint16_t &hsv_cols,
                                    const uint16_t &row,
                                    const uint16_t &col,
                                    const uint64_t &pos);
@@ -350,7 +350,7 @@ class CalibrationHandler {
      * @param row Row of point in image.
      * @param col Column of point in image.
      */
-    void addPointInImg(const uint16_t row, const uint16_t col);
+    void add_point_in_img(const uint16_t row, const uint16_t col);
 
     /**
      * @brief Function to handle mouse callback in image.
@@ -358,22 +358,22 @@ class CalibrationHandler {
      * @param x X-coordinate in image.
      * @param y Y-coordinate in image.
      */
-    void clickAndCrop(int event, int x, int y);
+    void click_and_crop(int event, int x, int y);
 
     /**
-     * @brief OpenCV can not handle a member function. This is a hack around to
-     * use member variables in mouse callback. Needed to use own clickAndCrop.
+     * @brief Open_c_v can not handle a member function. This is a hack around to
+     * use member variables in mouse callback. Needed to use own click_and_crop.
      * @param event Mouse event.
      * @param x X-coordinate in image.
      * @param y Y-coordinate in image.
      * @param flags Keys used.
-     * @param userdata Additional data given in setMouseCallback.
+     * @param userdata Additional data given in set_mouse_callback.
      */
     static void
-    clickAndCrop(int event, int x, int y, int flags, void *userdata);
+    click_and_crop(int event, int x, int y, int flags, void *userdata);
 
-    // Used for clickAndCrop
-    std::vector<cv::Point> squarePoints;
+    // Used for click_and_crop
+    std::vector<cv::Point> square_points;
 
     const int16_t HSV_CHANNELS = 3;
     const int16_t KEY_ACCEPT = 13;
@@ -385,34 +385,34 @@ class CalibrationHandler {
     const double START_VALUE_FACTORS = 1e-3;
     const uint8_t WAIT_TIME = 20;
 
-    cv::Mat imgCopy;
+    cv::Mat img_copy;
     std::string title;
-    uint16_t distanceText2Border;
+    uint16_t distance_text_2_Border;
     uint8_t font;
-    float textScale;
-    cv::Scalar textColor;
-    uint8_t textThickness;
-    bool drawActive;
+    float text_scale;
+    cv::Scalar text_color;
+    uint8_t text_thickness;
+    bool draw_active;
 
-    uint8_t negDist;
-    uint8_t posDist;
+    uint8_t neg_dist;
+    uint8_t pos_dist;
 
-    cv::Scalar badColor;
-    cv::Scalar goodColor;
+    cv::Scalar bad_color;
+    cv::Scalar good_color;
 
-    uint8_t *hsvPtr;
-    Matrix8u hsvValues;
+    uint8_t *hsv_ptr;
+    Matrix8u hsv_values;
     Eigen::VectorXd results;
-    std::vector<Matrix8u> allGoodValues;
+    std::vector<Matrix8u> all_good_values;
 
-    uint64_t startIdxPositives;
+    uint64_t start_idx_positives;
 
-    double minErrorFactors;
-    double minCorrectionFactors;
-    uint16_t maxIterationFactors;
+    double min_error_factors;
+    double min_correction_factors;
+    uint16_t max_iteration_factors;
 
-    Eigen::Vector3d optimalValuesIntern;
-    Eigen::Vector3d errorFactorsIntern;
+    Eigen::Vector3d optimal_values_intern;
+    Eigen::Vector3d error_factors_intern;
 };
 
 #endif // CODE_INCLUDE_CALIBRATIONHANDLER_H_

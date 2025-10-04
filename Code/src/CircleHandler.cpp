@@ -1,6 +1,6 @@
 // Modified MIT License
 //
-// Copyright (c) 2019 tgwaAo
+// Copyright (c) 2019 tgwa_ao
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -39,16 +39,16 @@ CircleHandler::CircleHandler() {
     CircleHandler(10, 10, std::vector<float>(3, 3), 0, 640, 480);
 }
 
-CircleHandler::CircleHandler(const uint8_t numCircles,
+CircleHandler::CircleHandler(const uint8_t num_circles,
                              const uint8_t radius,
-                             const std::vector<float> &circleTimeStates,
+                             const std::vector<float> &circle_time_states,
                              const cv::Scalar& color,
                              const uint16_t width,
                              const uint16_t height) {
-    if (circleTimeStates.size() == SIZE_OF_TIME_STATES) {
-        this->circleTimeStates = circleTimeStates;
+    if (circle_time_states.size() == SIZE_OF_TIME_STATES) {
+        this->circle_time_states = circle_time_states;
     } else {
-        this->circleTimeStates = std::vector<float>(3, 10);
+        this->circle_time_states = std::vector<float>(3, 10);
     }
 
     this->radius = radius;
@@ -57,75 +57,75 @@ CircleHandler::CircleHandler(const uint8_t numCircles,
     std::random_device rd;
     eng = std::mt19937(rd());
     // Use an index to select different positions.
-    randomLeftRightIdx =
+    random_left_right_idx =
         std::uniform_int_distribution<uint16_t>(
             0,
             std::round((width - 2 * radius) / (2 * radius)));
 
-    randomUpDownIdx =
+    random_up_down_idx =
         std::uniform_int_distribution<uint16_t>(0,
                 std::round((height - 2 * radius) / (2 * radius)));
 
-    allCircles.resize(numCircles, Circle {cv::Point(0, 0), clock(), 0});
+    all_circles.resize(num_circles, Circle {cv::Point(0, 0), clock(), 0});
 
-    std::uniform_int_distribution<uint8_t> randomState(0, 2);
+    std::uniform_int_distribution<uint8_t> random_state(0, 2);
 
-    for (uint8_t i = 0; i < allCircles.size(); ++i) {
-        allCircles[i].point.x = radius + 2 * radius * randomLeftRightIdx(eng);
-        allCircles[i].point.y = radius + 2 * radius * randomUpDownIdx(eng);
-        allCircles[i].status = randomState(eng);
+    for (uint8_t i = 0; i < all_circles.size(); ++i) {
+        all_circles[i].point.x = radius + 2 * radius * random_left_right_idx(eng);
+        all_circles[i].point.y = radius + 2 * radius * random_up_down_idx(eng);
+        all_circles[i].status = random_state(eng);
     }
 }
 
 CircleHandler::~CircleHandler() {}
 
-void CircleHandler::updateCircles(cv::Mat *const img) {
-    float leftSeconds;
-    cv::Scalar usedColor;
+void CircleHandler::update_circles(cv::Mat *const img) {
+    float left_seconds;
+    cv::Scalar used_color;
 
-    for (uint8_t i = 0; i < allCircles.size(); ++i) {
-        leftSeconds =
-            circleTimeStates[allCircles[i].status]
-            - static_cast<float>(clock() - allCircles[i].timerStart)
+    for (uint8_t i = 0; i < all_circles.size(); ++i) {
+        left_seconds =
+            circle_time_states[all_circles[i].status]
+            - static_cast<float>(clock() - all_circles[i].timer_start)
             / CLOCKS_PER_SEC;
 
-        if (leftSeconds <= 0) {
-            if (allCircles[i].status == SIZE_OF_TIME_STATES - 1) {
-                newPos(i);
+        if (left_seconds <= 0) {
+            if (all_circles[i].status == SIZE_OF_TIME_STATES - 1) {
+                new_pos(i);
             } else {
-                allCircles[i].status += 1;
-                allCircles[i].timerStart = clock();
+                all_circles[i].status += 1;
+                all_circles[i].timer_start = clock();
             }
         }
 
-        if (allCircles[i].status != 0) {
-            usedColor.val[0] = color.val[0] * 0.5 * allCircles[i].status;
-            usedColor.val[1] = color.val[1] * 0.5 * allCircles[i].status;
-            usedColor.val[2] = color.val[2] * 0.5 * allCircles[i].status;
+        if (all_circles[i].status != 0) {
+            used_color.val[0] = color.val[0] * 0.5 * all_circles[i].status;
+            used_color.val[1] = color.val[1] * 0.5 * all_circles[i].status;
+            used_color.val[2] = color.val[2] * 0.5 * all_circles[i].status;
             cv::circle(
                 *img,
-                allCircles[i].point,
+                all_circles[i].point,
                 radius,
-                usedColor,
+                used_color,
                 -1);
         }
     }
 }
 
-uint8_t CircleHandler::checkHit(const uint16_t x, const uint16_t y) {
+uint8_t CircleHandler::check_hit(const uint16_t x, const uint16_t y) {
     double dist;
     uint16_t hits = 0;
 
-    for (uint8_t i = 0; i < allCircles.size(); ++i) {
-        if (allCircles[i].status == 2) {
+    for (uint8_t i = 0; i < all_circles.size(); ++i) {
+        if (all_circles[i].status == 2) {
             dist =
                 sqrt(
-                    pow(x - allCircles[i].point.x, 2)
-                    + pow(y - allCircles[i].point.y, 2));
+                    pow(x - all_circles[i].point.x, 2)
+                    + pow(y - all_circles[i].point.y, 2));
 
             if (dist <= radius) {
                 ++hits;
-                newPos(i);
+                new_pos(i);
             }
         }
     }
@@ -133,36 +133,36 @@ uint8_t CircleHandler::checkHit(const uint16_t x, const uint16_t y) {
     return hits;
 }
 
-void CircleHandler::newPos(uint8_t idx) {
-    allCircles[idx].point.x = radius + 2 * radius * randomLeftRightIdx(eng);
-    allCircles[idx].point.y = radius + 2 * radius * randomUpDownIdx(eng);
-    allCircles[idx].timerStart = clock();
-    allCircles[idx].status = 0;
+void CircleHandler::new_pos(uint8_t idx) {
+    all_circles[idx].point.x = radius + 2 * radius * random_left_right_idx(eng);
+    all_circles[idx].point.y = radius + 2 * radius * random_up_down_idx(eng);
+    all_circles[idx].timer_start = clock();
+    all_circles[idx].status = 0;
 }
 
-void CircleHandler::setCircleTimeStates(
-    const std::vector<float>& circleTimeStates) {
-    if (circleTimeStates.size() == SIZE_OF_TIME_STATES) {
-        this->circleTimeStates = circleTimeStates;
+void CircleHandler::set_circle_time_states(
+    const std::vector<float>& circle_time_states) {
+    if (circle_time_states.size() == SIZE_OF_TIME_STATES) {
+        this->circle_time_states = circle_time_states;
     }
 }
 
-void CircleHandler::setColor(const cv::Scalar& color) {
+void CircleHandler::set_color(const cv::Scalar& color) {
     this->color = color;
 }
 
-void CircleHandler::setRadius(const uint8_t radius) {
+void CircleHandler::set_radius(const uint8_t radius) {
     this->radius = radius;
 }
 
-std::vector<float> CircleHandler::getCircleTimeStates() const {
-    return circleTimeStates;
+std::vector<float> CircleHandler::get_circle_time_states() const {
+    return circle_time_states;
 }
 
-cv::Scalar CircleHandler::getColor() const {
+cv::Scalar CircleHandler::get_color() const {
     return color;
 }
 
-uint8_t CircleHandler::getRadius() const {
+uint8_t CircleHandler::get_radius() const {
     return radius;
 }
