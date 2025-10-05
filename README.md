@@ -10,9 +10,20 @@ THIS GAME DOES NOT CHECK YOUR SURROUNDINGS. PLEASE BE CAREFUL WHILE PLAYING.
 
 ## Before gameplay
 
+## Build
+1. Create a folder/directory called build.
+2. Switch into that folder/directory.
+3. Run cmake:  
+    - With executable:  
+    ```cmake ..```
+    - Without executable (just build the library):  
+    ```cmake  -DBUILD_EXAMPLES=OFF ..```
+4. Run make  
+```make```
+
 ### Check your surroundings
 
-The game will be played 1-2 meters in front of the camera and used the complete space of the seen image. Please make sure to have enough space!
+The game will be played 0.5-2 meters in front of the camera and used the complete space of the seen image. Please make sure to have enough space!
 
 ### Camera choice
 
