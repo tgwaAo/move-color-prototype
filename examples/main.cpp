@@ -48,9 +48,9 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/imgcodecs.hpp>
 
-#include "CalibrationHandler.h"
-#include "CircleHandler.h"
-#include "ParticleWeighting.h"
+#include "calibration_handler.h"
+#include "circle_handler.h"
+#include "particle_weighting.h"
 
 /**
  * @brief A single play.

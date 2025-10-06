@@ -10,7 +10,14 @@ include_directories(
     "${CMAKE_SOURCE_DIR}/include"
 )
 
-add_library(${LIB_NAME} include/ParticleWeighting.h include/CalibrationHandler.h include/CircleHandler.h src/ParticleWeighting.cpp src/CalibrationHandler.cpp src/CircleHandler.cpp)
+add_library(${LIB_NAME} 
+    include/circle_handler.h
+    include/calibration_handler.h
+    include/particle_weighting.h
+    src/particle_weighting.cpp
+    src/calibration_handler.cpp
+    src/circle_handler.cpp
+)
 target_compile_options(${LIB_NAME} PRIVATE -Wall -Wextra)
 
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
