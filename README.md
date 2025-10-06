@@ -18,8 +18,8 @@ THIS GAME DOES NOT CHECK YOUR SURROUNDINGS. PLEASE BE CAREFUL WHILE PLAYING.
     ```cmake ..```
     - Without executable (just build the library):  
     ```cmake  -DBUILD_EXAMPLES=OFF ..```
-4. Run make  
-```make```
+4. Run make:  
+    ```make```
 
 ### Check your surroundings
 
