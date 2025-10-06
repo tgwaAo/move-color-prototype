@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['iscolor_123',['isColor',['../class_particle_weighting.html#ae681ef175c7fe9f86eba0a1ede2bc7a9',1,'ParticleWeighting']]]
+  ['is_5fcolor_123',['is_color',['../class_particle_weighting.html#aeccd52e10748475c6fc7b88e26ec39d1',1,'ParticleWeighting']]]
 ];

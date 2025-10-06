@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['particleweighting_2ecpp_89',['ParticleWeighting.cpp',['../_particle_weighting_8cpp.html',1,'']]],
-  ['particleweighting_2eh_90',['ParticleWeighting.h',['../_particle_weighting_8h.html',1,'']]]
+  ['particle_5fweighting_2ecpp_89',['particle_weighting.cpp',['../particle__weighting_8cpp.html',1,'']]],
+  ['particle_5fweighting_2eh_90',['particle_weighting.h',['../particle__weighting_8h.html',1,'']]]
 ];

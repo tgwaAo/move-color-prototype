@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Move_Color_Prototype: Code/main.cpp File Reference</title>
+<title>move-color-prototype: examples/main.cpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Move_Color_Prototype
+   <div id="projectname">move-color-prototype
    </div>
   </td>
  </tr>
@@ -61,12 +61,11 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_23fdee2f6995db16c755697cdf620cf4.html">Code</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_d28a4824dc47e487b107a5db32ef43c4.html">examples</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#define-members">Macros</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">main.cpp File Reference</div>  </div>
@@ -76,62 +75,41 @@ $(function() {
 <code>#include &lt;dirent.h&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
 <code>#include &lt;fstream&gt;</code><br />
+<code>#include &lt;iostream&gt;</code><br />
+<code>#include &lt;sstream&gt;</code><br />
 <code>#include &lt;iomanip&gt;</code><br />
-<code>#include &lt;random&gt;</code><br />
-<code>#include &lt;unistd.h&gt;</code><br />
 <code>#include &lt;opencv2/core.hpp&gt;</code><br />
 <code>#include &lt;opencv2/highgui.hpp&gt;</code><br />
 <code>#include &lt;opencv2/videoio.hpp&gt;</code><br />
 <code>#include &lt;opencv2/imgproc.hpp&gt;</code><br />
 <code>#include &lt;opencv2/imgcodecs.hpp&gt;</code><br />
-<code>#include &quot;<a class="el" href="_calibration_handler_8h_source.html">CalibrationHandler.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="_circle_handler_8h_source.html">CircleHandler.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="_particle_weighting_8h_source.html">ParticleWeighting.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="calibration__handler_8h_source.html">calibration_handler.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="circle__handler_8h_source.html">circle_handler.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="particle__weighting_8h_source.html">particle_weighting.h</a>&quot;</code><br />
 </div><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
-Macros</h2></td></tr>
-<tr class="memitem:af0c0d1034a71f8aa3a08cda83c9d4e7a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8cpp.html#af0c0d1034a71f8aa3a08cda83c9d4e7a">GetCurrentDir</a>&#160;&#160;&#160;getcwd</td></tr>
-<tr class="separator:af0c0d1034a71f8aa3a08cda83c9d4e7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ab3ffbebd9313c9cd97772c8ed220d959"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8cpp.html#ab3ffbebd9313c9cd97772c8ed220d959">gameplay</a> (cv::VideoCapture *cap, cv::Mat *mirror, const std::string &amp;title, const uint8_t corner2center, <a class="el" href="class_circle_handler.html">CircleHandler</a> *posHandler, <a class="el" href="class_circle_handler.html">CircleHandler</a> *negHandler, const uint8_t maxDistance, std::vector&lt; std::vector&lt; <a class="el" href="class_particle_weighting.html">ParticleWeighting</a> &gt;&gt; *weightingMatrix)</td></tr>
-<tr class="memdesc:ab3ffbebd9313c9cd97772c8ed220d959"><td class="mdescLeft">&#160;</td><td class="mdescRight">A single play.  <a href="main_8cpp.html#ab3ffbebd9313c9cd97772c8ed220d959">More...</a><br /></td></tr>
-<tr class="separator:ab3ffbebd9313c9cd97772c8ed220d959"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58b7ef088c0705909aaef3c1fb9130df"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8cpp.html#a58b7ef088c0705909aaef3c1fb9130df">photoWithTimer</a> (cv::VideoCapture *cap, cv::Mat *image, const std::string &amp;title, int16_t keyAbort)</td></tr>
-<tr class="memdesc:a58b7ef088c0705909aaef3c1fb9130df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Take a photo after 3 seconds.  <a href="main_8cpp.html#a58b7ef088c0705909aaef3c1fb9130df">More...</a><br /></td></tr>
-<tr class="separator:a58b7ef088c0705909aaef3c1fb9130df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5bcab53bb60fb9bdccc52451becca0f2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8cpp.html#a5bcab53bb60fb9bdccc52451becca0f2">waitAndShowSeconds</a> (cv::VideoCapture *cap, cv::Mat *image, const std::string &amp;title, int16_t keyAbort, const uint8_t &amp;secondsToWait)</td></tr>
-<tr class="memdesc:a5bcab53bb60fb9bdccc52451becca0f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Count down and display left seconds.  <a href="main_8cpp.html#a5bcab53bb60fb9bdccc52451becca0f2">More...</a><br /></td></tr>
-<tr class="separator:a5bcab53bb60fb9bdccc52451becca0f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae574b8bc95ef1b8f099a93a0d0dea88a"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8cpp.html#ae574b8bc95ef1b8f099a93a0d0dea88a">loadHighscore</a> (const std::string &amp;filename, int16_t hits)</td></tr>
-<tr class="memdesc:ae574b8bc95ef1b8f099a93a0d0dea88a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load last highscore and return current highscore.  <a href="main_8cpp.html#ae574b8bc95ef1b8f099a93a0d0dea88a">More...</a><br /></td></tr>
-<tr class="separator:ae574b8bc95ef1b8f099a93a0d0dea88a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5838d7289b6193c05484e5529cfd7212"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8cpp.html#a5838d7289b6193c05484e5529cfd7212">saveCalibration</a> (const std::string &amp;filename, const std::vector&lt; double &gt; &amp;hsvColor, const std::vector&lt; double &gt; &amp;factorsColor)</td></tr>
-<tr class="memdesc:a5838d7289b6193c05484e5529cfd7212"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save calibration in a txt file.  <a href="main_8cpp.html#a5838d7289b6193c05484e5529cfd7212">More...</a><br /></td></tr>
-<tr class="separator:a5838d7289b6193c05484e5529cfd7212"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebb83e71efb3526bb487425e38a0c839"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8cpp.html#aebb83e71efb3526bb487425e38a0c839">gameplay</a> (cv::VideoCapture *cap, cv::Mat *mirror, const std::string &amp;title, const uint8_t corner_2_center, <a class="el" href="class_circle_handler.html">CircleHandler</a> *pos_handler, <a class="el" href="class_circle_handler.html">CircleHandler</a> *neg_handler, const uint8_t max_distance, std::vector&lt; std::vector&lt; <a class="el" href="class_particle_weighting.html">ParticleWeighting</a> &gt;&gt; *weighting_matrix)</td></tr>
+<tr class="memdesc:aebb83e71efb3526bb487425e38a0c839"><td class="mdescLeft">&#160;</td><td class="mdescRight">A single play.  <a href="main_8cpp.html#aebb83e71efb3526bb487425e38a0c839">More...</a><br /></td></tr>
+<tr class="separator:aebb83e71efb3526bb487425e38a0c839"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeaad1e188cb36effea865ba8f6448b2b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8cpp.html#aeaad1e188cb36effea865ba8f6448b2b">photo_with_timer</a> (cv::VideoCapture *cap, cv::Mat *image, const std::string &amp;title, int16_t key_abort)</td></tr>
+<tr class="memdesc:aeaad1e188cb36effea865ba8f6448b2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Take a photo after 3 seconds.  <a href="main_8cpp.html#aeaad1e188cb36effea865ba8f6448b2b">More...</a><br /></td></tr>
+<tr class="separator:aeaad1e188cb36effea865ba8f6448b2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a107100a1be45e0ebdb88bec362320179"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8cpp.html#a107100a1be45e0ebdb88bec362320179">wait_and_show_seconds</a> (cv::VideoCapture *cap, cv::Mat *image, const std::string &amp;title, int16_t key_abort, const uint8_t &amp;seconds_to_wait)</td></tr>
+<tr class="memdesc:a107100a1be45e0ebdb88bec362320179"><td class="mdescLeft">&#160;</td><td class="mdescRight">Count down and display left seconds.  <a href="main_8cpp.html#a107100a1be45e0ebdb88bec362320179">More...</a><br /></td></tr>
+<tr class="separator:a107100a1be45e0ebdb88bec362320179"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0dd6e7c18eaeb1819d4f4eb884db8121"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8cpp.html#a0dd6e7c18eaeb1819d4f4eb884db8121">load_highscore</a> (const std::string &amp;filename, int16_t hits)</td></tr>
+<tr class="memdesc:a0dd6e7c18eaeb1819d4f4eb884db8121"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load last highscore and return current highscore.  <a href="main_8cpp.html#a0dd6e7c18eaeb1819d4f4eb884db8121">More...</a><br /></td></tr>
+<tr class="separator:a0dd6e7c18eaeb1819d4f4eb884db8121"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef99e6a0178d96dce255df0d9994e51a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8cpp.html#aef99e6a0178d96dce255df0d9994e51a">save_calibration</a> (const std::string &amp;filename, const std::vector&lt; double &gt; &amp;hsv_color, const std::vector&lt; double &gt; &amp;factors_color)</td></tr>
+<tr class="memdesc:aef99e6a0178d96dce255df0d9994e51a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save calibration in a txt file.  <a href="main_8cpp.html#aef99e6a0178d96dce255df0d9994e51a">More...</a><br /></td></tr>
+<tr class="separator:aef99e6a0178d96dce255df0d9994e51a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a> ()</td></tr>
 <tr class="separator:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="af0c0d1034a71f8aa3a08cda83c9d4e7a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af0c0d1034a71f8aa3a08cda83c9d4e7a">&#9670;&nbsp;</a></span>GetCurrentDir</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define GetCurrentDir&#160;&#160;&#160;getcwd</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Start of a little game. The goal is to hit the bright green circles and avoid the bright red circles. The dark green and red circles are not active and will turn bright later. </p>
-
-</div>
-</div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="ab3ffbebd9313c9cd97772c8ed220d959"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab3ffbebd9313c9cd97772c8ed220d959">&#9670;&nbsp;</a></span>gameplay()</h2>
+<a id="aebb83e71efb3526bb487425e38a0c839"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aebb83e71efb3526bb487425e38a0c839">&#9670;&nbsp;</a></span>gameplay()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -158,31 +136,31 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const uint8_t&#160;</td>
-          <td class="paramname"><em>corner2center</em>, </td>
+          <td class="paramname"><em>corner_2_center</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="class_circle_handler.html">CircleHandler</a> *&#160;</td>
-          <td class="paramname"><em>posHandler</em>, </td>
+          <td class="paramname"><em>pos_handler</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="class_circle_handler.html">CircleHandler</a> *&#160;</td>
-          <td class="paramname"><em>negHandler</em>, </td>
+          <td class="paramname"><em>neg_handler</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const uint8_t&#160;</td>
-          <td class="paramname"><em>maxDistance</em>, </td>
+          <td class="paramname"><em>max_distance</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::vector&lt; std::vector&lt; <a class="el" href="class_particle_weighting.html">ParticleWeighting</a> &gt;&gt; *&#160;</td>
-          <td class="paramname"><em>weightingMatrix</em>&#160;</td>
+          <td class="paramname"><em>weighting_matrix</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -193,16 +171,16 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>A single play. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Start of a little game. The goal is to hit the bright green circles and avoid the bright red circles. The dark green and red circles are not active and will turn bright later. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">cap</td><td>Camera for acquisition of pictures. </td></tr>
     <tr><td class="paramname">mirror</td><td>Image for visualization. </td></tr>
     <tr><td class="paramname">title</td><td>Title of game play. </td></tr>
-    <tr><td class="paramname">corner2center</td><td>Distance from center of particle weighting to its start. </td></tr>
-    <tr><td class="paramname">posHandler</td><td>Handler of positive circles. </td></tr>
-    <tr><td class="paramname">negHandler</td><td>Handler of negative circles. </td></tr>
-    <tr><td class="paramname">maxDistance</td><td>Distance of one particle weighting. </td></tr>
-    <tr><td class="paramname">weightingMatrix</td><td>Matrix of particle weightings. </td></tr>
+    <tr><td class="paramname">corner_2_center</td><td>Distance from center of particle weighting to its start. </td></tr>
+    <tr><td class="paramname">pos_handler</td><td>Handler of positive circles. </td></tr>
+    <tr><td class="paramname">neg_handler</td><td>Handler of negative circles. </td></tr>
+    <tr><td class="paramname">max_distance</td><td>Distance of one particle weighting. </td></tr>
+    <tr><td class="paramname">weighting_matrix</td><td>Matrix of particle weightings. </td></tr>
   </table>
   </dd>
 </dl>
@@ -210,14 +188,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ae574b8bc95ef1b8f099a93a0d0dea88a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae574b8bc95ef1b8f099a93a0d0dea88a">&#9670;&nbsp;</a></span>loadHighscore()</h2>
+<a id="a0dd6e7c18eaeb1819d4f4eb884db8121"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0dd6e7c18eaeb1819d4f4eb884db8121">&#9670;&nbsp;</a></span>load_highscore()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int16_t loadHighscore </td>
+          <td class="memname">int16_t load_highscore </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>filename</em>, </td>
@@ -265,14 +243,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a58b7ef088c0705909aaef3c1fb9130df"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a58b7ef088c0705909aaef3c1fb9130df">&#9670;&nbsp;</a></span>photoWithTimer()</h2>
+<a id="aeaad1e188cb36effea865ba8f6448b2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeaad1e188cb36effea865ba8f6448b2b">&#9670;&nbsp;</a></span>photo_with_timer()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool photoWithTimer </td>
+          <td class="memname">bool photo_with_timer </td>
           <td>(</td>
           <td class="paramtype">cv::VideoCapture *&#160;</td>
           <td class="paramname"><em>cap</em>, </td>
@@ -293,7 +271,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int16_t&#160;</td>
-          <td class="paramname"><em>keyAbort</em>&#160;</td>
+          <td class="paramname"><em>key_abort</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -309,7 +287,7 @@ Functions</h2></td></tr>
     <tr><td class="paramname">cap</td><td>Camera to shot photo. </td></tr>
     <tr><td class="paramname">image</td><td>Image to save picture. </td></tr>
     <tr><td class="paramname">title</td><td>Title shown on counting down. </td></tr>
-    <tr><td class="paramname">keyAbort</td><td>Key to abort timer. </td></tr>
+    <tr><td class="paramname">key_abort</td><td>Key to abort timer. </td></tr>
   </table>
   </dd>
 </dl>
@@ -317,14 +295,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a5838d7289b6193c05484e5529cfd7212"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5838d7289b6193c05484e5529cfd7212">&#9670;&nbsp;</a></span>saveCalibration()</h2>
+<a id="aef99e6a0178d96dce255df0d9994e51a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef99e6a0178d96dce255df0d9994e51a">&#9670;&nbsp;</a></span>save_calibration()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void saveCalibration </td>
+          <td class="memname">void save_calibration </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>filename</em>, </td>
@@ -333,13 +311,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
-          <td class="paramname"><em>hsvColor</em>, </td>
+          <td class="paramname"><em>hsv_color</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
-          <td class="paramname"><em>factorsColor</em>&#160;</td>
+          <td class="paramname"><em>factors_color</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -353,22 +331,22 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">filename</td><td>Name of the calibration file. </td></tr>
-    <tr><td class="paramname">hsvColor</td><td>Vector of bright optimal values. </td></tr>
-    <tr><td class="paramname">factorsColor</td><td>Vector of bright factors. </td></tr>
+    <tr><td class="paramname">hsv_color</td><td>Vector of bright optimal values. </td></tr>
+    <tr><td class="paramname">factors_color</td><td>Vector of bright factors. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a5bcab53bb60fb9bdccc52451becca0f2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5bcab53bb60fb9bdccc52451becca0f2">&#9670;&nbsp;</a></span>waitAndShowSeconds()</h2>
+<a id="a107100a1be45e0ebdb88bec362320179"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a107100a1be45e0ebdb88bec362320179">&#9670;&nbsp;</a></span>wait_and_show_seconds()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool waitAndShowSeconds </td>
+          <td class="memname">bool wait_and_show_seconds </td>
           <td>(</td>
           <td class="paramtype">cv::VideoCapture *&#160;</td>
           <td class="paramname"><em>cap</em>, </td>
@@ -389,13 +367,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int16_t&#160;</td>
-          <td class="paramname"><em>keyAbort</em>, </td>
+          <td class="paramname"><em>key_abort</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const uint8_t &amp;&#160;</td>
-          <td class="paramname"><em>secondsToWait</em>&#160;</td>
+          <td class="paramname"><em>seconds_to_wait</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -411,8 +389,8 @@ Functions</h2></td></tr>
     <tr><td class="paramname">cap</td><td>Camera to shot photo. </td></tr>
     <tr><td class="paramname">image</td><td>Image to store the picture. </td></tr>
     <tr><td class="paramname">title</td><td>Title shown on counting down. </td></tr>
-    <tr><td class="paramname">keyAbort</td><td>Key to abort timer. </td></tr>
-    <tr><td class="paramname">secondsToWait</td><td>Seconds before function returns. </td></tr>
+    <tr><td class="paramname">key_abort</td><td>Key to abort timer. </td></tr>
+    <tr><td class="paramname">seconds_to_wait</td><td>Seconds before function returns. </td></tr>
   </table>
   </dd>
 </dl>

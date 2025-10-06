@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['getcurrentdir_162',['GetCurrentDir',['../main_8cpp.html#af0c0d1034a71f8aa3a08cda83c9d4e7a',1,'main.cpp']]]
+  ['architecture_5fid_194',['ARCHITECTURE_ID',['../_c_make_files_23_822_81_2_compiler_id_c_2_c_make_c_compiler_id_8c.html#aba35d0d200deaeb06aee95ca297acb28',1,'ARCHITECTURE_ID():&#160;CMakeCCompilerId.c'],['../_c_make_files_23_822_81_2_compiler_id_c_x_x_2_c_make_c_x_x_compiler_id_8cpp.html#aba35d0d200deaeb06aee95ca297acb28',1,'ARCHITECTURE_ID():&#160;CMakeCXXCompilerId.cpp'],['../move-color-prototype-_desktop-_debug_2_c_make_files_23_822_81_2_compiler_id_c_2_c_make_c_compiler_id_8c.html#aba35d0d200deaeb06aee95ca297acb28',1,'ARCHITECTURE_ID():&#160;CMakeCCompilerId.c'],['../move-color-prototype-_desktop-_debug_2_c_make_files_23_822_81_2_compiler_id_c_x_x_2_c_make_c_x_x_compiler_id_8cpp.html#aba35d0d200deaeb06aee95ca297acb28',1,'ARCHITECTURE_ID():&#160;CMakeCXXCompilerId.cpp']]]
 ];

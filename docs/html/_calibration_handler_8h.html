@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Move_Color_Prototype: Code/include/CalibrationHandler.h File Reference</title>
+<title>move-color-prototype: include/CalibrationHandler.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Move_Color_Prototype
+   <div id="projectname">move-color-prototype
    </div>
   </td>
  </tr>
@@ -61,7 +61,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_23fdee2f6995db16c755697cdf620cf4.html">Code</a></li><li class="navelem"><a class="el" href="dir_9c3759210dc580ae7b20d284282066a5.html">include</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -73,18 +73,15 @@ $(function() {
 <div class="title">CalibrationHandler.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p>Class to handle calibration. Marked areas of an image are used to calibrate values with eigens BDCSVD.  
-<a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;time.h&gt;</code><br />
-<code>#include &lt;math.h&gt;</code><br />
+<div class="textblock"><code>#include &lt;math.h&gt;</code><br />
+<code>#include &lt;time.h&gt;</code><br />
 <code>#include &lt;eigen3/Eigen/Dense&gt;</code><br />
-<code>#include &lt;tuple&gt;</code><br />
-<code>#include &lt;vector&gt;</code><br />
-<code>#include &lt;string&gt;</code><br />
 <code>#include &lt;fstream&gt;</code><br />
-<code>#include &lt;unordered_map&gt;</code><br />
 <code>#include &lt;random&gt;</code><br />
+<code>#include &lt;string&gt;</code><br />
+<code>#include &lt;tuple&gt;</code><br />
+<code>#include &lt;unordered_map&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
 <code>#include &lt;opencv2/opencv.hpp&gt;</code><br />
 </div>
 <p><a href="_calibration_handler_8h_source.html">Go to the source code of this file.</a></p>
@@ -101,13 +98,11 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:af48117ced6287c89edefe63bf9a5aec8"><td class="memItemLeft" align="right" valign="top">typedef Eigen::Matrix&lt; uint8_t, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_calibration_handler_8h.html#af48117ced6287c89edefe63bf9a5aec8">Matrix8u</a></td></tr>
-<tr class="memdesc:af48117ced6287c89edefe63bf9a5aec8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Matrix8u Save space with own matrix definition.  <a href="_calibration_handler_8h.html#af48117ced6287c89edefe63bf9a5aec8">More...</a><br /></td></tr>
-<tr class="separator:af48117ced6287c89edefe63bf9a5aec8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4608ec7db9b5d68f9100adee008234b"><td class="memItemLeft" align="right" valign="top">typedef Eigen::Matrix&lt; uint8_t, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_calibration_handler_8h.html#ab4608ec7db9b5d68f9100adee008234b">Matrix8u</a></td></tr>
+<tr class="memdesc:ab4608ec7db9b5d68f9100adee008234b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Matrix8u Save space with own matrix definition.  <a href="_calibration_handler_8h.html#ab4608ec7db9b5d68f9100adee008234b">More...</a><br /></td></tr>
+<tr class="separator:ab4608ec7db9b5d68f9100adee008234b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Class to handle calibration. Marked areas of an image are used to calibrate values with eigens BDCSVD. </p>
-</div><h2 class="groupheader">Macro Definition Documentation</h2>
+<h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a56e1504926ca8dfaa658bed64aa32207"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a56e1504926ca8dfaa658bed64aa32207">&#9670;&nbsp;</a></span>EIGEN_MPL2_ONLY</h2>
 
@@ -123,14 +118,14 @@ Typedefs</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Typedef Documentation</h2>
-<a id="af48117ced6287c89edefe63bf9a5aec8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af48117ced6287c89edefe63bf9a5aec8">&#9670;&nbsp;</a></span>Matrix8u</h2>
+<a id="ab4608ec7db9b5d68f9100adee008234b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4608ec7db9b5d68f9100adee008234b">&#9670;&nbsp;</a></span>Matrix8u</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef Eigen::Matrix&lt;uint8_t,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor&gt; <a class="el" href="_calibration_handler_8h.html#af48117ced6287c89edefe63bf9a5aec8">Matrix8u</a></td>
+          <td class="memname">typedef Eigen::Matrix&lt;uint8_t, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor&gt; <a class="el" href="_calibration_handler_8h.html#ab4608ec7db9b5d68f9100adee008234b">Matrix8u</a></td>
         </tr>
       </table>
 </div><div class="memdoc">

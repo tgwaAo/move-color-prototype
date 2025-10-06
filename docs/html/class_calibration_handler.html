@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Move_Color_Prototype: CalibrationHandler Class Reference</title>
+<title>move-color-prototype: CalibrationHandler Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Move_Color_Prototype
+   <div id="projectname">move-color-prototype
    </div>
   </td>
  </tr>
@@ -69,100 +69,100 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="_calibration_handler_8h_source.html">CalibrationHandler.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="calibration__handler_8h_source.html">calibration_handler.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a53b7884270d99d913142e40949d8bf5c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a53b7884270d99d913142e40949d8bf5c">CalibrationHandler</a> (std::string title=&quot;Calibration&quot;, uint16_t distanceText2Border=10, uint8_t font=cv::FONT_HERSHEY_SIMPLEX, float textScale=1.2, cv::Scalar textColor=cv::Scalar(255, 255, 0), uint8_t textThickness=2)</td></tr>
-<tr class="memdesc:a53b7884270d99d913142e40949d8bf5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor with a variable list of possible parameters.  <a href="class_calibration_handler.html#a53b7884270d99d913142e40949d8bf5c">More...</a><br /></td></tr>
-<tr class="separator:a53b7884270d99d913142e40949d8bf5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b618bcd58d16b9a2f00eb08f180faf3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a5b618bcd58d16b9a2f00eb08f180faf3">CalibrationHandler</a> (std::string title=&quot;Calibration&quot;, uint16_t distance_text_2_Border=10, uint8_t font=cv::FONT_HERSHEY_SIMPLEX, float text_scale=1.2, cv::Scalar text_color=cv::Scalar(255, 255, 0), uint8_t text_thickness=2)</td></tr>
+<tr class="memdesc:a5b618bcd58d16b9a2f00eb08f180faf3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor with a variable list of possible parameters.  <a href="class_calibration_handler.html#a5b618bcd58d16b9a2f00eb08f180faf3">More...</a><br /></td></tr>
+<tr class="separator:a5b618bcd58d16b9a2f00eb08f180faf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a71eb87df427b0d1b98f2e4e4254809d9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a71eb87df427b0d1b98f2e4e4254809d9">~CalibrationHandler</a> ()</td></tr>
 <tr class="memdesc:a71eb87df427b0d1b98f2e4e4254809d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destoying object.  <a href="class_calibration_handler.html#a71eb87df427b0d1b98f2e4e4254809d9">More...</a><br /></td></tr>
 <tr class="separator:a71eb87df427b0d1b98f2e4e4254809d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adfd01d885b4f3c62d32f66e1574bea16"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#adfd01d885b4f3c62d32f66e1574bea16">calibrate</a> (cv::Mat *img, std::vector&lt; double &gt; *const optimalValuesIntern, std::vector&lt; double &gt; *const errorFactorsIntern)</td></tr>
-<tr class="memdesc:adfd01d885b4f3c62d32f66e1574bea16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calibrates params. Values without error are found using histograms, factors for predictions are calculated using eigens BDCSVD.  <a href="class_calibration_handler.html#adfd01d885b4f3c62d32f66e1574bea16">More...</a><br /></td></tr>
-<tr class="separator:adfd01d885b4f3c62d32f66e1574bea16"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ee8292aebefa7cbe1b1af3bfa2639ee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a3ee8292aebefa7cbe1b1af3bfa2639ee">setTitle</a> (const std::string &amp;title)</td></tr>
-<tr class="memdesc:a3ee8292aebefa7cbe1b1af3bfa2639ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set title of shown window.  <a href="class_calibration_handler.html#a3ee8292aebefa7cbe1b1af3bfa2639ee">More...</a><br /></td></tr>
-<tr class="separator:a3ee8292aebefa7cbe1b1af3bfa2639ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c5fa3d250a6c78049618f7228587755"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a9c5fa3d250a6c78049618f7228587755">setFont</a> (const uint8_t font)</td></tr>
-<tr class="memdesc:a9c5fa3d250a6c78049618f7228587755"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set font of explanation text.  <a href="class_calibration_handler.html#a9c5fa3d250a6c78049618f7228587755">More...</a><br /></td></tr>
-<tr class="separator:a9c5fa3d250a6c78049618f7228587755"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab9afd27197f9211d425292dcf2b98d4d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#ab9afd27197f9211d425292dcf2b98d4d">setTextColor</a> (const cv::Scalar textColor)</td></tr>
-<tr class="memdesc:ab9afd27197f9211d425292dcf2b98d4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set color of explanation text.  <a href="class_calibration_handler.html#ab9afd27197f9211d425292dcf2b98d4d">More...</a><br /></td></tr>
-<tr class="separator:ab9afd27197f9211d425292dcf2b98d4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5f4099e0452ffadd9c75816d12cf040c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a5f4099e0452ffadd9c75816d12cf040c">setTextScale</a> (float textScale)</td></tr>
-<tr class="memdesc:a5f4099e0452ffadd9c75816d12cf040c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set scale of explanation text.  <a href="class_calibration_handler.html#a5f4099e0452ffadd9c75816d12cf040c">More...</a><br /></td></tr>
-<tr class="separator:a5f4099e0452ffadd9c75816d12cf040c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0470756bcfca4afa1ec1a0bd11dfaf41"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a0470756bcfca4afa1ec1a0bd11dfaf41">setTextThickness</a> (const uint8_t textThickness)</td></tr>
-<tr class="memdesc:a0470756bcfca4afa1ec1a0bd11dfaf41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set thickness of explanation text.  <a href="class_calibration_handler.html#a0470756bcfca4afa1ec1a0bd11dfaf41">More...</a><br /></td></tr>
-<tr class="separator:a0470756bcfca4afa1ec1a0bd11dfaf41"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af4fd19f0f331a8f8d5291e92054a39bb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#af4fd19f0f331a8f8d5291e92054a39bb">setMaxIterationFactors</a> (const uint16_t maxIterationFactors)</td></tr>
-<tr class="memdesc:af4fd19f0f331a8f8d5291e92054a39bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set maximum of iterations in calibration of error factors.  <a href="class_calibration_handler.html#af4fd19f0f331a8f8d5291e92054a39bb">More...</a><br /></td></tr>
-<tr class="separator:af4fd19f0f331a8f8d5291e92054a39bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89f26200a8d589ec4b2edb1592fd32ec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a89f26200a8d589ec4b2edb1592fd32ec">setMinErrorFactors</a> (const double minErrorFactors)</td></tr>
-<tr class="memdesc:a89f26200a8d589ec4b2edb1592fd32ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set minimum of false positives in factor calibration.  <a href="class_calibration_handler.html#a89f26200a8d589ec4b2edb1592fd32ec">More...</a><br /></td></tr>
-<tr class="separator:a89f26200a8d589ec4b2edb1592fd32ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a652093c5e0b5d0b5a0be6542a995eb5f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a652093c5e0b5d0b5a0be6542a995eb5f">setMinCorrectionFactors</a> (const double minCorrectionFactors)</td></tr>
-<tr class="memdesc:a652093c5e0b5d0b5a0be6542a995eb5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set minimum border to finish calibration of factors.  <a href="class_calibration_handler.html#a652093c5e0b5d0b5a0be6542a995eb5f">More...</a><br /></td></tr>
-<tr class="separator:a652093c5e0b5d0b5a0be6542a995eb5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b04b1c519de96b744b7d437fe04f12a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a0b04b1c519de96b744b7d437fe04f12a">setStartIdxPositives</a> (const uint64_t startIdxPositives)</td></tr>
-<tr class="memdesc:a0b04b1c519de96b744b7d437fe04f12a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set start index of positive values in matrix of input points.  <a href="class_calibration_handler.html#a0b04b1c519de96b744b7d437fe04f12a">More...</a><br /></td></tr>
-<tr class="separator:a0b04b1c519de96b744b7d437fe04f12a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab5d8edaa38a46d497a0c6d476deb1c18"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#ab5d8edaa38a46d497a0c6d476deb1c18">setNegDist</a> (const uint8_t negDist)</td></tr>
-<tr class="memdesc:ab5d8edaa38a46d497a0c6d476deb1c18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set distance of negative colors picked in image.  <a href="class_calibration_handler.html#ab5d8edaa38a46d497a0c6d476deb1c18">More...</a><br /></td></tr>
-<tr class="separator:ab5d8edaa38a46d497a0c6d476deb1c18"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb8607bf4b62b790842995aead57ebeb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#acb8607bf4b62b790842995aead57ebeb">setPosDist</a> (const uint8_t posDist)</td></tr>
-<tr class="memdesc:acb8607bf4b62b790842995aead57ebeb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set distance of positive colors picked in image.  <a href="class_calibration_handler.html#acb8607bf4b62b790842995aead57ebeb">More...</a><br /></td></tr>
-<tr class="separator:acb8607bf4b62b790842995aead57ebeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8d16c5728a4501b9b080cc893af0ba8"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#ad8d16c5728a4501b9b080cc893af0ba8">getTitle</a> () const</td></tr>
-<tr class="memdesc:ad8d16c5728a4501b9b080cc893af0ba8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get title of shown window.  <a href="class_calibration_handler.html#ad8d16c5728a4501b9b080cc893af0ba8">More...</a><br /></td></tr>
-<tr class="separator:ad8d16c5728a4501b9b080cc893af0ba8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8604dcaaa08fa93d3ae8f4ea1c9cab71"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a8604dcaaa08fa93d3ae8f4ea1c9cab71">getFont</a> () const</td></tr>
-<tr class="memdesc:a8604dcaaa08fa93d3ae8f4ea1c9cab71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get font of shown explanation text.  <a href="class_calibration_handler.html#a8604dcaaa08fa93d3ae8f4ea1c9cab71">More...</a><br /></td></tr>
-<tr class="separator:a8604dcaaa08fa93d3ae8f4ea1c9cab71"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b356c6b73e5ed26811464230e5d96c5"><td class="memItemLeft" align="right" valign="top">cv::Scalar&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a7b356c6b73e5ed26811464230e5d96c5">getTextColor</a> () const</td></tr>
-<tr class="memdesc:a7b356c6b73e5ed26811464230e5d96c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get color of explanation text.  <a href="class_calibration_handler.html#a7b356c6b73e5ed26811464230e5d96c5">More...</a><br /></td></tr>
-<tr class="separator:a7b356c6b73e5ed26811464230e5d96c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae68b6e6f107eda6f12e6fbb2537304a8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#ae68b6e6f107eda6f12e6fbb2537304a8">getTextScale</a> () const</td></tr>
-<tr class="memdesc:ae68b6e6f107eda6f12e6fbb2537304a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get scale of explanation text.  <a href="class_calibration_handler.html#ae68b6e6f107eda6f12e6fbb2537304a8">More...</a><br /></td></tr>
-<tr class="separator:ae68b6e6f107eda6f12e6fbb2537304a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a044d490b1146d7fe26029cb2f2d337b3"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a044d490b1146d7fe26029cb2f2d337b3">getTextThickness</a> () const</td></tr>
-<tr class="memdesc:a044d490b1146d7fe26029cb2f2d337b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get thickness of explanation text.  <a href="class_calibration_handler.html#a044d490b1146d7fe26029cb2f2d337b3">More...</a><br /></td></tr>
-<tr class="separator:a044d490b1146d7fe26029cb2f2d337b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a686e6008e40b84aa4affdafd4c568c21"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a686e6008e40b84aa4affdafd4c568c21">getMaxIterationOptimalValues</a> () const</td></tr>
-<tr class="memdesc:a686e6008e40b84aa4affdafd4c568c21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get maximum iterations in calculation of optimal values.  <a href="class_calibration_handler.html#a686e6008e40b84aa4affdafd4c568c21">More...</a><br /></td></tr>
-<tr class="separator:a686e6008e40b84aa4affdafd4c568c21"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a25277d8487fd1e29c4fb64039a1b1f9a"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a25277d8487fd1e29c4fb64039a1b1f9a">getMaxIterationFactors</a> () const</td></tr>
-<tr class="memdesc:a25277d8487fd1e29c4fb64039a1b1f9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get maximum iterations in calculation of error factors.  <a href="class_calibration_handler.html#a25277d8487fd1e29c4fb64039a1b1f9a">More...</a><br /></td></tr>
-<tr class="separator:a25277d8487fd1e29c4fb64039a1b1f9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd1f4a6e9dc6306ebe53326a14f8accf"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#abd1f4a6e9dc6306ebe53326a14f8accf">getMinErrorOptimalValues</a> () const</td></tr>
-<tr class="memdesc:abd1f4a6e9dc6306ebe53326a14f8accf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get minimal false positives in calculation needed to stop.  <a href="class_calibration_handler.html#abd1f4a6e9dc6306ebe53326a14f8accf">More...</a><br /></td></tr>
-<tr class="separator:abd1f4a6e9dc6306ebe53326a14f8accf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66d9f2adfd94ff6ca6cd50ae97d2988e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a66d9f2adfd94ff6ca6cd50ae97d2988e">getMinErrorFactors</a> () const</td></tr>
-<tr class="memdesc:a66d9f2adfd94ff6ca6cd50ae97d2988e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get minimal false positives in calculation needed to stop.  <a href="class_calibration_handler.html#a66d9f2adfd94ff6ca6cd50ae97d2988e">More...</a><br /></td></tr>
-<tr class="separator:a66d9f2adfd94ff6ca6cd50ae97d2988e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a67846d1fffcbfd9ecbfdaadefe6ead"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a8a67846d1fffcbfd9ecbfdaadefe6ead">getMinCorrectionOptimalValues</a> () const</td></tr>
-<tr class="memdesc:a8a67846d1fffcbfd9ecbfdaadefe6ead"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get minimal correction border needed to stop calculation of optimal values.  <a href="class_calibration_handler.html#a8a67846d1fffcbfd9ecbfdaadefe6ead">More...</a><br /></td></tr>
-<tr class="separator:a8a67846d1fffcbfd9ecbfdaadefe6ead"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5bca888d017f5cfe2e74fe9f3811f72"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#aa5bca888d017f5cfe2e74fe9f3811f72">getMinCorrectionFactors</a> () const</td></tr>
-<tr class="memdesc:aa5bca888d017f5cfe2e74fe9f3811f72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get minimal correction border needed to stop calculation of factors.  <a href="class_calibration_handler.html#aa5bca888d017f5cfe2e74fe9f3811f72">More...</a><br /></td></tr>
-<tr class="separator:aa5bca888d017f5cfe2e74fe9f3811f72"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6878008a660631de26c2428ad569d41f"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a6878008a660631de26c2428ad569d41f">getStartIdxPositives</a> () const</td></tr>
-<tr class="memdesc:a6878008a660631de26c2428ad569d41f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get start index of positives in matrix of input points.  <a href="class_calibration_handler.html#a6878008a660631de26c2428ad569d41f">More...</a><br /></td></tr>
-<tr class="separator:a6878008a660631de26c2428ad569d41f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab710b6a8929029835aee49bac852589b"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#ab710b6a8929029835aee49bac852589b">getNegDist</a> () const</td></tr>
-<tr class="memdesc:ab710b6a8929029835aee49bac852589b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get distance of negative colors picked in image.  <a href="class_calibration_handler.html#ab710b6a8929029835aee49bac852589b">More...</a><br /></td></tr>
-<tr class="separator:ab710b6a8929029835aee49bac852589b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf5f948de73503a87d32a948939631f2"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#acf5f948de73503a87d32a948939631f2">getPosDist</a> () const</td></tr>
-<tr class="memdesc:acf5f948de73503a87d32a948939631f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get distance of positive colors picked in image.  <a href="class_calibration_handler.html#acf5f948de73503a87d32a948939631f2">More...</a><br /></td></tr>
-<tr class="separator:acf5f948de73503a87d32a948939631f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39e605519837a2089f366334aa50906d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a39e605519837a2089f366334aa50906d">calibrate</a> (cv::Mat *img, std::vector&lt; double &gt; *const optimal_values_intern, std::vector&lt; double &gt; *const error_factors_intern)</td></tr>
+<tr class="memdesc:a39e605519837a2089f366334aa50906d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calibrates params. Values without error are found using histograms, factors for predictions are calculated using eigens BDCSVD.  <a href="class_calibration_handler.html#a39e605519837a2089f366334aa50906d">More...</a><br /></td></tr>
+<tr class="separator:a39e605519837a2089f366334aa50906d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ad630e029d1dc99a446c059acd31bc4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a2ad630e029d1dc99a446c059acd31bc4">set_title</a> (const std::string &amp;title)</td></tr>
+<tr class="memdesc:a2ad630e029d1dc99a446c059acd31bc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set title of shown window.  <a href="class_calibration_handler.html#a2ad630e029d1dc99a446c059acd31bc4">More...</a><br /></td></tr>
+<tr class="separator:a2ad630e029d1dc99a446c059acd31bc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4316ae4a5de9faec05509ec422608792"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a4316ae4a5de9faec05509ec422608792">set_font</a> (const uint8_t font)</td></tr>
+<tr class="memdesc:a4316ae4a5de9faec05509ec422608792"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set font of explanation text.  <a href="class_calibration_handler.html#a4316ae4a5de9faec05509ec422608792">More...</a><br /></td></tr>
+<tr class="separator:a4316ae4a5de9faec05509ec422608792"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40f52acaac0cbcdfe50431e526e998be"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a40f52acaac0cbcdfe50431e526e998be">set_text_color</a> (const cv::Scalar text_color)</td></tr>
+<tr class="memdesc:a40f52acaac0cbcdfe50431e526e998be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set color of explanation text.  <a href="class_calibration_handler.html#a40f52acaac0cbcdfe50431e526e998be">More...</a><br /></td></tr>
+<tr class="separator:a40f52acaac0cbcdfe50431e526e998be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0e92fce22975e50b91c0687fe75fbb0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#ab0e92fce22975e50b91c0687fe75fbb0">set_text_scale</a> (float text_scale)</td></tr>
+<tr class="memdesc:ab0e92fce22975e50b91c0687fe75fbb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set scale of explanation text.  <a href="class_calibration_handler.html#ab0e92fce22975e50b91c0687fe75fbb0">More...</a><br /></td></tr>
+<tr class="separator:ab0e92fce22975e50b91c0687fe75fbb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac153cc40959336c4b766e8edf02ed14e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#ac153cc40959336c4b766e8edf02ed14e">set_text_thickness</a> (const uint8_t text_thickness)</td></tr>
+<tr class="memdesc:ac153cc40959336c4b766e8edf02ed14e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set thickness of explanation text.  <a href="class_calibration_handler.html#ac153cc40959336c4b766e8edf02ed14e">More...</a><br /></td></tr>
+<tr class="separator:ac153cc40959336c4b766e8edf02ed14e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c43ed8cdb3ff680d93e2f7c4e71a801"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a0c43ed8cdb3ff680d93e2f7c4e71a801">set_max_iteration_factors</a> (const uint16_t max_iteration_factors)</td></tr>
+<tr class="memdesc:a0c43ed8cdb3ff680d93e2f7c4e71a801"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set maximum of iterations in calibration of error factors.  <a href="class_calibration_handler.html#a0c43ed8cdb3ff680d93e2f7c4e71a801">More...</a><br /></td></tr>
+<tr class="separator:a0c43ed8cdb3ff680d93e2f7c4e71a801"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb68af88f411ff362ab0431291013960"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#aeb68af88f411ff362ab0431291013960">set_min_error_factors</a> (const double min_error_factors)</td></tr>
+<tr class="memdesc:aeb68af88f411ff362ab0431291013960"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set minimum of false positives in factor calibration.  <a href="class_calibration_handler.html#aeb68af88f411ff362ab0431291013960">More...</a><br /></td></tr>
+<tr class="separator:aeb68af88f411ff362ab0431291013960"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ef9e874c3470ad3ed0a3743fadbf9cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a7ef9e874c3470ad3ed0a3743fadbf9cc">set_min_correction_factors</a> (const double min_correction_factors)</td></tr>
+<tr class="memdesc:a7ef9e874c3470ad3ed0a3743fadbf9cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set minimum border to finish calibration of factors.  <a href="class_calibration_handler.html#a7ef9e874c3470ad3ed0a3743fadbf9cc">More...</a><br /></td></tr>
+<tr class="separator:a7ef9e874c3470ad3ed0a3743fadbf9cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2ffdb6a799e179ce628c9847f231b14"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#ad2ffdb6a799e179ce628c9847f231b14">set_start_idx_positives</a> (const uint64_t start_idx_positives)</td></tr>
+<tr class="memdesc:ad2ffdb6a799e179ce628c9847f231b14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set start index of positive values in matrix of input points.  <a href="class_calibration_handler.html#ad2ffdb6a799e179ce628c9847f231b14">More...</a><br /></td></tr>
+<tr class="separator:ad2ffdb6a799e179ce628c9847f231b14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3955bfbe7f9fc744e220862a791188f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#af3955bfbe7f9fc744e220862a791188f">set_neg_dist</a> (const uint8_t neg_dist)</td></tr>
+<tr class="memdesc:af3955bfbe7f9fc744e220862a791188f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set distance of negative colors picked in image.  <a href="class_calibration_handler.html#af3955bfbe7f9fc744e220862a791188f">More...</a><br /></td></tr>
+<tr class="separator:af3955bfbe7f9fc744e220862a791188f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24a4126e37906bc0aba3339eed4a3282"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a24a4126e37906bc0aba3339eed4a3282">set_pos_dist</a> (const uint8_t pos_dist)</td></tr>
+<tr class="memdesc:a24a4126e37906bc0aba3339eed4a3282"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set distance of positive colors picked in image.  <a href="class_calibration_handler.html#a24a4126e37906bc0aba3339eed4a3282">More...</a><br /></td></tr>
+<tr class="separator:a24a4126e37906bc0aba3339eed4a3282"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a235350cdbb3fe60e33922a1e220dc9"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a8a235350cdbb3fe60e33922a1e220dc9">get_title</a> () const</td></tr>
+<tr class="memdesc:a8a235350cdbb3fe60e33922a1e220dc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get title of shown window.  <a href="class_calibration_handler.html#a8a235350cdbb3fe60e33922a1e220dc9">More...</a><br /></td></tr>
+<tr class="separator:a8a235350cdbb3fe60e33922a1e220dc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae697ea0265f31b8b5f390810d0be3b40"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#ae697ea0265f31b8b5f390810d0be3b40">get_font</a> () const</td></tr>
+<tr class="memdesc:ae697ea0265f31b8b5f390810d0be3b40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get font of shown explanation text.  <a href="class_calibration_handler.html#ae697ea0265f31b8b5f390810d0be3b40">More...</a><br /></td></tr>
+<tr class="separator:ae697ea0265f31b8b5f390810d0be3b40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8698871ee6a4b2f990c2f4e87d12695e"><td class="memItemLeft" align="right" valign="top">cv::Scalar&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a8698871ee6a4b2f990c2f4e87d12695e">get_text_color</a> () const</td></tr>
+<tr class="memdesc:a8698871ee6a4b2f990c2f4e87d12695e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get color of explanation text.  <a href="class_calibration_handler.html#a8698871ee6a4b2f990c2f4e87d12695e">More...</a><br /></td></tr>
+<tr class="separator:a8698871ee6a4b2f990c2f4e87d12695e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9826ad4b4034cd0527880edaf3975b2c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a9826ad4b4034cd0527880edaf3975b2c">get_text_scale</a> () const</td></tr>
+<tr class="memdesc:a9826ad4b4034cd0527880edaf3975b2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get scale of explanation text.  <a href="class_calibration_handler.html#a9826ad4b4034cd0527880edaf3975b2c">More...</a><br /></td></tr>
+<tr class="separator:a9826ad4b4034cd0527880edaf3975b2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abdbad426e47da29f1c895e716cba204f"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#abdbad426e47da29f1c895e716cba204f">get_text_thickness</a> () const</td></tr>
+<tr class="memdesc:abdbad426e47da29f1c895e716cba204f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get thickness of explanation text.  <a href="class_calibration_handler.html#abdbad426e47da29f1c895e716cba204f">More...</a><br /></td></tr>
+<tr class="separator:abdbad426e47da29f1c895e716cba204f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb546bf733b4a8efcd9b0b5888ba3dda"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#adb546bf733b4a8efcd9b0b5888ba3dda">get_max_iteration_optimal_values</a> () const</td></tr>
+<tr class="memdesc:adb546bf733b4a8efcd9b0b5888ba3dda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get maximum iterations in calculation of optimal values.  <a href="class_calibration_handler.html#adb546bf733b4a8efcd9b0b5888ba3dda">More...</a><br /></td></tr>
+<tr class="separator:adb546bf733b4a8efcd9b0b5888ba3dda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada66fcd1097d30c620d1690144342d32"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#ada66fcd1097d30c620d1690144342d32">get_max_iteration_factors</a> () const</td></tr>
+<tr class="memdesc:ada66fcd1097d30c620d1690144342d32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get maximum iterations in calculation of error factors.  <a href="class_calibration_handler.html#ada66fcd1097d30c620d1690144342d32">More...</a><br /></td></tr>
+<tr class="separator:ada66fcd1097d30c620d1690144342d32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed776150f9b1931d845b880c6700ec2f"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#aed776150f9b1931d845b880c6700ec2f">get_min_error_optimal_values</a> () const</td></tr>
+<tr class="memdesc:aed776150f9b1931d845b880c6700ec2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get minimal false positives in calculation needed to stop.  <a href="class_calibration_handler.html#aed776150f9b1931d845b880c6700ec2f">More...</a><br /></td></tr>
+<tr class="separator:aed776150f9b1931d845b880c6700ec2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1901373edd05e09093ff05fac9176436"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a1901373edd05e09093ff05fac9176436">get_min_error_factors</a> () const</td></tr>
+<tr class="memdesc:a1901373edd05e09093ff05fac9176436"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get minimal false positives in calculation needed to stop.  <a href="class_calibration_handler.html#a1901373edd05e09093ff05fac9176436">More...</a><br /></td></tr>
+<tr class="separator:a1901373edd05e09093ff05fac9176436"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1b0650c51f6b169b0ea9940a221b123"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#ab1b0650c51f6b169b0ea9940a221b123">get_min_correction_optimal_values</a> () const</td></tr>
+<tr class="memdesc:ab1b0650c51f6b169b0ea9940a221b123"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get minimal correction border needed to stop calculation of optimal values.  <a href="class_calibration_handler.html#ab1b0650c51f6b169b0ea9940a221b123">More...</a><br /></td></tr>
+<tr class="separator:ab1b0650c51f6b169b0ea9940a221b123"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad42519fa1fb4b75d521bc059a6455cbf"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#ad42519fa1fb4b75d521bc059a6455cbf">get_min_correction_factors</a> () const</td></tr>
+<tr class="memdesc:ad42519fa1fb4b75d521bc059a6455cbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get minimal correction border needed to stop calculation of factors.  <a href="class_calibration_handler.html#ad42519fa1fb4b75d521bc059a6455cbf">More...</a><br /></td></tr>
+<tr class="separator:ad42519fa1fb4b75d521bc059a6455cbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abca06d578a24194d8cfbd4a8a23ad844"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#abca06d578a24194d8cfbd4a8a23ad844">get_start_idx_positives</a> () const</td></tr>
+<tr class="memdesc:abca06d578a24194d8cfbd4a8a23ad844"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get start index of positives in matrix of input points.  <a href="class_calibration_handler.html#abca06d578a24194d8cfbd4a8a23ad844">More...</a><br /></td></tr>
+<tr class="separator:abca06d578a24194d8cfbd4a8a23ad844"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeabf7544f9bd525f797d1cd6f2c0db8f"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#aeabf7544f9bd525f797d1cd6f2c0db8f">get_neg_dist</a> () const</td></tr>
+<tr class="memdesc:aeabf7544f9bd525f797d1cd6f2c0db8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get distance of negative colors picked in image.  <a href="class_calibration_handler.html#aeabf7544f9bd525f797d1cd6f2c0db8f">More...</a><br /></td></tr>
+<tr class="separator:aeabf7544f9bd525f797d1cd6f2c0db8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53ef2bab12617beb51462efb188e71c5"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calibration_handler.html#a53ef2bab12617beb51462efb188e71c5">get_pos_dist</a> () const</td></tr>
+<tr class="memdesc:a53ef2bab12617beb51462efb188e71c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get distance of positive colors picked in image.  <a href="class_calibration_handler.html#a53ef2bab12617beb51462efb188e71c5">More...</a><br /></td></tr>
+<tr class="separator:a53ef2bab12617beb51462efb188e71c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><dl class="section date"><dt>Date</dt><dd>08/10/19 </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a53b7884270d99d913142e40949d8bf5c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a53b7884270d99d913142e40949d8bf5c">&#9670;&nbsp;</a></span>CalibrationHandler()</h2>
+<a id="a5b618bcd58d16b9a2f00eb08f180faf3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b618bcd58d16b9a2f00eb08f180faf3">&#9670;&nbsp;</a></span>CalibrationHandler()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -177,7 +177,7 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">uint16_t&#160;</td>
-          <td class="paramname"><em>distanceText2Border</em> = <code>10</code>, </td>
+          <td class="paramname"><em>distance_text_2_Border</em> = <code>10</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -189,19 +189,19 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>textScale</em> = <code>1.2</code>, </td>
+          <td class="paramname"><em>text_scale</em> = <code>1.2</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">cv::Scalar&#160;</td>
-          <td class="paramname"><em>textColor</em> = <code>cv::Scalar(255,&#160;255,&#160;0)</code>, </td>
+          <td class="paramname"><em>text_color</em> = <code>cv::Scalar(255,&#160;255,&#160;0)</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">uint8_t&#160;</td>
-          <td class="paramname"><em>textThickness</em> = <code>2</code>&#160;</td>
+          <td class="paramname"><em>text_thickness</em> = <code>2</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -215,15 +215,15 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">title</td><td>Title of windows shown. </td></tr>
-    <tr><td class="paramname">distanceText2Border</td><td>Distance to left and lower border of window. </td></tr>
+    <tr><td class="paramname">distance_text_2_Border</td><td>Distance to left and lower border of window. </td></tr>
     <tr><td class="paramname">font</td><td>Font of description text. </td></tr>
-    <tr><td class="paramname">textScale</td><td>Scale of description text. </td></tr>
-    <tr><td class="paramname">textColor</td><td>Color of description text. </td></tr>
-    <tr><td class="paramname">textThickness</td><td>Thickness of description text.</td></tr>
+    <tr><td class="paramname">text_scale</td><td>Scale of description text. </td></tr>
+    <tr><td class="paramname">text_color</td><td>Color of description text. </td></tr>
+    <tr><td class="paramname">text_thickness</td><td>Thickness of description text.</td></tr>
   </table>
   </dd>
 </dl>
-<p><a class="el" href="_calibration_handler_8cpp.html">CalibrationHandler.cpp</a></p>
+<p>CalibrationHandler.cpp</p>
 <p>Take picture after a short time, drag and drop over it and calibrate. </p>
 
 </div>
@@ -248,8 +248,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="adfd01d885b4f3c62d32f66e1574bea16"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adfd01d885b4f3c62d32f66e1574bea16">&#9670;&nbsp;</a></span>calibrate()</h2>
+<a id="a39e605519837a2089f366334aa50906d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39e605519837a2089f366334aa50906d">&#9670;&nbsp;</a></span>calibrate()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -264,13 +264,13 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::vector&lt; double &gt; *const&#160;</td>
-          <td class="paramname"><em>optimalValuesIntern</em>, </td>
+          <td class="paramname"><em>optimal_values_intern</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::vector&lt; double &gt; *const&#160;</td>
-          <td class="paramname"><em>errorFactorsIntern</em>&#160;</td>
+          <td class="paramname"><em>error_factors_intern</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -284,8 +284,8 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">img</td><td>Image used to visualize steps and to get values for calibration. </td></tr>
-    <tr><td class="paramname">optimalValuesIntern</td><td>Internal saved calculated optimal values. </td></tr>
-    <tr><td class="paramname">errorFactorsIntern</td><td>Factors to calculate prediction of dark color spectrum. </td></tr>
+    <tr><td class="paramname">optimal_values_intern</td><td>Internal saved calculated optimal values. </td></tr>
+    <tr><td class="paramname">error_factors_intern</td><td>Factors to calculate prediction of dark color spectrum. </td></tr>
   </table>
   </dd>
 </dl>
@@ -293,14 +293,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a8604dcaaa08fa93d3ae8f4ea1c9cab71"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8604dcaaa08fa93d3ae8f4ea1c9cab71">&#9670;&nbsp;</a></span>getFont()</h2>
+<a id="ae697ea0265f31b8b5f390810d0be3b40"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae697ea0265f31b8b5f390810d0be3b40">&#9670;&nbsp;</a></span>get_font()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t CalibrationHandler::getFont </td>
+          <td class="memname">uint8_t CalibrationHandler::get_font </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -313,14 +313,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a25277d8487fd1e29c4fb64039a1b1f9a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a25277d8487fd1e29c4fb64039a1b1f9a">&#9670;&nbsp;</a></span>getMaxIterationFactors()</h2>
+<a id="ada66fcd1097d30c620d1690144342d32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada66fcd1097d30c620d1690144342d32">&#9670;&nbsp;</a></span>get_max_iteration_factors()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint16_t CalibrationHandler::getMaxIterationFactors </td>
+          <td class="memname">uint16_t CalibrationHandler::get_max_iteration_factors </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -333,14 +333,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a686e6008e40b84aa4affdafd4c568c21"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a686e6008e40b84aa4affdafd4c568c21">&#9670;&nbsp;</a></span>getMaxIterationOptimalValues()</h2>
+<a id="adb546bf733b4a8efcd9b0b5888ba3dda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb546bf733b4a8efcd9b0b5888ba3dda">&#9670;&nbsp;</a></span>get_max_iteration_optimal_values()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint16_t CalibrationHandler::getMaxIterationOptimalValues </td>
+          <td class="memname">uint16_t CalibrationHandler::get_max_iteration_optimal_values </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -353,14 +353,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aa5bca888d017f5cfe2e74fe9f3811f72"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa5bca888d017f5cfe2e74fe9f3811f72">&#9670;&nbsp;</a></span>getMinCorrectionFactors()</h2>
+<a id="ad42519fa1fb4b75d521bc059a6455cbf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad42519fa1fb4b75d521bc059a6455cbf">&#9670;&nbsp;</a></span>get_min_correction_factors()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">double CalibrationHandler::getMinCorrectionFactors </td>
+          <td class="memname">double CalibrationHandler::get_min_correction_factors </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -373,14 +373,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a8a67846d1fffcbfd9ecbfdaadefe6ead"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8a67846d1fffcbfd9ecbfdaadefe6ead">&#9670;&nbsp;</a></span>getMinCorrectionOptimalValues()</h2>
+<a id="ab1b0650c51f6b169b0ea9940a221b123"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1b0650c51f6b169b0ea9940a221b123">&#9670;&nbsp;</a></span>get_min_correction_optimal_values()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">double CalibrationHandler::getMinCorrectionOptimalValues </td>
+          <td class="memname">double CalibrationHandler::get_min_correction_optimal_values </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -393,14 +393,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a66d9f2adfd94ff6ca6cd50ae97d2988e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a66d9f2adfd94ff6ca6cd50ae97d2988e">&#9670;&nbsp;</a></span>getMinErrorFactors()</h2>
+<a id="a1901373edd05e09093ff05fac9176436"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1901373edd05e09093ff05fac9176436">&#9670;&nbsp;</a></span>get_min_error_factors()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">double CalibrationHandler::getMinErrorFactors </td>
+          <td class="memname">double CalibrationHandler::get_min_error_factors </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -413,14 +413,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="abd1f4a6e9dc6306ebe53326a14f8accf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abd1f4a6e9dc6306ebe53326a14f8accf">&#9670;&nbsp;</a></span>getMinErrorOptimalValues()</h2>
+<a id="aed776150f9b1931d845b880c6700ec2f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed776150f9b1931d845b880c6700ec2f">&#9670;&nbsp;</a></span>get_min_error_optimal_values()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">double CalibrationHandler::getMinErrorOptimalValues </td>
+          <td class="memname">double CalibrationHandler::get_min_error_optimal_values </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -433,14 +433,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ab710b6a8929029835aee49bac852589b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab710b6a8929029835aee49bac852589b">&#9670;&nbsp;</a></span>getNegDist()</h2>
+<a id="aeabf7544f9bd525f797d1cd6f2c0db8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeabf7544f9bd525f797d1cd6f2c0db8f">&#9670;&nbsp;</a></span>get_neg_dist()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t CalibrationHandler::getNegDist </td>
+          <td class="memname">uint8_t CalibrationHandler::get_neg_dist </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -453,14 +453,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="acf5f948de73503a87d32a948939631f2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acf5f948de73503a87d32a948939631f2">&#9670;&nbsp;</a></span>getPosDist()</h2>
+<a id="a53ef2bab12617beb51462efb188e71c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53ef2bab12617beb51462efb188e71c5">&#9670;&nbsp;</a></span>get_pos_dist()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t CalibrationHandler::getPosDist </td>
+          <td class="memname">uint8_t CalibrationHandler::get_pos_dist </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -473,14 +473,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a6878008a660631de26c2428ad569d41f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6878008a660631de26c2428ad569d41f">&#9670;&nbsp;</a></span>getStartIdxPositives()</h2>
+<a id="abca06d578a24194d8cfbd4a8a23ad844"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abca06d578a24194d8cfbd4a8a23ad844">&#9670;&nbsp;</a></span>get_start_idx_positives()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint64_t CalibrationHandler::getStartIdxPositives </td>
+          <td class="memname">uint64_t CalibrationHandler::get_start_idx_positives </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -493,14 +493,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a7b356c6b73e5ed26811464230e5d96c5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7b356c6b73e5ed26811464230e5d96c5">&#9670;&nbsp;</a></span>getTextColor()</h2>
+<a id="a8698871ee6a4b2f990c2f4e87d12695e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8698871ee6a4b2f990c2f4e87d12695e">&#9670;&nbsp;</a></span>get_text_color()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">cv::Scalar CalibrationHandler::getTextColor </td>
+          <td class="memname">cv::Scalar CalibrationHandler::get_text_color </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -513,14 +513,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ae68b6e6f107eda6f12e6fbb2537304a8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae68b6e6f107eda6f12e6fbb2537304a8">&#9670;&nbsp;</a></span>getTextScale()</h2>
+<a id="a9826ad4b4034cd0527880edaf3975b2c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9826ad4b4034cd0527880edaf3975b2c">&#9670;&nbsp;</a></span>get_text_scale()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float CalibrationHandler::getTextScale </td>
+          <td class="memname">float CalibrationHandler::get_text_scale </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -533,14 +533,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a044d490b1146d7fe26029cb2f2d337b3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a044d490b1146d7fe26029cb2f2d337b3">&#9670;&nbsp;</a></span>getTextThickness()</h2>
+<a id="abdbad426e47da29f1c895e716cba204f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abdbad426e47da29f1c895e716cba204f">&#9670;&nbsp;</a></span>get_text_thickness()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t CalibrationHandler::getTextThickness </td>
+          <td class="memname">uint8_t CalibrationHandler::get_text_thickness </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -553,14 +553,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ad8d16c5728a4501b9b080cc893af0ba8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad8d16c5728a4501b9b080cc893af0ba8">&#9670;&nbsp;</a></span>getTitle()</h2>
+<a id="a8a235350cdbb3fe60e33922a1e220dc9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a235350cdbb3fe60e33922a1e220dc9">&#9670;&nbsp;</a></span>get_title()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::string CalibrationHandler::getTitle </td>
+          <td class="memname">std::string CalibrationHandler::get_title </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -573,14 +573,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a9c5fa3d250a6c78049618f7228587755"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9c5fa3d250a6c78049618f7228587755">&#9670;&nbsp;</a></span>setFont()</h2>
+<a id="a4316ae4a5de9faec05509ec422608792"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4316ae4a5de9faec05509ec422608792">&#9670;&nbsp;</a></span>set_font()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void CalibrationHandler::setFont </td>
+          <td class="memname">void CalibrationHandler::set_font </td>
           <td>(</td>
           <td class="paramtype">const uint8_t&#160;</td>
           <td class="paramname"><em>font</em></td><td>)</td>
@@ -599,17 +599,17 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="af4fd19f0f331a8f8d5291e92054a39bb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af4fd19f0f331a8f8d5291e92054a39bb">&#9670;&nbsp;</a></span>setMaxIterationFactors()</h2>
+<a id="a0c43ed8cdb3ff680d93e2f7c4e71a801"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c43ed8cdb3ff680d93e2f7c4e71a801">&#9670;&nbsp;</a></span>set_max_iteration_factors()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void CalibrationHandler::setMaxIterationFactors </td>
+          <td class="memname">void CalibrationHandler::set_max_iteration_factors </td>
           <td>(</td>
           <td class="paramtype">const uint16_t&#160;</td>
-          <td class="paramname"><em>maxIterationFactors</em></td><td>)</td>
+          <td class="paramname"><em>max_iteration_factors</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -618,24 +618,24 @@ Public Member Functions</h2></td></tr>
 <p>Set maximum of iterations in calibration of error factors. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">maxIterationFactors</td><td>Max. iterations in calibration of error factors. </td></tr>
+    <tr><td class="paramname">max_iteration_factors</td><td>Max. iterations in calibration of error factors. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a652093c5e0b5d0b5a0be6542a995eb5f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a652093c5e0b5d0b5a0be6542a995eb5f">&#9670;&nbsp;</a></span>setMinCorrectionFactors()</h2>
+<a id="a7ef9e874c3470ad3ed0a3743fadbf9cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ef9e874c3470ad3ed0a3743fadbf9cc">&#9670;&nbsp;</a></span>set_min_correction_factors()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void CalibrationHandler::setMinCorrectionFactors </td>
+          <td class="memname">void CalibrationHandler::set_min_correction_factors </td>
           <td>(</td>
           <td class="paramtype">const double&#160;</td>
-          <td class="paramname"><em>minCorrectionFactors</em></td><td>)</td>
+          <td class="paramname"><em>min_correction_factors</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -644,24 +644,24 @@ Public Member Functions</h2></td></tr>
 <p>Set minimum border to finish calibration of factors. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">minCorrectionFactors</td><td>Factors Minimum correction border to finish calibration of factors. </td></tr>
+    <tr><td class="paramname">min_correction_factors</td><td>Factors Minimum correction border to finish calibration of factors. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a89f26200a8d589ec4b2edb1592fd32ec"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a89f26200a8d589ec4b2edb1592fd32ec">&#9670;&nbsp;</a></span>setMinErrorFactors()</h2>
+<a id="aeb68af88f411ff362ab0431291013960"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb68af88f411ff362ab0431291013960">&#9670;&nbsp;</a></span>set_min_error_factors()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void CalibrationHandler::setMinErrorFactors </td>
+          <td class="memname">void CalibrationHandler::set_min_error_factors </td>
           <td>(</td>
           <td class="paramtype">const double&#160;</td>
-          <td class="paramname"><em>minErrorFactors</em></td><td>)</td>
+          <td class="paramname"><em>min_error_factors</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -670,24 +670,24 @@ Public Member Functions</h2></td></tr>
 <p>Set minimum of false positives in factor calibration. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">minErrorFactors</td><td>Minimum of false positives in factor calibration. </td></tr>
+    <tr><td class="paramname">min_error_factors</td><td>Minimum of false positives in factor calibration. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="ab5d8edaa38a46d497a0c6d476deb1c18"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab5d8edaa38a46d497a0c6d476deb1c18">&#9670;&nbsp;</a></span>setNegDist()</h2>
+<a id="af3955bfbe7f9fc744e220862a791188f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3955bfbe7f9fc744e220862a791188f">&#9670;&nbsp;</a></span>set_neg_dist()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void CalibrationHandler::setNegDist </td>
+          <td class="memname">void CalibrationHandler::set_neg_dist </td>
           <td>(</td>
           <td class="paramtype">const uint8_t&#160;</td>
-          <td class="paramname"><em>negDist</em></td><td>)</td>
+          <td class="paramname"><em>neg_dist</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -696,24 +696,24 @@ Public Member Functions</h2></td></tr>
 <p>Set distance of negative colors picked in image. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">negDist</td><td>Distance of negative colors picked in image. </td></tr>
+    <tr><td class="paramname">neg_dist</td><td>Distance of negative colors picked in image. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="acb8607bf4b62b790842995aead57ebeb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acb8607bf4b62b790842995aead57ebeb">&#9670;&nbsp;</a></span>setPosDist()</h2>
+<a id="a24a4126e37906bc0aba3339eed4a3282"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24a4126e37906bc0aba3339eed4a3282">&#9670;&nbsp;</a></span>set_pos_dist()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void CalibrationHandler::setPosDist </td>
+          <td class="memname">void CalibrationHandler::set_pos_dist </td>
           <td>(</td>
           <td class="paramtype">const uint8_t&#160;</td>
-          <td class="paramname"><em>posDist</em></td><td>)</td>
+          <td class="paramname"><em>pos_dist</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -722,24 +722,24 @@ Public Member Functions</h2></td></tr>
 <p>Set distance of positive colors picked in image. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">posDist</td><td>Distance of positive colors picked in image. </td></tr>
+    <tr><td class="paramname">pos_dist</td><td>Distance of positive colors picked in image. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a0b04b1c519de96b744b7d437fe04f12a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0b04b1c519de96b744b7d437fe04f12a">&#9670;&nbsp;</a></span>setStartIdxPositives()</h2>
+<a id="ad2ffdb6a799e179ce628c9847f231b14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2ffdb6a799e179ce628c9847f231b14">&#9670;&nbsp;</a></span>set_start_idx_positives()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void CalibrationHandler::setStartIdxPositives </td>
+          <td class="memname">void CalibrationHandler::set_start_idx_positives </td>
           <td>(</td>
           <td class="paramtype">const uint64_t&#160;</td>
-          <td class="paramname"><em>startIdxPositives</em></td><td>)</td>
+          <td class="paramname"><em>start_idx_positives</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -748,24 +748,24 @@ Public Member Functions</h2></td></tr>
 <p>Set start index of positive values in matrix of input points. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">startIdxPositives</td><td>Start index of positives in matrix of input points. </td></tr>
+    <tr><td class="paramname">start_idx_positives</td><td>Start index of positives in matrix of input points. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="ab9afd27197f9211d425292dcf2b98d4d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab9afd27197f9211d425292dcf2b98d4d">&#9670;&nbsp;</a></span>setTextColor()</h2>
+<a id="a40f52acaac0cbcdfe50431e526e998be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40f52acaac0cbcdfe50431e526e998be">&#9670;&nbsp;</a></span>set_text_color()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void CalibrationHandler::setTextColor </td>
+          <td class="memname">void CalibrationHandler::set_text_color </td>
           <td>(</td>
           <td class="paramtype">const cv::Scalar&#160;</td>
-          <td class="paramname"><em>textColor</em></td><td>)</td>
+          <td class="paramname"><em>text_color</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -774,24 +774,24 @@ Public Member Functions</h2></td></tr>
 <p>Set color of explanation text. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">textColor</td><td>Color of explanation text. </td></tr>
+    <tr><td class="paramname">text_color</td><td>Color of explanation text. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a5f4099e0452ffadd9c75816d12cf040c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5f4099e0452ffadd9c75816d12cf040c">&#9670;&nbsp;</a></span>setTextScale()</h2>
+<a id="ab0e92fce22975e50b91c0687fe75fbb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0e92fce22975e50b91c0687fe75fbb0">&#9670;&nbsp;</a></span>set_text_scale()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void CalibrationHandler::setTextScale </td>
+          <td class="memname">void CalibrationHandler::set_text_scale </td>
           <td>(</td>
           <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>textScale</em></td><td>)</td>
+          <td class="paramname"><em>text_scale</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -800,24 +800,24 @@ Public Member Functions</h2></td></tr>
 <p>Set scale of explanation text. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">textScale</td><td>Scale of explanation text. </td></tr>
+    <tr><td class="paramname">text_scale</td><td>Scale of explanation text. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a0470756bcfca4afa1ec1a0bd11dfaf41"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0470756bcfca4afa1ec1a0bd11dfaf41">&#9670;&nbsp;</a></span>setTextThickness()</h2>
+<a id="ac153cc40959336c4b766e8edf02ed14e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac153cc40959336c4b766e8edf02ed14e">&#9670;&nbsp;</a></span>set_text_thickness()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void CalibrationHandler::setTextThickness </td>
+          <td class="memname">void CalibrationHandler::set_text_thickness </td>
           <td>(</td>
           <td class="paramtype">const uint8_t&#160;</td>
-          <td class="paramname"><em>textThickness</em></td><td>)</td>
+          <td class="paramname"><em>text_thickness</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -826,21 +826,21 @@ Public Member Functions</h2></td></tr>
 <p>Set thickness of explanation text. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">textThickness</td><td>Thickness of explanation text. </td></tr>
+    <tr><td class="paramname">text_thickness</td><td>Thickness of explanation text. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a3ee8292aebefa7cbe1b1af3bfa2639ee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3ee8292aebefa7cbe1b1af3bfa2639ee">&#9670;&nbsp;</a></span>setTitle()</h2>
+<a id="a2ad630e029d1dc99a446c059acd31bc4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ad630e029d1dc99a446c059acd31bc4">&#9670;&nbsp;</a></span>set_title()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void CalibrationHandler::setTitle </td>
+          <td class="memname">void CalibrationHandler::set_title </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>title</em></td><td>)</td>
@@ -860,8 +860,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>Code/include/<a class="el" href="_calibration_handler_8h_source.html">CalibrationHandler.h</a></li>
-<li>Code/src/<a class="el" href="_calibration_handler_8cpp.html">CalibrationHandler.cpp</a></li>
+<li>include/<a class="el" href="calibration__handler_8h_source.html">calibration_handler.h</a></li>
+<li>src/<a class="el" href="calibration__handler_8cpp.html">calibration_handler.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

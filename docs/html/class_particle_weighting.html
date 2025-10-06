@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Move_Color_Prototype: ParticleWeighting Class Reference</title>
+<title>move-color-prototype: ParticleWeighting Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Move_Color_Prototype
+   <div id="projectname">move-color-prototype
    </div>
   </td>
  </tr>
@@ -69,82 +69,79 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="_particle_weighting_8h_source.html">ParticleWeighting.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="particle__weighting_8h_source.html">particle_weighting.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a8f9f1487fa73ff0b5e09f12460ec3a08"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#a8f9f1487fa73ff0b5e09f12460ec3a08">ParticleWeighting</a> (const uint16_t numParticles, const double minWidth, const double maxWidth, const double minHeight, const double maxHeight, const uint16_t maxWeight, const uint16_t cols, const uint32_t bound, const std::vector&lt; double &gt; &amp;factors, const std::vector&lt; double &gt; &amp;optimalHsvValues)</td></tr>
-<tr class="memdesc:a8f9f1487fa73ff0b5e09f12460ec3a08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a continuous matrix of particles in given area and initializes necessary attributes.  <a href="class_particle_weighting.html#a8f9f1487fa73ff0b5e09f12460ec3a08">More...</a><br /></td></tr>
-<tr class="separator:a8f9f1487fa73ff0b5e09f12460ec3a08"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2440ccc45c914e3a507780fbc3422d01"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#a2440ccc45c914e3a507780fbc3422d01">calculateSumWeights</a> (const uint8_t *const pixelPtr)</td></tr>
-<tr class="memdesc:a2440ccc45c914e3a507780fbc3422d01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate sum of weights.  <a href="class_particle_weighting.html#a2440ccc45c914e3a507780fbc3422d01">More...</a><br /></td></tr>
-<tr class="separator:a2440ccc45c914e3a507780fbc3422d01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae681ef175c7fe9f86eba0a1ede2bc7a9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#ae681ef175c7fe9f86eba0a1ede2bc7a9">isColor</a> (const uint8_t *const pixelPtr)</td></tr>
-<tr class="memdesc:ae681ef175c7fe9f86eba0a1ede2bc7a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decide, wheter area contains color or not.  <a href="class_particle_weighting.html#ae681ef175c7fe9f86eba0a1ede2bc7a9">More...</a><br /></td></tr>
-<tr class="separator:ae681ef175c7fe9f86eba0a1ede2bc7a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c4cc8dd0bcda059e4c4f1b23d414c8e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#a8c4cc8dd0bcda059e4c4f1b23d414c8e">ParticleWeighting</a> (const uint16_t num_particles, const double min_width, const double max_width, const double min_height, const double max_height, const uint16_t max_weight, const uint16_t cols, const uint32_t bound, const std::vector&lt; double &gt; &amp;factors, const std::vector&lt; double &gt; &amp;optimal_hsv_values)</td></tr>
+<tr class="memdesc:a8c4cc8dd0bcda059e4c4f1b23d414c8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a continuous matrix of particles in given area and initializes necessary attributes.  <a href="class_particle_weighting.html#a8c4cc8dd0bcda059e4c4f1b23d414c8e">More...</a><br /></td></tr>
+<tr class="separator:a8c4cc8dd0bcda059e4c4f1b23d414c8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeccd52e10748475c6fc7b88e26ec39d1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#aeccd52e10748475c6fc7b88e26ec39d1">is_color</a> (const uint8_t *const pixel_ptr)</td></tr>
+<tr class="memdesc:aeccd52e10748475c6fc7b88e26ec39d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decide, wheter area contains color or not.  <a href="class_particle_weighting.html#aeccd52e10748475c6fc7b88e26ec39d1">More...</a><br /></td></tr>
+<tr class="separator:aeccd52e10748475c6fc7b88e26ec39d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f9b14402ac4fd33b38e2ae58126e709"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#a8f9b14402ac4fd33b38e2ae58126e709">update</a> ()</td></tr>
 <tr class="memdesc:a8f9b14402ac4fd33b38e2ae58126e709"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update position of particles after changed size.  <a href="class_particle_weighting.html#a8f9b14402ac4fd33b38e2ae58126e709">More...</a><br /></td></tr>
 <tr class="separator:a8f9b14402ac4fd33b38e2ae58126e709"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adecad9e5106299a439888f1805695039"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#adecad9e5106299a439888f1805695039">getParticle</a> (const uint16_t idx, uint16_t backX, uint16_t backY, uint16_t backW, bool alright) const</td></tr>
-<tr class="memdesc:adecad9e5106299a439888f1805695039"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get values of a particle.  <a href="class_particle_weighting.html#adecad9e5106299a439888f1805695039">More...</a><br /></td></tr>
-<tr class="separator:adecad9e5106299a439888f1805695039"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72e99e3b7e6114a45d623e91e9321bb9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#a72e99e3b7e6114a45d623e91e9321bb9">setParticle</a> (const uint16_t idx, const uint16_t changeX, const uint16_t changeY, const uint16_t changeW)</td></tr>
-<tr class="memdesc:a72e99e3b7e6114a45d623e91e9321bb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set values of a particle.  <a href="class_particle_weighting.html#a72e99e3b7e6114a45d623e91e9321bb9">More...</a><br /></td></tr>
-<tr class="separator:a72e99e3b7e6114a45d623e91e9321bb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6763bfd2bc9a06ba22a410c4704ac63"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#ab6763bfd2bc9a06ba22a410c4704ac63">getSumWeights</a> () const</td></tr>
-<tr class="memdesc:ab6763bfd2bc9a06ba22a410c4704ac63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get sum of weights.  <a href="class_particle_weighting.html#ab6763bfd2bc9a06ba22a410c4704ac63">More...</a><br /></td></tr>
-<tr class="separator:ab6763bfd2bc9a06ba22a410c4704ac63"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a459911ba08c4dfb274fbfa772852f03f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#a459911ba08c4dfb274fbfa772852f03f">setSumWeights</a> (const uint32_t sumWeights)</td></tr>
-<tr class="memdesc:a459911ba08c4dfb274fbfa772852f03f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set sum of weights.  <a href="class_particle_weighting.html#a459911ba08c4dfb274fbfa772852f03f">More...</a><br /></td></tr>
-<tr class="separator:a459911ba08c4dfb274fbfa772852f03f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af3e233f0568bc310fa0ab94110252752"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#af3e233f0568bc310fa0ab94110252752">getMaxWeight</a> () const</td></tr>
-<tr class="memdesc:af3e233f0568bc310fa0ab94110252752"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get weight of no error.  <a href="class_particle_weighting.html#af3e233f0568bc310fa0ab94110252752">More...</a><br /></td></tr>
-<tr class="separator:af3e233f0568bc310fa0ab94110252752"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6c9fda7991bc8e56a80cdc4eae10e54"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#ab6c9fda7991bc8e56a80cdc4eae10e54">setMaxWeight</a> (const uint16_t maxWeight)</td></tr>
-<tr class="memdesc:ab6c9fda7991bc8e56a80cdc4eae10e54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set maximum possible weight.  <a href="class_particle_weighting.html#ab6c9fda7991bc8e56a80cdc4eae10e54">More...</a><br /></td></tr>
-<tr class="separator:ab6c9fda7991bc8e56a80cdc4eae10e54"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a31086b6a885d7816846ab7c71c856909"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#a31086b6a885d7816846ab7c71c856909">getMinWidth</a> () const</td></tr>
-<tr class="memdesc:a31086b6a885d7816846ab7c71c856909"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get horizontal start of area.  <a href="class_particle_weighting.html#a31086b6a885d7816846ab7c71c856909">More...</a><br /></td></tr>
-<tr class="separator:a31086b6a885d7816846ab7c71c856909"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abfd89f37a6a91cda423f6bb3a11dcf25"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#abfd89f37a6a91cda423f6bb3a11dcf25">setMinWidth</a> (const uint16_t minWidth)</td></tr>
-<tr class="memdesc:abfd89f37a6a91cda423f6bb3a11dcf25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set horizontal start of area.  <a href="class_particle_weighting.html#abfd89f37a6a91cda423f6bb3a11dcf25">More...</a><br /></td></tr>
-<tr class="separator:abfd89f37a6a91cda423f6bb3a11dcf25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf28410314ea6168364fc37436ac364a"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#acf28410314ea6168364fc37436ac364a">getMinHeight</a> () const</td></tr>
-<tr class="memdesc:acf28410314ea6168364fc37436ac364a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get vertical start of area.  <a href="class_particle_weighting.html#acf28410314ea6168364fc37436ac364a">More...</a><br /></td></tr>
-<tr class="separator:acf28410314ea6168364fc37436ac364a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace4e04498f28390f62896ba524e96270"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#ace4e04498f28390f62896ba524e96270">setMinHeight</a> (const uint16_t minHeight)</td></tr>
-<tr class="memdesc:ace4e04498f28390f62896ba524e96270"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set vertical start of area.  <a href="class_particle_weighting.html#ace4e04498f28390f62896ba524e96270">More...</a><br /></td></tr>
-<tr class="separator:ace4e04498f28390f62896ba524e96270"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1df32b09e541e6dcbd1ebeb4ebdef50d"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#a1df32b09e541e6dcbd1ebeb4ebdef50d">getMaxWidth</a> () const</td></tr>
-<tr class="memdesc:a1df32b09e541e6dcbd1ebeb4ebdef50d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get horizontal end of area.  <a href="class_particle_weighting.html#a1df32b09e541e6dcbd1ebeb4ebdef50d">More...</a><br /></td></tr>
-<tr class="separator:a1df32b09e541e6dcbd1ebeb4ebdef50d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad326cf5bf459be7b88270775dac41eca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#ad326cf5bf459be7b88270775dac41eca">setMaxWidth</a> (const uint16_t maxWidth)</td></tr>
-<tr class="memdesc:ad326cf5bf459be7b88270775dac41eca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set horizontal end of area.  <a href="class_particle_weighting.html#ad326cf5bf459be7b88270775dac41eca">More...</a><br /></td></tr>
-<tr class="separator:ad326cf5bf459be7b88270775dac41eca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa771735e84e9dc4b74a0c1aa1d2fe7d5"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#aa771735e84e9dc4b74a0c1aa1d2fe7d5">getMaxHeight</a> () const</td></tr>
-<tr class="memdesc:aa771735e84e9dc4b74a0c1aa1d2fe7d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get vertical end of area.  <a href="class_particle_weighting.html#aa771735e84e9dc4b74a0c1aa1d2fe7d5">More...</a><br /></td></tr>
-<tr class="separator:aa771735e84e9dc4b74a0c1aa1d2fe7d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6e1ec0a75724faf68ff4ea02153e5ad"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#ac6e1ec0a75724faf68ff4ea02153e5ad">setMaxHeight</a> (const uint16_t maxHeight)</td></tr>
-<tr class="memdesc:ac6e1ec0a75724faf68ff4ea02153e5ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set vertical end of area.  <a href="class_particle_weighting.html#ac6e1ec0a75724faf68ff4ea02153e5ad">More...</a><br /></td></tr>
-<tr class="separator:ac6e1ec0a75724faf68ff4ea02153e5ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6505dbedad5113f00dfc2fdea7de8052"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#a6505dbedad5113f00dfc2fdea7de8052">getHsv</a> () const</td></tr>
-<tr class="memdesc:a6505dbedad5113f00dfc2fdea7de8052"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get vector of optimal hsv values.  <a href="class_particle_weighting.html#a6505dbedad5113f00dfc2fdea7de8052">More...</a><br /></td></tr>
-<tr class="separator:a6505dbedad5113f00dfc2fdea7de8052"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63a4e81b133f18689e81c3088e4de840"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#a63a4e81b133f18689e81c3088e4de840">setHsv</a> (const std::vector&lt; double &gt; &amp;hsv)</td></tr>
-<tr class="memdesc:a63a4e81b133f18689e81c3088e4de840"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set optimal hsv values.  <a href="class_particle_weighting.html#a63a4e81b133f18689e81c3088e4de840">More...</a><br /></td></tr>
-<tr class="separator:a63a4e81b133f18689e81c3088e4de840"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ed56010db69f5b53cd5a706c768f858"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#a1ed56010db69f5b53cd5a706c768f858">getFactors</a> () const</td></tr>
-<tr class="memdesc:a1ed56010db69f5b53cd5a706c768f858"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get factors of squared errors of hsv values.  <a href="class_particle_weighting.html#a1ed56010db69f5b53cd5a706c768f858">More...</a><br /></td></tr>
-<tr class="separator:a1ed56010db69f5b53cd5a706c768f858"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40e0082fd13bff83aff47ca5ad9892c8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#a40e0082fd13bff83aff47ca5ad9892c8">setFactors</a> (const std::vector&lt; double &gt; &amp;factors)</td></tr>
-<tr class="memdesc:a40e0082fd13bff83aff47ca5ad9892c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set factors of squared errors of hsv values.  <a href="class_particle_weighting.html#a40e0082fd13bff83aff47ca5ad9892c8">More...</a><br /></td></tr>
-<tr class="separator:a40e0082fd13bff83aff47ca5ad9892c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66e425383e37e868dd8b77390070d829"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#a66e425383e37e868dd8b77390070d829">get_particle</a> (const uint16_t idx, uint16_t &amp;back_x, uint16_t &amp;back_y, uint16_t &amp;back_w, bool &amp;alright) const</td></tr>
+<tr class="memdesc:a66e425383e37e868dd8b77390070d829"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get values of a particle.  <a href="class_particle_weighting.html#a66e425383e37e868dd8b77390070d829">More...</a><br /></td></tr>
+<tr class="separator:a66e425383e37e868dd8b77390070d829"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ede9702118cdfeb81df2c8e0875a4c0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#a4ede9702118cdfeb81df2c8e0875a4c0">set_particle</a> (const uint16_t idx, const uint16_t change_x, const uint16_t change_y, const uint16_t change_w)</td></tr>
+<tr class="memdesc:a4ede9702118cdfeb81df2c8e0875a4c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set values of a particle.  <a href="class_particle_weighting.html#a4ede9702118cdfeb81df2c8e0875a4c0">More...</a><br /></td></tr>
+<tr class="separator:a4ede9702118cdfeb81df2c8e0875a4c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a997832a1dbef3acf9924a76d7a03db87"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#a997832a1dbef3acf9924a76d7a03db87">get_sum_weights</a> () const</td></tr>
+<tr class="memdesc:a997832a1dbef3acf9924a76d7a03db87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get sum of weights.  <a href="class_particle_weighting.html#a997832a1dbef3acf9924a76d7a03db87">More...</a><br /></td></tr>
+<tr class="separator:a997832a1dbef3acf9924a76d7a03db87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac662da534260ee1a856a6f22b15f2df6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#ac662da534260ee1a856a6f22b15f2df6">set_sum_weights</a> (const uint32_t sum_weights)</td></tr>
+<tr class="memdesc:ac662da534260ee1a856a6f22b15f2df6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set sum of weights.  <a href="class_particle_weighting.html#ac662da534260ee1a856a6f22b15f2df6">More...</a><br /></td></tr>
+<tr class="separator:ac662da534260ee1a856a6f22b15f2df6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cb4f46a7a5108a47233694635233508"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#a2cb4f46a7a5108a47233694635233508">get_max_weight</a> () const</td></tr>
+<tr class="memdesc:a2cb4f46a7a5108a47233694635233508"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get weight of no error.  <a href="class_particle_weighting.html#a2cb4f46a7a5108a47233694635233508">More...</a><br /></td></tr>
+<tr class="separator:a2cb4f46a7a5108a47233694635233508"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e2d75d14a11d0574d3d41eb5e2ae034"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#a9e2d75d14a11d0574d3d41eb5e2ae034">set_max_weight</a> (const uint16_t max_weight)</td></tr>
+<tr class="memdesc:a9e2d75d14a11d0574d3d41eb5e2ae034"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set maximum possible weight.  <a href="class_particle_weighting.html#a9e2d75d14a11d0574d3d41eb5e2ae034">More...</a><br /></td></tr>
+<tr class="separator:a9e2d75d14a11d0574d3d41eb5e2ae034"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d0ae9840bdc815082619081809146f8"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#a0d0ae9840bdc815082619081809146f8">get_min_width</a> () const</td></tr>
+<tr class="memdesc:a0d0ae9840bdc815082619081809146f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get horizontal start of area.  <a href="class_particle_weighting.html#a0d0ae9840bdc815082619081809146f8">More...</a><br /></td></tr>
+<tr class="separator:a0d0ae9840bdc815082619081809146f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62a1ac9154ef24ad5f86bba02cec42bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#a62a1ac9154ef24ad5f86bba02cec42bf">set_min_width</a> (const uint16_t min_width)</td></tr>
+<tr class="memdesc:a62a1ac9154ef24ad5f86bba02cec42bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set horizontal start of area.  <a href="class_particle_weighting.html#a62a1ac9154ef24ad5f86bba02cec42bf">More...</a><br /></td></tr>
+<tr class="separator:a62a1ac9154ef24ad5f86bba02cec42bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e52519a444df565dcb2e34f156da304"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#a9e52519a444df565dcb2e34f156da304">get_min_height</a> () const</td></tr>
+<tr class="memdesc:a9e52519a444df565dcb2e34f156da304"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get vertical start of area.  <a href="class_particle_weighting.html#a9e52519a444df565dcb2e34f156da304">More...</a><br /></td></tr>
+<tr class="separator:a9e52519a444df565dcb2e34f156da304"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a655f3244fda6c81cad950bb0f346a904"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#a655f3244fda6c81cad950bb0f346a904">set_min_height</a> (const uint16_t min_height)</td></tr>
+<tr class="memdesc:a655f3244fda6c81cad950bb0f346a904"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set vertical start of area.  <a href="class_particle_weighting.html#a655f3244fda6c81cad950bb0f346a904">More...</a><br /></td></tr>
+<tr class="separator:a655f3244fda6c81cad950bb0f346a904"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a5b62f3ecc784fd2d9efca66f2b93ee"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#a7a5b62f3ecc784fd2d9efca66f2b93ee">get_max_width</a> () const</td></tr>
+<tr class="memdesc:a7a5b62f3ecc784fd2d9efca66f2b93ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get horizontal end of area.  <a href="class_particle_weighting.html#a7a5b62f3ecc784fd2d9efca66f2b93ee">More...</a><br /></td></tr>
+<tr class="separator:a7a5b62f3ecc784fd2d9efca66f2b93ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1077781f962b77f276082b158f4da4e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#a1077781f962b77f276082b158f4da4e9">set_max_width</a> (const uint16_t max_width)</td></tr>
+<tr class="memdesc:a1077781f962b77f276082b158f4da4e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set horizontal end of area.  <a href="class_particle_weighting.html#a1077781f962b77f276082b158f4da4e9">More...</a><br /></td></tr>
+<tr class="separator:a1077781f962b77f276082b158f4da4e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7766b428637fdeceedda43afabc897fc"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#a7766b428637fdeceedda43afabc897fc">get_max_height</a> () const</td></tr>
+<tr class="memdesc:a7766b428637fdeceedda43afabc897fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get vertical end of area.  <a href="class_particle_weighting.html#a7766b428637fdeceedda43afabc897fc">More...</a><br /></td></tr>
+<tr class="separator:a7766b428637fdeceedda43afabc897fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a574e682e995f4068f55fff754d191985"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#a574e682e995f4068f55fff754d191985">set_max_height</a> (const uint16_t max_height)</td></tr>
+<tr class="memdesc:a574e682e995f4068f55fff754d191985"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set vertical end of area.  <a href="class_particle_weighting.html#a574e682e995f4068f55fff754d191985">More...</a><br /></td></tr>
+<tr class="separator:a574e682e995f4068f55fff754d191985"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb5428415a42485de9a4dc992a41d819"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#acb5428415a42485de9a4dc992a41d819">get_hsv</a> () const</td></tr>
+<tr class="memdesc:acb5428415a42485de9a4dc992a41d819"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get vector of optimal hsv values.  <a href="class_particle_weighting.html#acb5428415a42485de9a4dc992a41d819">More...</a><br /></td></tr>
+<tr class="separator:acb5428415a42485de9a4dc992a41d819"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5bf72f9e3c83a343088a2ea42a19ee98"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#a5bf72f9e3c83a343088a2ea42a19ee98">set_hsv</a> (const std::vector&lt; double &gt; &amp;hsv)</td></tr>
+<tr class="memdesc:a5bf72f9e3c83a343088a2ea42a19ee98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set optimal hsv values.  <a href="class_particle_weighting.html#a5bf72f9e3c83a343088a2ea42a19ee98">More...</a><br /></td></tr>
+<tr class="separator:a5bf72f9e3c83a343088a2ea42a19ee98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac41e9a785ebdda6476eee4352418356a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#ac41e9a785ebdda6476eee4352418356a">get_factors</a> () const</td></tr>
+<tr class="memdesc:ac41e9a785ebdda6476eee4352418356a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get factors of squared errors of hsv values.  <a href="class_particle_weighting.html#ac41e9a785ebdda6476eee4352418356a">More...</a><br /></td></tr>
+<tr class="separator:ac41e9a785ebdda6476eee4352418356a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af47e4993666f86ae3808ccda68c18118"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_weighting.html#af47e4993666f86ae3808ccda68c18118">set_factors</a> (const std::vector&lt; double &gt; &amp;factors)</td></tr>
+<tr class="memdesc:af47e4993666f86ae3808ccda68c18118"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set factors of squared errors of hsv values.  <a href="class_particle_weighting.html#af47e4993666f86ae3808ccda68c18118">More...</a><br /></td></tr>
+<tr class="separator:af47e4993666f86ae3808ccda68c18118"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><dl class="section date"><dt>Date</dt><dd>09/10/19 </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a8f9f1487fa73ff0b5e09f12460ec3a08"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8f9f1487fa73ff0b5e09f12460ec3a08">&#9670;&nbsp;</a></span>ParticleWeighting()</h2>
+<a id="a8c4cc8dd0bcda059e4c4f1b23d414c8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c4cc8dd0bcda059e4c4f1b23d414c8e">&#9670;&nbsp;</a></span>ParticleWeighting()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -153,37 +150,37 @@ Public Member Functions</h2></td></tr>
           <td class="memname">ParticleWeighting::ParticleWeighting </td>
           <td>(</td>
           <td class="paramtype">const uint16_t&#160;</td>
-          <td class="paramname"><em>numParticles</em>, </td>
+          <td class="paramname"><em>num_particles</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const double&#160;</td>
-          <td class="paramname"><em>minWidth</em>, </td>
+          <td class="paramname"><em>min_width</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const double&#160;</td>
-          <td class="paramname"><em>maxWidth</em>, </td>
+          <td class="paramname"><em>max_width</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const double&#160;</td>
-          <td class="paramname"><em>minHeight</em>, </td>
+          <td class="paramname"><em>min_height</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const double&#160;</td>
-          <td class="paramname"><em>maxHeight</em>, </td>
+          <td class="paramname"><em>max_height</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const uint16_t&#160;</td>
-          <td class="paramname"><em>maxWeight</em>, </td>
+          <td class="paramname"><em>max_weight</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -207,7 +204,7 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
-          <td class="paramname"><em>optimalHsvValues</em>&#160;</td>
+          <td class="paramname"><em>optimal_hsv_values</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -220,60 +217,33 @@ Public Member Functions</h2></td></tr>
 <p>Constructs a continuous matrix of particles in given area and initializes necessary attributes. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">numParticles</td><td>Number of particles. </td></tr>
-    <tr><td class="paramname">minWidth</td><td>Where width starts. </td></tr>
-    <tr><td class="paramname">maxWidth</td><td>Where width ends. </td></tr>
-    <tr><td class="paramname">minHeight</td><td>Where height starts. </td></tr>
-    <tr><td class="paramname">maxHeight</td><td>Where height ends. </td></tr>
-    <tr><td class="paramname">maxWeight</td><td>Weight of a particle without error. </td></tr>
+    <tr><td class="paramname">num_particles</td><td>Number of particles. </td></tr>
+    <tr><td class="paramname">min_width</td><td>Where width starts. </td></tr>
+    <tr><td class="paramname">max_width</td><td>Where width ends. </td></tr>
+    <tr><td class="paramname">min_height</td><td>Where height starts. </td></tr>
+    <tr><td class="paramname">max_height</td><td>Where height ends. </td></tr>
+    <tr><td class="paramname">max_weight</td><td>Weight of a particle without error. </td></tr>
     <tr><td class="paramname">cols</td><td>Number of horizontal pixels. </td></tr>
     <tr><td class="paramname">bound</td><td>Minimal number of positive particles. </td></tr>
     <tr><td class="paramname">factors</td><td>Factors multiplied by squared error. </td></tr>
-    <tr><td class="paramname">optimalHsvValues</td><td>HSV values closest to ideal values.</td></tr>
+    <tr><td class="paramname">optimal_hsv_values</td><td>HSV values closest to ideal values.</td></tr>
   </table>
   </dd>
 </dl>
-<p><a class="el" href="_particle_weighting_8cpp.html">ParticleWeighting.cpp</a></p>
+<p>ParticleWeighting.cpp</p>
 <p>Class to calculate decision of containing a color in hsv space or not. This is done via unmoving particles, because the color from one pixel and the one next to it will not change often. </p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a2440ccc45c914e3a507780fbc3422d01"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2440ccc45c914e3a507780fbc3422d01">&#9670;&nbsp;</a></span>calculateSumWeights()</h2>
+<a id="ac41e9a785ebdda6476eee4352418356a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac41e9a785ebdda6476eee4352418356a">&#9670;&nbsp;</a></span>get_factors()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint32_t ParticleWeighting::calculateSumWeights </td>
-          <td>(</td>
-          <td class="paramtype">const uint8_t *const&#160;</td>
-          <td class="paramname"><em>pixelPtr</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Calculate sum of weights. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">pixelPtr</td><td>Pointer pointing to current image. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Sum of weights of particles. </dd></dl>
-
-</div>
-</div>
-<a id="a1ed56010db69f5b53cd5a706c768f858"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1ed56010db69f5b53cd5a706c768f858">&#9670;&nbsp;</a></span>getFactors()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt; double &gt; ParticleWeighting::getFactors </td>
+          <td class="memname">std::vector&lt; double &gt; ParticleWeighting::get_factors </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -286,14 +256,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a6505dbedad5113f00dfc2fdea7de8052"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6505dbedad5113f00dfc2fdea7de8052">&#9670;&nbsp;</a></span>getHsv()</h2>
+<a id="acb5428415a42485de9a4dc992a41d819"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb5428415a42485de9a4dc992a41d819">&#9670;&nbsp;</a></span>get_hsv()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; double &gt; ParticleWeighting::getHsv </td>
+          <td class="memname">std::vector&lt; double &gt; ParticleWeighting::get_hsv </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -306,14 +276,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aa771735e84e9dc4b74a0c1aa1d2fe7d5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa771735e84e9dc4b74a0c1aa1d2fe7d5">&#9670;&nbsp;</a></span>getMaxHeight()</h2>
+<a id="a7766b428637fdeceedda43afabc897fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7766b428637fdeceedda43afabc897fc">&#9670;&nbsp;</a></span>get_max_height()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint16_t ParticleWeighting::getMaxHeight </td>
+          <td class="memname">uint16_t ParticleWeighting::get_max_height </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -326,14 +296,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="af3e233f0568bc310fa0ab94110252752"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af3e233f0568bc310fa0ab94110252752">&#9670;&nbsp;</a></span>getMaxWeight()</h2>
+<a id="a2cb4f46a7a5108a47233694635233508"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2cb4f46a7a5108a47233694635233508">&#9670;&nbsp;</a></span>get_max_weight()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint16_t ParticleWeighting::getMaxWeight </td>
+          <td class="memname">uint16_t ParticleWeighting::get_max_weight </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -346,14 +316,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a1df32b09e541e6dcbd1ebeb4ebdef50d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1df32b09e541e6dcbd1ebeb4ebdef50d">&#9670;&nbsp;</a></span>getMaxWidth()</h2>
+<a id="a7a5b62f3ecc784fd2d9efca66f2b93ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a5b62f3ecc784fd2d9efca66f2b93ee">&#9670;&nbsp;</a></span>get_max_width()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint16_t ParticleWeighting::getMaxWidth </td>
+          <td class="memname">uint16_t ParticleWeighting::get_max_width </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -366,14 +336,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="acf28410314ea6168364fc37436ac364a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acf28410314ea6168364fc37436ac364a">&#9670;&nbsp;</a></span>getMinHeight()</h2>
+<a id="a9e52519a444df565dcb2e34f156da304"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e52519a444df565dcb2e34f156da304">&#9670;&nbsp;</a></span>get_min_height()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint16_t ParticleWeighting::getMinHeight </td>
+          <td class="memname">uint16_t ParticleWeighting::get_min_height </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -386,14 +356,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a31086b6a885d7816846ab7c71c856909"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a31086b6a885d7816846ab7c71c856909">&#9670;&nbsp;</a></span>getMinWidth()</h2>
+<a id="a0d0ae9840bdc815082619081809146f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d0ae9840bdc815082619081809146f8">&#9670;&nbsp;</a></span>get_min_width()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint16_t ParticleWeighting::getMinWidth </td>
+          <td class="memname">uint16_t ParticleWeighting::get_min_width </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -406,14 +376,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="adecad9e5106299a439888f1805695039"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adecad9e5106299a439888f1805695039">&#9670;&nbsp;</a></span>getParticle()</h2>
+<a id="a66e425383e37e868dd8b77390070d829"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66e425383e37e868dd8b77390070d829">&#9670;&nbsp;</a></span>get_particle()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void ParticleWeighting::getParticle </td>
+          <td class="memname">void ParticleWeighting::get_particle </td>
           <td>(</td>
           <td class="paramtype">const uint16_t&#160;</td>
           <td class="paramname"><em>idx</em>, </td>
@@ -421,25 +391,25 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint16_t&#160;</td>
-          <td class="paramname"><em>backX</em>, </td>
+          <td class="paramtype">uint16_t &amp;&#160;</td>
+          <td class="paramname"><em>back_x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint16_t&#160;</td>
-          <td class="paramname"><em>backY</em>, </td>
+          <td class="paramtype">uint16_t &amp;&#160;</td>
+          <td class="paramname"><em>back_y</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint16_t&#160;</td>
-          <td class="paramname"><em>backW</em>, </td>
+          <td class="paramtype">uint16_t &amp;&#160;</td>
+          <td class="paramname"><em>back_w</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool&#160;</td>
+          <td class="paramtype">bool &amp;&#160;</td>
           <td class="paramname"><em>alright</em>&#160;</td>
         </tr>
         <tr>
@@ -454,9 +424,9 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">idx</td><td>Index of wanted particle. </td></tr>
-    <tr><td class="paramname">backX</td><td>X position of particle. </td></tr>
-    <tr><td class="paramname">backY</td><td>Y position of particle. </td></tr>
-    <tr><td class="paramname">backW</td><td>Weight of particle. </td></tr>
+    <tr><td class="paramname">back_x</td><td>X position of particle. </td></tr>
+    <tr><td class="paramname">back_y</td><td>Y position of particle. </td></tr>
+    <tr><td class="paramname">back_w</td><td>Weight of particle. </td></tr>
     <tr><td class="paramname">alright</td><td>Is alright, if idx_ is in valid range. </td></tr>
   </table>
   </dd>
@@ -464,14 +434,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ab6763bfd2bc9a06ba22a410c4704ac63"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab6763bfd2bc9a06ba22a410c4704ac63">&#9670;&nbsp;</a></span>getSumWeights()</h2>
+<a id="a997832a1dbef3acf9924a76d7a03db87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a997832a1dbef3acf9924a76d7a03db87">&#9670;&nbsp;</a></span>get_sum_weights()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint32_t ParticleWeighting::getSumWeights </td>
+          <td class="memname">uint32_t ParticleWeighting::get_sum_weights </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -484,17 +454,17 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ae681ef175c7fe9f86eba0a1ede2bc7a9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae681ef175c7fe9f86eba0a1ede2bc7a9">&#9670;&nbsp;</a></span>isColor()</h2>
+<a id="aeccd52e10748475c6fc7b88e26ec39d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeccd52e10748475c6fc7b88e26ec39d1">&#9670;&nbsp;</a></span>is_color()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool ParticleWeighting::isColor </td>
+          <td class="memname">bool ParticleWeighting::is_color </td>
           <td>(</td>
           <td class="paramtype">const uint8_t *const&#160;</td>
-          <td class="paramname"><em>pixelPtr</em></td><td>)</td>
+          <td class="paramname"><em>pixel_ptr</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -503,7 +473,7 @@ Public Member Functions</h2></td></tr>
 <p>Decide, wheter area contains color or not. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">pixelPtr</td><td>Pointer pointing to current image. </td></tr>
+    <tr><td class="paramname">pixel_ptr</td><td>Pointer pointing to current image. </td></tr>
   </table>
   </dd>
 </dl>
@@ -511,14 +481,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a40e0082fd13bff83aff47ca5ad9892c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a40e0082fd13bff83aff47ca5ad9892c8">&#9670;&nbsp;</a></span>setFactors()</h2>
+<a id="af47e4993666f86ae3808ccda68c18118"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af47e4993666f86ae3808ccda68c18118">&#9670;&nbsp;</a></span>set_factors()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool ParticleWeighting::setFactors </td>
+          <td class="memname">bool ParticleWeighting::set_factors </td>
           <td>(</td>
           <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
           <td class="paramname"><em>factors</em></td><td>)</td>
@@ -538,14 +508,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a63a4e81b133f18689e81c3088e4de840"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a63a4e81b133f18689e81c3088e4de840">&#9670;&nbsp;</a></span>setHsv()</h2>
+<a id="a5bf72f9e3c83a343088a2ea42a19ee98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5bf72f9e3c83a343088a2ea42a19ee98">&#9670;&nbsp;</a></span>set_hsv()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool ParticleWeighting::setHsv </td>
+          <td class="memname">bool ParticleWeighting::set_hsv </td>
           <td>(</td>
           <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
           <td class="paramname"><em>hsv</em></td><td>)</td>
@@ -565,17 +535,17 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ac6e1ec0a75724faf68ff4ea02153e5ad"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac6e1ec0a75724faf68ff4ea02153e5ad">&#9670;&nbsp;</a></span>setMaxHeight()</h2>
+<a id="a574e682e995f4068f55fff754d191985"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a574e682e995f4068f55fff754d191985">&#9670;&nbsp;</a></span>set_max_height()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void ParticleWeighting::setMaxHeight </td>
+          <td class="memname">void ParticleWeighting::set_max_height </td>
           <td>(</td>
           <td class="paramtype">const uint16_t&#160;</td>
-          <td class="paramname"><em>maxHeight</em></td><td>)</td>
+          <td class="paramname"><em>max_height</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -584,24 +554,24 @@ Public Member Functions</h2></td></tr>
 <p>Set vertical end of area. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">maxHeight</td><td>Vertical end of area. </td></tr>
+    <tr><td class="paramname">max_height</td><td>Vertical end of area. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="ab6c9fda7991bc8e56a80cdc4eae10e54"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab6c9fda7991bc8e56a80cdc4eae10e54">&#9670;&nbsp;</a></span>setMaxWeight()</h2>
+<a id="a9e2d75d14a11d0574d3d41eb5e2ae034"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e2d75d14a11d0574d3d41eb5e2ae034">&#9670;&nbsp;</a></span>set_max_weight()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void ParticleWeighting::setMaxWeight </td>
+          <td class="memname">void ParticleWeighting::set_max_weight </td>
           <td>(</td>
           <td class="paramtype">const uint16_t&#160;</td>
-          <td class="paramname"><em>maxWeight</em></td><td>)</td>
+          <td class="paramname"><em>max_weight</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -610,24 +580,24 @@ Public Member Functions</h2></td></tr>
 <p>Set maximum possible weight. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">maxWeight</td><td>Maximum possible weight. </td></tr>
+    <tr><td class="paramname">max_weight</td><td>Maximum possible weight. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="ad326cf5bf459be7b88270775dac41eca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad326cf5bf459be7b88270775dac41eca">&#9670;&nbsp;</a></span>setMaxWidth()</h2>
+<a id="a1077781f962b77f276082b158f4da4e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1077781f962b77f276082b158f4da4e9">&#9670;&nbsp;</a></span>set_max_width()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void ParticleWeighting::setMaxWidth </td>
+          <td class="memname">void ParticleWeighting::set_max_width </td>
           <td>(</td>
           <td class="paramtype">const uint16_t&#160;</td>
-          <td class="paramname"><em>maxWidth</em></td><td>)</td>
+          <td class="paramname"><em>max_width</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -636,24 +606,24 @@ Public Member Functions</h2></td></tr>
 <p>Set horizontal end of area. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">maxWidth</td><td>Horizontal end of area. </td></tr>
+    <tr><td class="paramname">max_width</td><td>Horizontal end of area. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="ace4e04498f28390f62896ba524e96270"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ace4e04498f28390f62896ba524e96270">&#9670;&nbsp;</a></span>setMinHeight()</h2>
+<a id="a655f3244fda6c81cad950bb0f346a904"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a655f3244fda6c81cad950bb0f346a904">&#9670;&nbsp;</a></span>set_min_height()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void ParticleWeighting::setMinHeight </td>
+          <td class="memname">void ParticleWeighting::set_min_height </td>
           <td>(</td>
           <td class="paramtype">const uint16_t&#160;</td>
-          <td class="paramname"><em>minHeight</em></td><td>)</td>
+          <td class="paramname"><em>min_height</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -662,24 +632,24 @@ Public Member Functions</h2></td></tr>
 <p>Set vertical start of area. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">minHeight</td><td>Vertical start of area. </td></tr>
+    <tr><td class="paramname">min_height</td><td>Vertical start of area. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="abfd89f37a6a91cda423f6bb3a11dcf25"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abfd89f37a6a91cda423f6bb3a11dcf25">&#9670;&nbsp;</a></span>setMinWidth()</h2>
+<a id="a62a1ac9154ef24ad5f86bba02cec42bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a62a1ac9154ef24ad5f86bba02cec42bf">&#9670;&nbsp;</a></span>set_min_width()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void ParticleWeighting::setMinWidth </td>
+          <td class="memname">void ParticleWeighting::set_min_width </td>
           <td>(</td>
           <td class="paramtype">const uint16_t&#160;</td>
-          <td class="paramname"><em>minWidth</em></td><td>)</td>
+          <td class="paramname"><em>min_width</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -688,21 +658,21 @@ Public Member Functions</h2></td></tr>
 <p>Set horizontal start of area. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">minWidth</td><td>Horizontal start of area. </td></tr>
+    <tr><td class="paramname">min_width</td><td>Horizontal start of area. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a72e99e3b7e6114a45d623e91e9321bb9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a72e99e3b7e6114a45d623e91e9321bb9">&#9670;&nbsp;</a></span>setParticle()</h2>
+<a id="a4ede9702118cdfeb81df2c8e0875a4c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ede9702118cdfeb81df2c8e0875a4c0">&#9670;&nbsp;</a></span>set_particle()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void ParticleWeighting::setParticle </td>
+          <td class="memname">void ParticleWeighting::set_particle </td>
           <td>(</td>
           <td class="paramtype">const uint16_t&#160;</td>
           <td class="paramname"><em>idx</em>, </td>
@@ -711,19 +681,19 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const uint16_t&#160;</td>
-          <td class="paramname"><em>changeX</em>, </td>
+          <td class="paramname"><em>change_x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const uint16_t&#160;</td>
-          <td class="paramname"><em>changeY</em>, </td>
+          <td class="paramname"><em>change_y</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const uint16_t&#160;</td>
-          <td class="paramname"><em>changeW</em>&#160;</td>
+          <td class="paramname"><em>change_w</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -737,26 +707,26 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">idx</td><td>Index of interesting particle. </td></tr>
-    <tr><td class="paramname">changeX</td><td>Next x position of particle. </td></tr>
-    <tr><td class="paramname">changeY</td><td>Next y position of particle. </td></tr>
-    <tr><td class="paramname">changeW</td><td>Next weight of particle. </td></tr>
+    <tr><td class="paramname">change_x</td><td>Next x position of particle. </td></tr>
+    <tr><td class="paramname">change_y</td><td>Next y position of particle. </td></tr>
+    <tr><td class="paramname">change_w</td><td>Next weight of particle. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a459911ba08c4dfb274fbfa772852f03f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a459911ba08c4dfb274fbfa772852f03f">&#9670;&nbsp;</a></span>setSumWeights()</h2>
+<a id="ac662da534260ee1a856a6f22b15f2df6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac662da534260ee1a856a6f22b15f2df6">&#9670;&nbsp;</a></span>set_sum_weights()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void ParticleWeighting::setSumWeights </td>
+          <td class="memname">void ParticleWeighting::set_sum_weights </td>
           <td>(</td>
           <td class="paramtype">const uint32_t&#160;</td>
-          <td class="paramname"><em>sumWeights</em></td><td>)</td>
+          <td class="paramname"><em>sum_weights</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -765,7 +735,7 @@ Public Member Functions</h2></td></tr>
 <p>Set sum of weights. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">sumWeights</td><td>New sum of weights. </td></tr>
+    <tr><td class="paramname">sum_weights</td><td>New sum of weights. </td></tr>
   </table>
   </dd>
 </dl>
@@ -792,8 +762,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>Code/include/<a class="el" href="_particle_weighting_8h_source.html">ParticleWeighting.h</a></li>
-<li>Code/src/<a class="el" href="_particle_weighting_8cpp.html">ParticleWeighting.cpp</a></li>
+<li>include/<a class="el" href="particle__weighting_8h_source.html">particle_weighting.h</a></li>
+<li>src/<a class="el" href="particle__weighting_8cpp.html">particle_weighting.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

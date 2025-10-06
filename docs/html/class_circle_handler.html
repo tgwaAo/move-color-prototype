@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Move_Color_Prototype: CircleHandler Class Reference</title>
+<title>move-color-prototype: CircleHandler Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Move_Color_Prototype
+   <div id="projectname">move-color-prototype
    </div>
   </td>
  </tr>
@@ -70,7 +70,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="_circle_handler_8h_source.html">CircleHandler.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="circle__handler_8h_source.html">circle_handler.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
@@ -82,36 +82,36 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a78e8715673e91f7a389b58155a62176d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_circle_handler.html#a78e8715673e91f7a389b58155a62176d">CircleHandler</a> ()</td></tr>
 <tr class="memdesc:a78e8715673e91f7a389b58155a62176d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor calling other constructor with 10 circles with a radius of ten. The time of each state is 3 seconds and initial state is dark (visible, but not active jet). The circles are blue and created in a window of size 480x640.  <a href="class_circle_handler.html#a78e8715673e91f7a389b58155a62176d">More...</a><br /></td></tr>
 <tr class="separator:a78e8715673e91f7a389b58155a62176d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1bbb0cf83cbbfc9bdfb4db5b1d98aacb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_circle_handler.html#a1bbb0cf83cbbfc9bdfb4db5b1d98aacb">CircleHandler</a> (const uint8_t numCircles, const uint8_t radius_, const std::vector&lt; float &gt; &amp;circleTimeStates, const cv::Scalar &amp;color, const uint16_t width=640, const uint16_t height=480)</td></tr>
-<tr class="memdesc:a1bbb0cf83cbbfc9bdfb4db5b1d98aacb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor initializing times of states and active state, color and number of circles and window of creation.  <a href="class_circle_handler.html#a1bbb0cf83cbbfc9bdfb4db5b1d98aacb">More...</a><br /></td></tr>
-<tr class="separator:a1bbb0cf83cbbfc9bdfb4db5b1d98aacb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81641c203842a850541e8dba197cb195"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_circle_handler.html#a81641c203842a850541e8dba197cb195">CircleHandler</a> (const uint8_t num_circles, const uint8_t radius_, const std::vector&lt; float &gt; &amp;circle_time_states, const cv::Scalar &amp;color, const uint16_t width=640, const uint16_t height=480)</td></tr>
+<tr class="memdesc:a81641c203842a850541e8dba197cb195"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor initializing times of states and active state, color and number of circles and window of creation.  <a href="class_circle_handler.html#a81641c203842a850541e8dba197cb195">More...</a><br /></td></tr>
+<tr class="separator:a81641c203842a850541e8dba197cb195"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a045ef2e99eeb58c44387d5ddad9f814c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_circle_handler.html#a045ef2e99eeb58c44387d5ddad9f814c">~CircleHandler</a> ()</td></tr>
 <tr class="memdesc:a045ef2e99eeb58c44387d5ddad9f814c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor of class.  <a href="class_circle_handler.html#a045ef2e99eeb58c44387d5ddad9f814c">More...</a><br /></td></tr>
 <tr class="separator:a045ef2e99eeb58c44387d5ddad9f814c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a662d82f413fa997d7e9ad0c2246b393e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_circle_handler.html#a662d82f413fa997d7e9ad0c2246b393e">updateCircles</a> (cv::Mat *img)</td></tr>
-<tr class="memdesc:a662d82f413fa997d7e9ad0c2246b393e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update states and drawings.  <a href="class_circle_handler.html#a662d82f413fa997d7e9ad0c2246b393e">More...</a><br /></td></tr>
-<tr class="separator:a662d82f413fa997d7e9ad0c2246b393e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adcd70a8fa0d7694ebf52c6d260068593"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_circle_handler.html#adcd70a8fa0d7694ebf52c6d260068593">checkHit</a> (const uint16_t x, const uint16_t y)</td></tr>
-<tr class="memdesc:adcd70a8fa0d7694ebf52c6d260068593"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check hits of circles at position.  <a href="class_circle_handler.html#adcd70a8fa0d7694ebf52c6d260068593">More...</a><br /></td></tr>
-<tr class="separator:adcd70a8fa0d7694ebf52c6d260068593"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f571ee69101c979fd96906044a76387"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_circle_handler.html#a4f571ee69101c979fd96906044a76387">setCircleTimeStates</a> (const std::vector&lt; float &gt; &amp;circleTimeStates)</td></tr>
-<tr class="memdesc:a4f571ee69101c979fd96906044a76387"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set times of different states.  <a href="class_circle_handler.html#a4f571ee69101c979fd96906044a76387">More...</a><br /></td></tr>
-<tr class="separator:a4f571ee69101c979fd96906044a76387"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b23248cc86044606287236ef1575cd7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_circle_handler.html#a9b23248cc86044606287236ef1575cd7">setColor</a> (const cv::Scalar &amp;color)</td></tr>
-<tr class="memdesc:a9b23248cc86044606287236ef1575cd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set color of shown circles.  <a href="class_circle_handler.html#a9b23248cc86044606287236ef1575cd7">More...</a><br /></td></tr>
-<tr class="separator:a9b23248cc86044606287236ef1575cd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1058c9c7688937bc93c692f4aade5ff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_circle_handler.html#ad1058c9c7688937bc93c692f4aade5ff">setRadius</a> (const uint8_t radius)</td></tr>
-<tr class="memdesc:ad1058c9c7688937bc93c692f4aade5ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set radius of shown circles.  <a href="class_circle_handler.html#ad1058c9c7688937bc93c692f4aade5ff">More...</a><br /></td></tr>
-<tr class="separator:ad1058c9c7688937bc93c692f4aade5ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d980130304721bb7569b2568f3363d5"><td class="memItemLeft" align="right" valign="top">std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_circle_handler.html#a4d980130304721bb7569b2568f3363d5">getCircleTimeStates</a> () const</td></tr>
-<tr class="memdesc:a4d980130304721bb7569b2568f3363d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get time of state at given index.  <a href="class_circle_handler.html#a4d980130304721bb7569b2568f3363d5">More...</a><br /></td></tr>
-<tr class="separator:a4d980130304721bb7569b2568f3363d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a23bb542bc6703754bd918f35bf292189"><td class="memItemLeft" align="right" valign="top">cv::Scalar&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_circle_handler.html#a23bb542bc6703754bd918f35bf292189">getColor</a> () const</td></tr>
-<tr class="memdesc:a23bb542bc6703754bd918f35bf292189"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get color of drawn circles.  <a href="class_circle_handler.html#a23bb542bc6703754bd918f35bf292189">More...</a><br /></td></tr>
-<tr class="separator:a23bb542bc6703754bd918f35bf292189"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2684b03383b3037b21b929d342cb991f"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_circle_handler.html#a2684b03383b3037b21b929d342cb991f">getRadius</a> () const</td></tr>
-<tr class="memdesc:a2684b03383b3037b21b929d342cb991f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get radius of drawn cirlces.  <a href="class_circle_handler.html#a2684b03383b3037b21b929d342cb991f">More...</a><br /></td></tr>
-<tr class="separator:a2684b03383b3037b21b929d342cb991f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87a1938c530577388b07a97d4d5b022d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_circle_handler.html#a87a1938c530577388b07a97d4d5b022d">update_circles</a> (cv::Mat *img)</td></tr>
+<tr class="memdesc:a87a1938c530577388b07a97d4d5b022d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update states and drawings.  <a href="class_circle_handler.html#a87a1938c530577388b07a97d4d5b022d">More...</a><br /></td></tr>
+<tr class="separator:a87a1938c530577388b07a97d4d5b022d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a915c03780832fa7a49379ed762dc518a"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_circle_handler.html#a915c03780832fa7a49379ed762dc518a">check_hit</a> (const uint16_t x, const uint16_t y)</td></tr>
+<tr class="memdesc:a915c03780832fa7a49379ed762dc518a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check hits of circles at position.  <a href="class_circle_handler.html#a915c03780832fa7a49379ed762dc518a">More...</a><br /></td></tr>
+<tr class="separator:a915c03780832fa7a49379ed762dc518a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6554849f3678f1ce0288365f762bbdae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_circle_handler.html#a6554849f3678f1ce0288365f762bbdae">set_circle_time_states</a> (const std::vector&lt; float &gt; &amp;circle_time_states)</td></tr>
+<tr class="memdesc:a6554849f3678f1ce0288365f762bbdae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set times of different states.  <a href="class_circle_handler.html#a6554849f3678f1ce0288365f762bbdae">More...</a><br /></td></tr>
+<tr class="separator:a6554849f3678f1ce0288365f762bbdae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40822e049a2e9a9fef3e79a99921d785"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_circle_handler.html#a40822e049a2e9a9fef3e79a99921d785">set_color</a> (const cv::Scalar &amp;color)</td></tr>
+<tr class="memdesc:a40822e049a2e9a9fef3e79a99921d785"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set color of shown circles.  <a href="class_circle_handler.html#a40822e049a2e9a9fef3e79a99921d785">More...</a><br /></td></tr>
+<tr class="separator:a40822e049a2e9a9fef3e79a99921d785"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3575c998b33c76af8494d90628c4127e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_circle_handler.html#a3575c998b33c76af8494d90628c4127e">set_radius</a> (const uint8_t radius)</td></tr>
+<tr class="memdesc:a3575c998b33c76af8494d90628c4127e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set radius of shown circles.  <a href="class_circle_handler.html#a3575c998b33c76af8494d90628c4127e">More...</a><br /></td></tr>
+<tr class="separator:a3575c998b33c76af8494d90628c4127e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adca1d081923541bdce5a4fcd60ea27a4"><td class="memItemLeft" align="right" valign="top">std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_circle_handler.html#adca1d081923541bdce5a4fcd60ea27a4">get_circle_time_states</a> () const</td></tr>
+<tr class="memdesc:adca1d081923541bdce5a4fcd60ea27a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get time of state at given index.  <a href="class_circle_handler.html#adca1d081923541bdce5a4fcd60ea27a4">More...</a><br /></td></tr>
+<tr class="separator:adca1d081923541bdce5a4fcd60ea27a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3847f633157d1032800f2daca13c67b6"><td class="memItemLeft" align="right" valign="top">cv::Scalar&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_circle_handler.html#a3847f633157d1032800f2daca13c67b6">get_color</a> () const</td></tr>
+<tr class="memdesc:a3847f633157d1032800f2daca13c67b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get color of drawn circles.  <a href="class_circle_handler.html#a3847f633157d1032800f2daca13c67b6">More...</a><br /></td></tr>
+<tr class="separator:a3847f633157d1032800f2daca13c67b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a460aa66622d4d18d3ea6f3dffefd2401"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_circle_handler.html#a460aa66622d4d18d3ea6f3dffefd2401">get_radius</a> () const</td></tr>
+<tr class="memdesc:a460aa66622d4d18d3ea6f3dffefd2401"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get radius of drawn cirlces.  <a href="class_circle_handler.html#a460aa66622d4d18d3ea6f3dffefd2401">More...</a><br /></td></tr>
+<tr class="separator:a460aa66622d4d18d3ea6f3dffefd2401"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><dl class="section date"><dt>Date</dt><dd>09/10/19 </dd></dl>
@@ -132,13 +132,13 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Default constructor calling other constructor with 10 circles with a radius of ten. The time of each state is 3 seconds and initial state is dark (visible, but not active jet). The circles are blue and created in a window of size 480x640. </p>
-<p><a class="el" href="_circle_handler_8cpp.html">CircleHandler.cpp</a></p>
+<p>CircleHandler.cpp</p>
 <p>Handles timers and visualization of circles. </p>
 
 </div>
 </div>
-<a id="a1bbb0cf83cbbfc9bdfb4db5b1d98aacb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1bbb0cf83cbbfc9bdfb4db5b1d98aacb">&#9670;&nbsp;</a></span>CircleHandler() <span class="overload">[2/2]</span></h2>
+<a id="a81641c203842a850541e8dba197cb195"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81641c203842a850541e8dba197cb195">&#9670;&nbsp;</a></span>CircleHandler() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -147,7 +147,7 @@ Public Member Functions</h2></td></tr>
           <td class="memname">CircleHandler::CircleHandler </td>
           <td>(</td>
           <td class="paramtype">const uint8_t&#160;</td>
-          <td class="paramname"><em>numCircles</em>, </td>
+          <td class="paramname"><em>num_circles</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -159,7 +159,7 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::vector&lt; float &gt; &amp;&#160;</td>
-          <td class="paramname"><em>circleTimeStates</em>, </td>
+          <td class="paramname"><em>circle_time_states</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -190,9 +190,9 @@ Public Member Functions</h2></td></tr>
 <p>Constructor initializing times of states and active state, color and number of circles and window of creation. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">numCircles</td><td>Number of used circles. </td></tr>
+    <tr><td class="paramname">num_circles</td><td>Number of used circles. </td></tr>
     <tr><td class="paramname">radius_</td><td>Radius of used circles. </td></tr>
-    <tr><td class="paramname">circleTimeStates</td><td>Time of each state each circle has. </td></tr>
+    <tr><td class="paramname">circle_time_states</td><td>Time of each state each circle has. </td></tr>
     <tr><td class="paramname">color</td><td>Color of active state (brightest). </td></tr>
     <tr><td class="paramname">width</td><td>Width of possible positions in window. </td></tr>
     <tr><td class="paramname">height</td><td>Height of possible positions in window. </td></tr>
@@ -222,14 +222,14 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="adcd70a8fa0d7694ebf52c6d260068593"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adcd70a8fa0d7694ebf52c6d260068593">&#9670;&nbsp;</a></span>checkHit()</h2>
+<a id="a915c03780832fa7a49379ed762dc518a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a915c03780832fa7a49379ed762dc518a">&#9670;&nbsp;</a></span>check_hit()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t CircleHandler::checkHit </td>
+          <td class="memname">uint8_t CircleHandler::check_hit </td>
           <td>(</td>
           <td class="paramtype">const uint16_t&#160;</td>
           <td class="paramname"><em>x</em>, </td>
@@ -260,14 +260,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a4d980130304721bb7569b2568f3363d5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4d980130304721bb7569b2568f3363d5">&#9670;&nbsp;</a></span>getCircleTimeStates()</h2>
+<a id="adca1d081923541bdce5a4fcd60ea27a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adca1d081923541bdce5a4fcd60ea27a4">&#9670;&nbsp;</a></span>get_circle_time_states()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; float &gt; CircleHandler::getCircleTimeStates </td>
+          <td class="memname">std::vector&lt; float &gt; CircleHandler::get_circle_time_states </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -286,14 +286,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a23bb542bc6703754bd918f35bf292189"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a23bb542bc6703754bd918f35bf292189">&#9670;&nbsp;</a></span>getColor()</h2>
+<a id="a3847f633157d1032800f2daca13c67b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3847f633157d1032800f2daca13c67b6">&#9670;&nbsp;</a></span>get_color()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">cv::Scalar CircleHandler::getColor </td>
+          <td class="memname">cv::Scalar CircleHandler::get_color </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -306,14 +306,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a2684b03383b3037b21b929d342cb991f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2684b03383b3037b21b929d342cb991f">&#9670;&nbsp;</a></span>getRadius()</h2>
+<a id="a460aa66622d4d18d3ea6f3dffefd2401"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a460aa66622d4d18d3ea6f3dffefd2401">&#9670;&nbsp;</a></span>get_radius()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t CircleHandler::getRadius </td>
+          <td class="memname">uint8_t CircleHandler::get_radius </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -326,17 +326,17 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a4f571ee69101c979fd96906044a76387"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4f571ee69101c979fd96906044a76387">&#9670;&nbsp;</a></span>setCircleTimeStates()</h2>
+<a id="a6554849f3678f1ce0288365f762bbdae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6554849f3678f1ce0288365f762bbdae">&#9670;&nbsp;</a></span>set_circle_time_states()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void CircleHandler::setCircleTimeStates </td>
+          <td class="memname">void CircleHandler::set_circle_time_states </td>
           <td>(</td>
           <td class="paramtype">const std::vector&lt; float &gt; &amp;&#160;</td>
-          <td class="paramname"><em>circleTimeStates</em></td><td>)</td>
+          <td class="paramname"><em>circle_time_states</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -345,21 +345,21 @@ Public Member Functions</h2></td></tr>
 <p>Set times of different states. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">circleTimeStates</td><td>Possible states of the circles </td></tr>
+    <tr><td class="paramname">circle_time_states</td><td>Possible states of the circles </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a9b23248cc86044606287236ef1575cd7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9b23248cc86044606287236ef1575cd7">&#9670;&nbsp;</a></span>setColor()</h2>
+<a id="a40822e049a2e9a9fef3e79a99921d785"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40822e049a2e9a9fef3e79a99921d785">&#9670;&nbsp;</a></span>set_color()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void CircleHandler::setColor </td>
+          <td class="memname">void CircleHandler::set_color </td>
           <td>(</td>
           <td class="paramtype">const cv::Scalar &amp;&#160;</td>
           <td class="paramname"><em>color</em></td><td>)</td>
@@ -378,14 +378,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ad1058c9c7688937bc93c692f4aade5ff"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad1058c9c7688937bc93c692f4aade5ff">&#9670;&nbsp;</a></span>setRadius()</h2>
+<a id="a3575c998b33c76af8494d90628c4127e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3575c998b33c76af8494d90628c4127e">&#9670;&nbsp;</a></span>set_radius()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void CircleHandler::setRadius </td>
+          <td class="memname">void CircleHandler::set_radius </td>
           <td>(</td>
           <td class="paramtype">const uint8_t&#160;</td>
           <td class="paramname"><em>radius</em></td><td>)</td>
@@ -404,14 +404,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a662d82f413fa997d7e9ad0c2246b393e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a662d82f413fa997d7e9ad0c2246b393e">&#9670;&nbsp;</a></span>updateCircles()</h2>
+<a id="a87a1938c530577388b07a97d4d5b022d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a87a1938c530577388b07a97d4d5b022d">&#9670;&nbsp;</a></span>update_circles()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void CircleHandler::updateCircles </td>
+          <td class="memname">void CircleHandler::update_circles </td>
           <td>(</td>
           <td class="paramtype">cv::Mat *&#160;</td>
           <td class="paramname"><em>img</em></td><td>)</td>
@@ -431,8 +431,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>Code/include/<a class="el" href="_circle_handler_8h_source.html">CircleHandler.h</a></li>
-<li>Code/src/<a class="el" href="_circle_handler_8cpp.html">CircleHandler.cpp</a></li>
+<li>include/<a class="el" href="circle__handler_8h_source.html">circle_handler.h</a></li>
+<li>src/<a class="el" href="circle__handler_8cpp.html">circle_handler.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
