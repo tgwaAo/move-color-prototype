@@ -406,7 +406,7 @@ bool CalibrationHandler::calculate_factors() {
     double err_sum_sat = 0;
     double err_sum_val = 0;
 
-    for (int i = get_start_idx_positives(); i < hsv_values.rows(); ++i) {
+    for (int64_t i = get_start_idx_positives(); i < hsv_values.rows(); ++i) {
         err_hue = optimal_values_intern(0) - hsv_values(i, 0);  // x-a
         err_sat = optimal_values_intern(1) - hsv_values(i, 1);  // y-b
         err_val = optimal_values_intern(2) - hsv_values(i, 2);  // z-c
@@ -674,7 +674,7 @@ uint64_t CalibrationHandler::get_false_negatives(
     int16_t err_sat;
     int16_t err_val;
 
-    for (uint64_t i = start_good_values; i < hsv_values.rows(); ++i) {
+    for (int64_t i = start_good_values; i < hsv_values.rows(); ++i) {
         err_hue = optimal_values_intern(0) - hsv_values(i, 0);
         err_sat = optimal_values_intern(1) - hsv_values(i, 1);
         err_val = optimal_values_intern(2) - hsv_values(i, 2);
