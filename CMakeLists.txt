@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.0)
 project(move-color-prototype)
 set(EXE_NAME "move_color_prototype")
-set(LIB_NAME "move_color_prototype_lib")
+set(LIB_NAME "move_color_prototype")
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
