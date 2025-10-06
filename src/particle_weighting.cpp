@@ -85,7 +85,6 @@ bool ParticleWeighting::is_color(const uint8_t *const pixel_ptr) {
 
     double prediction;
     sum_weights = 0;
-    uint32_t failure_idx = particles_x.size() - boundary;
 
     for (uint32_t idx = 0; idx < particles_x.size(); ++idx) {
         // calculate probability of being correct
