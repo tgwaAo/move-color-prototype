@@ -36,6 +36,8 @@
 
 #include "calibration_handler.h"
 
+using namespace mc;
+
 CalibrationHandler::CalibrationHandler(
         std::string title,
         uint16_t distance_text_2_Border,

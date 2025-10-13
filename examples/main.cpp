@@ -69,11 +69,11 @@ uint8_t gameplay(
     cv::Mat *mirror,
     const std::string &title,
     const uint8_t corner_2_center,
-    CircleHandler *pos_handler,
-    CircleHandler *neg_handler,
+    mc::CircleHandler *pos_handler,
+    mc::CircleHandler *neg_handler,
     const uint8_t max_distance,
     std::vector<std::vector
-    <ParticleWeighting>> *weighting_matrix);
+    <mc::ParticleWeighting>> *weighting_matrix);
 
 /**
 * @brief Take a photo after 3 seconds.
@@ -178,7 +178,7 @@ int main() {
 
     const std::string SETTINGS_FILENAME = "hsv.txt";
     const int16_t key_abort = 27;
-    CalibrationHandler calibrator(TITLE);
+    mc::CalibrationHandler calibrator(TITLE);
     std::unique_ptr<cv::Mat> mirror(new cv::Mat);
 
     /*********************************************************************
@@ -217,13 +217,13 @@ int main() {
     const uint8_t MAX_WEIGHT = 1;  // TODO: check possible removal
     const uint8_t MAX_DISTANCE = 10;
     uint16_t mat_size = HEIGHT / MAX_DISTANCE;
-    std::unique_ptr<std::vector<std::vector<ParticleWeighting>
+    std::unique_ptr<std::vector<std::vector<mc::ParticleWeighting>
     > > weighting_matrix(
-        new std::vector<std::vector<ParticleWeighting>>(
+        new std::vector<std::vector<mc::ParticleWeighting>>(
             mat_size,
             std::vector
-            <ParticleWeighting>(WIDTH / MAX_DISTANCE,
-                                ParticleWeighting(
+            <mc::ParticleWeighting>(WIDTH / MAX_DISTANCE,
+                                mc::ParticleWeighting(
                                     NUM_PARTICLES,
                                     0,
                                     10,
@@ -256,8 +256,8 @@ int main() {
     std::vector<float> state_times(3, 1);
     state_times[2] = 3;
 
-    std::unique_ptr<CircleHandler> pos_handler(
-        new CircleHandler(
+    std::unique_ptr<mc::CircleHandler> pos_handler(
+        new mc::CircleHandler(
             7,
             target_radius,
             state_times,
@@ -269,8 +269,8 @@ int main() {
         state_times[i] = 5;
 
     target_radius = 30;
-    std::unique_ptr<CircleHandler> neg_handler(
-        new CircleHandler(5,
+    std::unique_ptr<mc::CircleHandler> neg_handler(
+        new mc::CircleHandler(5,
                           target_radius,
                           state_times,
                           cv::Scalar(0, 0, 254),
@@ -337,11 +337,11 @@ uint8_t gameplay(
     cv::Mat *mirror,
     const std::string &title,
     const uint8_t corner_2_center,
-    CircleHandler *pos_handler,
-    CircleHandler *neg_handler,
+    mc::CircleHandler *pos_handler,
+    mc::CircleHandler *neg_handler,
     const uint8_t max_distance,
     std::vector<std::vector
-    <ParticleWeighting>> *weighting_matrix) {
+    <mc::ParticleWeighting>> *weighting_matrix) {
     cv::Mat frame;
     cv::Mat hsv;
     uint8_t *pixel_ptr_hsv;

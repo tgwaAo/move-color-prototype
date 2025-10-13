@@ -37,6 +37,7 @@
 
 #include "particle_weighting.h"
 
+using namespace mc;
 
 ParticleWeighting::ParticleWeighting(
     const uint16_t num_particles,

@@ -35,6 +35,8 @@
 
 #include "circle_handler.h"
 
+using namespace mc;
+
 CircleHandler::CircleHandler() {
     CircleHandler(10, 10, std::vector<float>(3, 3), 0, 640, 480);
 }
