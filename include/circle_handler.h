@@ -30,7 +30,9 @@
 #ifndef CODE_INCLUDE_CIRCLEHANDLER_H_
 #define CODE_INCLUDE_CIRCLEHANDLER_H_
 
-#include <opencv2/opencv.hpp>
+#include <opencv2/core/types.hpp>
+#include <opencv2/imgproc.hpp>
+
 #include <random>
 #include <vector>
 
