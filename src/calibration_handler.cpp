@@ -34,6 +34,14 @@
 * drag and drop over it and calibrate.
 */
 
+#include <time.h>
+
+#include <iostream>
+#include <fstream>
+#include <random>
+
+#include <opencv2/highgui.hpp>
+
 #include "calibration_handler.h"
 
 using namespace mc;
@@ -67,6 +75,7 @@ CalibrationHandler::CalibrationHandler(
 
 CalibrationHandler::~CalibrationHandler() {}
 
+#if !defined(NO_OPENCV_GUI_INPUT)
 bool CalibrationHandler::calibrate(
         cv::Mat *const img,
         std::vector<double> *const hsv_color,
@@ -316,6 +325,7 @@ bool CalibrationHandler::calibrate(
     *hsv_ptr = 0;
     return accept_values;
 }
+#endif
 
 std::tuple<uint16_t, uint16_t, uint16_t, uint16_t> CalibrationHandler::find_min_max_xy_and_empty_square() {
     uint16_t smallest_x, biggest_x, smallest_y, biggest_y;
@@ -560,7 +570,7 @@ bool CalibrationHandler::check_correction_of_factors(
     return false;
 }
 
-
+#if !defined(NO_OPENCV_GUI_INPUT)
 bool CalibrationHandler::visualize_result(cv::Mat *const img) {
     for (uint16_t col = 0; col < img_copy.cols; col += neg_dist) {
         // Above
@@ -638,7 +648,7 @@ bool CalibrationHandler::visualize_result(cv::Mat *const img) {
     }
     return false;
 }
-
+#endif
 
 uint64_t CalibrationHandler::get_false_positives(
         const uint64_t &start_good_values) {
@@ -820,6 +830,7 @@ std::string CalibrationHandler::get_title() const {
     return title;
 }
 
+#if !defined(NO_OPENCV_GUI_INPUT)
 bool CalibrationHandler::draw_rectangle(
         std::string description, cv::Mat *const img) {
     img->copyTo(img_copy);
@@ -841,3 +852,4 @@ bool CalibrationHandler::draw_rectangle(
     square_points.push_back(cv::Point(rect.x + rect.width, rect.y + rect.height));
     return true;
 }
+#endif

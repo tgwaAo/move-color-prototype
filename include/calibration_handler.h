@@ -33,18 +33,14 @@
 #define EIGEN_MPL2_ONLY
 
 #include <math.h>
-#include <time.h>
 
 #include <eigen3/Eigen/Dense>
 
-#include <fstream>
-#include <random>
 #include <string>
 #include <tuple>
-#include <unordered_map>
 #include <vector>
 
-#include <opencv2/opencv.hpp>
+#include <opencv2/imgproc.hpp>
 
 namespace mc {
 /**
@@ -94,9 +90,11 @@ class CalibrationHandler {
      * spectrum.
      * @return Acception of new values.
      */
+#if !defined(NO_OPENCV_GUI_INPUT)
     bool calibrate(cv::Mat *img,
                    std::vector<double> *const optimal_values_intern,
                    std::vector<double> *const error_factors_intern);
+#endif
 
     /**
      * @brief Set title of shown window.
@@ -262,8 +260,9 @@ class CalibrationHandler {
      * @param img Image to draw rectangle.
      * @return Returns false for abort.
      */
+#if !defined(NO_OPENCV_GUI_INPUT)
     bool draw_rectangle(std::string description, cv::Mat *img);
-
+#endif
     /**
      * @brief Find min. and max. x- and y-values of a rectangle.
      * @return tuple Min and max values of roi.
@@ -318,7 +317,9 @@ class CalibrationHandler {
      * values or decline.
      * @return User decision, if values should be used or older values are kept.
      */
+#if !defined(NO_OPENCV_GUI_INPUT)
     bool visualize_result(cv::Mat *const img);
+#endif
 
     /**
      * @brief Calculate number of false positives.
