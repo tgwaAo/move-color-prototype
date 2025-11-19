@@ -11,3 +11,4 @@ debug_hsv.txt
 debug_image.jpg
 CMakeLists.txt.user
 build
+src/*.os
