@@ -14,6 +14,8 @@ add_library(${LIB_NAME}
     include/circle_handler.h
     include/calibration_handler.h
     include/particle_weighting.h
+    include/pixel_evaluator.h
+    src/pixel_evaluator.cpp
     src/particle_weighting.cpp
     src/calibration_handler.cpp
     src/circle_handler.cpp
