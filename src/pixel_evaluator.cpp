@@ -33,6 +33,14 @@ std::vector<std::vector<uint16_t>> PixelEvaluator::search_for_pixel_with_color(c
         particles_y[i] = (i*step) / 640;
     }
 
+    std::vector<std::vector<Point>> matrix(
+        640 / step,
+        std::vector<Point>(
+            480
+            )
+        );
+    const size_t x_entries = 640 / step;
+    const size_t y_entries = 480;
 
     for (uint32_t idx = 0; idx < particles_x.size(); ++idx) {
         err_hue =
@@ -57,7 +65,55 @@ std::vector<std::vector<uint16_t>> PixelEvaluator::search_for_pixel_with_color(c
                         + err_val * err_val * factors[2]);
 
         if (0.5 <= prediction ) {
-            found_pixels.push_back(std::vector<uint16_t>{particles_x[idx], particles_y[idx]});
+            // found_pixels.push_back(std::vector<uint16_t>{particles_x[idx], particles_y[idx]});
+            matrix[idx % x_entries][idx / y_entries].valid = true;
+            matrix[idx % x_entries][idx / y_entries].x = particles_x[idx];
+            matrix[idx % x_entries][idx / y_entries].y = particles_y[idx];
+        }
+    }
+
+    for (size_t x_idx = 0; x_idx < matrix.size(); ++x_idx) {
+        for (size_t y_idx = 0; y_idx < matrix.size(); ++y_idx) {
+            if (matrix[x_idx][y_idx].valid) {
+                bool validation;
+
+                if (matrix[x_idx-1][y_idx-1].valid) {
+                    validation = true;
+                }
+                else if (matrix[x_idx][y_idx-1].valid) {
+                    validation = true;
+                }
+                else if (matrix[x_idx+1][y_idx-1].valid) {
+                    validation = true;
+                }
+                else if (matrix[x_idx-1][y_idx].valid) {
+                    validation = true;
+                }
+                else if (matrix[x_idx+1][y_idx].valid) {
+                validation = true;
+                }
+                else if (matrix[x_idx-1][y_idx+1].valid) {
+                    validation = true;
+                }
+                else if (matrix[x_idx][y_idx+1].valid) {
+                    validation = true;
+                }
+                else if (matrix[x_idx+1][y_idx+1].valid) {
+                    validation = true;
+                }
+                else {
+                    validation = false;
+                }
+
+                if (!validation) {
+                    matrix[x_idx][y_idx].valid = false;
+                    matrix[x_idx][y_idx].x = -1;
+                    matrix[x_idx][y_idx].y = -1;
+                }
+                else{
+                    found_pixels.push_back(std::vector<uint16_t>{matrix[x_idx][y_idx].x, matrix[x_idx][y_idx].y});
+                }
+            }
         }
     }
 
@@ -88,6 +144,14 @@ std::vector<uint16_t> PixelEvaluator::search_median(const cv::Mat *img, const ui
         particles_y[i] = (i*step) / 640;
     }
 
+    std::vector<std::vector<Point>> matrix(
+        640 / step,
+        std::vector<Point>(
+            480
+            )
+        );
+    const size_t x_entries = 640 / step;
+    const size_t y_entries = 480;
 
     for (uint32_t idx = 0; idx < particles_x.size(); ++idx) {
         err_hue =
@@ -112,8 +176,55 @@ std::vector<uint16_t> PixelEvaluator::search_median(const cv::Mat *img, const ui
                         + err_val * err_val * factors[2]);
 
         if (0.5 <= prediction ) {
-            x_values.push_back(particles_x[idx]);
-            y_values.push_back(particles_y[idx]);
+            matrix[idx % x_entries][idx / y_entries].valid = true;
+            matrix[idx % x_entries][idx / y_entries].x = particles_x[idx];
+            matrix[idx % x_entries][idx / y_entries].y = particles_y[idx];
+        }
+    }
+
+    for (size_t x_idx = 0; x_idx < matrix.size(); ++x_idx) {
+        for (size_t y_idx = 0; y_idx < matrix.size(); ++y_idx) {
+            if (matrix[x_idx][y_idx].valid) {
+                bool validation;
+
+                if (matrix[x_idx-1][y_idx-1].valid) {
+                    validation = true;
+                }
+                else if (matrix[x_idx][y_idx-1].valid) {
+                    validation = true;
+                }
+                else if (matrix[x_idx+1][y_idx-1].valid) {
+                    validation = true;
+                }
+                else if (matrix[x_idx-1][y_idx].valid) {
+                    validation = true;
+                }
+                else if (matrix[x_idx+1][y_idx].valid) {
+                    validation = true;
+                }
+                else if (matrix[x_idx-1][y_idx+1].valid) {
+                    validation = true;
+                }
+                else if (matrix[x_idx][y_idx+1].valid) {
+                    validation = true;
+                }
+                else if (matrix[x_idx+1][y_idx+1].valid) {
+                    validation = true;
+                }
+                else {
+                    validation = false;
+                }
+
+                if (!validation) {
+                    matrix[x_idx][y_idx].valid = false;
+                    matrix[x_idx][y_idx].x = -1;
+                    matrix[x_idx][y_idx].y = -1;
+                }
+                else{
+                    x_values.push_back(matrix[x_idx][y_idx].x);
+                    y_values.push_back(matrix[x_idx][y_idx].y);
+                }
+            }
         }
     }
 

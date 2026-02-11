@@ -18,6 +18,11 @@ class PixelEvaluator {
     std::vector<uint16_t> search_median(const cv::Mat *img, const uint16_t &step);
 
   private:
+    struct Point {
+        bool valid = false;
+        uint16_t x = -1;
+        uint16_t y = -1;
+    };
     std::vector<double> factors;  // size 3
     std::vector<double> optimal_values;  // size 3
 
