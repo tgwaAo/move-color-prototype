@@ -22,7 +22,7 @@ std::vector<std::vector<uint16_t>> PixelEvaluator::search_for_pixel_with_color(c
     const uint8_t CHANNELS = img->channels();
     const uint16_t COLS = img->cols;
     const size_t NBR_PIXELS = img->rows * img->cols;
-    const size_t NBR_PARTICLES = NBR_PIXELS / step;
+    const size_t NBR_PARTICLES = NBR_PIXELS / (step * step);
 
     std::vector<std::vector<uint16_t>> found_pixels;
     std::vector<uint16_t> particles_x(NBR_PARTICLES);
@@ -30,17 +30,17 @@ std::vector<std::vector<uint16_t>> PixelEvaluator::search_for_pixel_with_color(c
 
     for (size_t i = 0; i < NBR_PARTICLES; ++i) {
         particles_x[i] = (i*step) % 640;
-        particles_y[i] = (i*step) / 640;
+        particles_y[i] = ((i*step) / 640) * step;
     }
 
     std::vector<std::vector<Point>> matrix(
         640 / step,
         std::vector<Point>(
-            480
+            480 / step
             )
         );
     const size_t x_entries = 640 / step;
-    const size_t y_entries = 480;
+    const size_t y_entries = 480 / step;
 
     for (uint32_t idx = 0; idx < particles_x.size(); ++idx) {
         err_hue =
@@ -66,14 +66,14 @@ std::vector<std::vector<uint16_t>> PixelEvaluator::search_for_pixel_with_color(c
 
         if (0.5 <= prediction ) {
             // found_pixels.push_back(std::vector<uint16_t>{particles_x[idx], particles_y[idx]});
-            matrix[idx % x_entries][idx / y_entries].valid = true;
-            matrix[idx % x_entries][idx / y_entries].x = particles_x[idx];
-            matrix[idx % x_entries][idx / y_entries].y = particles_y[idx];
+            matrix[idx % x_entries][idx / x_entries].valid = true;
+            matrix[idx % x_entries][idx / x_entries].x = particles_x[idx];
+            matrix[idx % x_entries][idx / x_entries].y = particles_y[idx];
         }
     }
 
     for (size_t x_idx = 0; x_idx < matrix.size(); ++x_idx) {
-        for (size_t y_idx = 0; y_idx < matrix.size(); ++y_idx) {
+        for (size_t y_idx = 0; y_idx < matrix[0].size(); ++y_idx) {
             if (matrix[x_idx][y_idx].valid) {
                 bool validation;
 
@@ -132,7 +132,7 @@ std::vector<uint16_t> PixelEvaluator::search_median(const cv::Mat *img, const ui
     const uint8_t CHANNELS = img->channels();
     const uint16_t COLS = img->cols;
     const size_t NBR_PIXELS = img->rows * img->cols;
-    const size_t NBR_PARTICLES = NBR_PIXELS / step;
+    const size_t NBR_PARTICLES = NBR_PIXELS / (step * step);
 
     std::vector<uint16_t> x_values;
     std::vector<uint16_t> y_values;
@@ -141,17 +141,17 @@ std::vector<uint16_t> PixelEvaluator::search_median(const cv::Mat *img, const ui
 
     for (size_t i = 0; i < NBR_PARTICLES; ++i) {
         particles_x[i] = (i*step) % 640;
-        particles_y[i] = (i*step) / 640;
+        particles_y[i] = ((i*step) / 640) * step;
     }
 
     std::vector<std::vector<Point>> matrix(
         640 / step,
         std::vector<Point>(
-            480
+            480 / step
             )
         );
     const size_t x_entries = 640 / step;
-    const size_t y_entries = 480;
+    // const size_t y_entries = 480 / step;
 
     for (uint32_t idx = 0; idx < particles_x.size(); ++idx) {
         err_hue =
@@ -176,14 +176,14 @@ std::vector<uint16_t> PixelEvaluator::search_median(const cv::Mat *img, const ui
                         + err_val * err_val * factors[2]);
 
         if (0.5 <= prediction ) {
-            matrix[idx % x_entries][idx / y_entries].valid = true;
-            matrix[idx % x_entries][idx / y_entries].x = particles_x[idx];
-            matrix[idx % x_entries][idx / y_entries].y = particles_y[idx];
+            matrix[idx % x_entries][idx / x_entries].valid = true;
+            matrix[idx % x_entries][idx / x_entries].x = particles_x[idx];
+            matrix[idx % x_entries][idx / x_entries].y = particles_y[idx];
         }
     }
 
     for (size_t x_idx = 0; x_idx < matrix.size(); ++x_idx) {
-        for (size_t y_idx = 0; y_idx < matrix.size(); ++y_idx) {
+        for (size_t y_idx = 0; y_idx < matrix[0].size(); ++y_idx) {
             if (matrix[x_idx][y_idx].valid) {
                 bool validation;
 
