@@ -11,54 +11,60 @@ PixelEvaluator::PixelEvaluator(const std::vector<double> &factors,
 }
 
 
-std::vector<std::vector<uint16_t>> PixelEvaluator::search_for_pixel_with_color(const cv::Mat *img, const uint16_t &step, const bool aquire_false_positives) {
+std::vector<std::vector<uint16_t>> PixelEvaluator::search_for_pixel_with_color(const cv::Mat *img, const uint16_t &step, const uint8_t &min_neighbors, const bool aquire_false_positives) {
 
     std::vector<std::vector<Point>> matrix = create_prediction_matrix(img, step);
     std::vector<std::vector<uint16_t>> found_pixels;
-    bool validation;
+    uint8_t neighbors;
 
     if (aquire_false_positives) {
         false_positives.clear();
-    }
+    }    
 
     for (size_t x_idx = 1; x_idx < matrix.size()-1; ++x_idx) {  // ignore outer border
         for (size_t y_idx = 1; y_idx < matrix[0].size()-1; ++y_idx) {  // ignore outer border
             if (matrix.at(x_idx).at(y_idx).valid) {
+                neighbors = 0;  // TODO: max value it 2, but should be 8
+
                 if (matrix.at(x_idx-1).at(y_idx-1).valid) {
-                    validation = true;
-                }
-                else if (matrix.at(x_idx).at(y_idx-1).valid) {
-                    validation = true;
-                }
-                else if (matrix.at(x_idx+1).at(y_idx-1).valid) {
-                    validation = true;
-                }
-                else if (matrix.at(x_idx-1).at(y_idx).valid) {
-                    validation = true;
-                }
-                else if (matrix.at(x_idx+1).at(y_idx).valid) {
-                validation = true;
-                }
-                else if (matrix.at(x_idx-1).at(y_idx+1).valid) {
-                    validation = true;
-                }
-                else if (matrix.at(x_idx).at(y_idx+1).valid) {
-                    validation = true;
-                }
-                else if (matrix.at(x_idx+1).at(y_idx+1).valid) {
-                    validation = true;
-                }
-                else {
-                    validation = false;
+                    ++neighbors;
                 }
 
-                if (!validation) {
+                if (matrix.at(x_idx).at(y_idx-1).valid) {
+                    ++neighbors;
+                }
+
+                if (matrix.at(x_idx+1).at(y_idx-1).valid) {
+                    ++neighbors;
+                }
+
+                if (matrix.at(x_idx-1).at(y_idx).valid) {
+                    ++neighbors;
+                }
+
+                if (matrix.at(x_idx+1).at(y_idx).valid) {
+                    ++neighbors;
+                }
+
+                if (matrix.at(x_idx-1).at(y_idx+1).valid) {
+                    ++neighbors;
+                }
+
+                if (matrix.at(x_idx).at(y_idx+1).valid) {
+                    ++neighbors;
+                }
+
+                if (matrix.at(x_idx+1).at(y_idx+1).valid) {
+                    ++neighbors;
+                }
+
+                if (min_neighbors <= neighbors) {
+                    found_pixels.push_back(std::vector<uint16_t>{matrix.at(x_idx).at(y_idx).x, matrix.at(x_idx).at(y_idx).y});
+                }
+                else{
                     if (aquire_false_positives) {
                         false_positives.push_back(std::vector<uint16_t>{matrix.at(x_idx).at(y_idx).x, matrix.at(x_idx).at(y_idx).y});
                     }
-                }
-                else{
-                    found_pixels.push_back(std::vector<uint16_t>{matrix.at(x_idx).at(y_idx).x, matrix.at(x_idx).at(y_idx).y});
                 }
             }
         }
@@ -78,7 +84,7 @@ std::vector<uint16_t> PixelEvaluator::search_median(const cv::Mat *img, const ui
         for (size_t y_idx = 1; y_idx < matrix[0].size()-1; ++y_idx) {  // ignore outer border
             if (matrix.at(x_idx).at(y_idx).valid) {
                 if (matrix.at(x_idx-1).at(y_idx-1).valid) {
-                    validation = true;
+                    validation = true;  // TODO: replace with number of neighbors
                 }
                 else if (matrix.at(x_idx).at(y_idx-1).valid) {
                     validation = true;
