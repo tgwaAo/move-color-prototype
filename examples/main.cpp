@@ -51,6 +51,8 @@
 #include "calibration_handler.h"
 #include "circle_handler.h"
 #include "particle_weighting.h"
+#include "pixel_evaluator.h"
+#include <cstdint>  // für uint16_t
 
 /**
  * @brief A single play.
@@ -60,7 +62,7 @@
  * @param corner_2_center Distance from center of particle weighting to its start.
  * @param pos_handler Handler of positive circles.
  * @param neg_handler Handler of negative circles.
- * @param max_distance Distance of one particle weighting.
+ * @param step_width Distance of one particle weighting.
  * @param weighting_matrix Matrix of particle weightings.
  * @return Code of user input. 0 for replay, 1 for end of game and 2 for calibration.
  */
@@ -71,9 +73,8 @@ uint8_t gameplay(
     const uint8_t corner_2_center,
     mc::CircleHandler *pos_handler,
     mc::CircleHandler *neg_handler,
-    const uint8_t max_distance,
-    std::vector<std::vector
-    <mc::ParticleWeighting>> *weighting_matrix);
+    const uint8_t step_width,
+    mc::PixelEvaluator *evaluator);
 
 /**
 * @brief Take a photo after 3 seconds.
@@ -213,38 +214,41 @@ int main() {
     /************************************************************
      * Setup matrices to find colors.
      * *********************************************************/
-    const uint16_t NUM_PARTICLES = 30;
-    const uint8_t MAX_WEIGHT = 1;  // TODO: check possible removal
-    const uint8_t MAX_DISTANCE = 10;
-    uint16_t mat_size = HEIGHT / MAX_DISTANCE;
-    std::unique_ptr<std::vector<std::vector<mc::ParticleWeighting>
-    > > weighting_matrix(
-        new std::vector<std::vector<mc::ParticleWeighting>>(
-            mat_size,
-            std::vector
-            <mc::ParticleWeighting>(WIDTH / MAX_DISTANCE,
-                                mc::ParticleWeighting(
-                                    NUM_PARTICLES,
-                                    0,
-                                    10,
-                                    0,
-                                    10,
-                                    MAX_WEIGHT,
-                                    WIDTH,
-                                    NUM_PARTICLES * MAX_WEIGHT * 4 / 10,
-                                    factors_color,
-                                    optimal_hsv_color))));
+    // const uint8_t MAX_DISTANCE = 10;
+    // const uint16_t NUM_PARTICLES = 30;
+    // uint16_t mat_size = HEIGHT / MAX_DISTANCE;
+    // const uint8_t MAX_WEIGHT = 1;  // TODO: check possible removal
 
-    for (int i = 0; i < HEIGHT / MAX_DISTANCE; ++i) {
-        for (int j = 0; j < WIDTH / MAX_DISTANCE; ++j) {
-            (*weighting_matrix)[i][j].set_min_height(i * MAX_DISTANCE);
-            (*weighting_matrix)[i][j].set_max_height((i + 1) * MAX_DISTANCE);
-            (*weighting_matrix)[i][j].set_min_width(j * MAX_DISTANCE);
-            (*weighting_matrix)[i][j].set_max_width((j + 1) * MAX_DISTANCE);
-            (*weighting_matrix)[i][j].update();
-        }
-    }
+    // std::unique_ptr<std::vector<std::vector<mc::ParticleWeighting>
+    // > > weighting_matrix(
+    //     new std::vector<std::vector<mc::ParticleWeighting>>(
+    //         mat_size,
+    //         std::vector
+    //         <mc::ParticleWeighting>(WIDTH / MAX_DISTANCE,
+    //                             mc::ParticleWeighting(
+    //                                 NUM_PARTICLES,
+    //                                 0,
+    //                                 10,
+    //                                 0,
+    //                                 10,
+    //                                 MAX_WEIGHT,
+    //                                 WIDTH,
+    //                                 NUM_PARTICLES * MAX_WEIGHT * 4 / 10,
+    //                                 factors_color,
+    //                                 optimal_hsv_color))));
 
+    // for (int i = 0; i < HEIGHT / MAX_DISTANCE; ++i) {
+    //     for (int j = 0; j < WIDTH / MAX_DISTANCE; ++j) {
+    //         (*weighting_matrix)[i][j].set_min_height(i * MAX_DISTANCE);
+    //         (*weighting_matrix)[i][j].set_max_height((i + 1) * MAX_DISTANCE);
+    //         (*weighting_matrix)[i][j].set_min_width(j * MAX_DISTANCE);
+    //         (*weighting_matrix)[i][j].set_max_width((j + 1) * MAX_DISTANCE);
+    //         (*weighting_matrix)[i][j].update();
+    //     }
+    // }
+
+    const uint8_t PIXEL_DISTANCE = 5;
+    std::unique_ptr<mc::PixelEvaluator> evaluator(new mc::PixelEvaluator(factors_color, optimal_hsv_color));
     /******************************************************************
      * Define circle data.
      * ***************************************************************/
@@ -284,7 +288,7 @@ int main() {
     const uint8_t CODE_END = 1;
     const uint8_t CODE_CALIBRATE = 2;
     bool run = true;
-    const uint8_t CORNER_2_CENTER = MAX_DISTANCE / 2;
+    const uint8_t CORNER_2_CENTER = PIXEL_DISTANCE / 2;
 
     while (run) {
         key_code = gameplay(
@@ -294,8 +298,8 @@ int main() {
                       CORNER_2_CENTER,
                       pos_handler.get(),
                       neg_handler.get(),
-                      MAX_DISTANCE,
-                      weighting_matrix.get());
+                      PIXEL_DISTANCE,
+                      evaluator.get());
 
         switch (key_code) {
         case CODE_END:
@@ -316,12 +320,14 @@ int main() {
                         optimal_hsv_color,
                         factors_color);
 
-                    for (int i = 0; i < HEIGHT / MAX_DISTANCE; ++i) {
-                        for (int j = 0; j < WIDTH / MAX_DISTANCE; ++j) {
-                            (*weighting_matrix)[i][j].set_hsv(optimal_hsv_color);
-                            (*weighting_matrix)[i][j].set_factors(factors_color);
-                        }
-                    }
+                    // for (int i = 0; i < HEIGHT / MAX_DISTANCE; ++i) {
+                    //     for (int j = 0; j < WIDTH / MAX_DISTANCE; ++j) {
+                    //         (*weighting_matrix)[i][j].set_hsv(optimal_hsv_color);
+                    //         (*weighting_matrix)[i][j].set_factors(factors_color);
+                    //     }
+                    // }
+                    evaluator->set_optimal_values((optimal_hsv_color));
+                    evaluator->set_factors(factors_color);
                 }
             break;
         }
@@ -339,9 +345,9 @@ uint8_t gameplay(
     const uint8_t corner_2_center,
     mc::CircleHandler *pos_handler,
     mc::CircleHandler *neg_handler,
-    const uint8_t max_distance,
-    std::vector<std::vector
-    <mc::ParticleWeighting>> *weighting_matrix) {
+    const uint8_t step_width,
+    mc::PixelEvaluator *evaluator
+    ) {
     cv::Mat frame;
     cv::Mat hsv;
     uint8_t *pixel_ptr_hsv;
@@ -359,6 +365,9 @@ uint8_t gameplay(
     const int16_t KEY_R = 114;
     const uint8_t game_time = 60;
     std::ostringstream time_message;
+    std::vector<std::vector<uint16_t>> found_pixel;
+    std::vector<std::vector<uint16_t>> bad_pixel;
+    cv::Mat cropped;
 
     if (!wait_and_show_seconds(cap, mirror, title, KEY_ESC, 5)) {
         return 1;
@@ -368,39 +377,51 @@ uint8_t gameplay(
 
     while (true) {
         *cap >> frame;
-        cv::flip(frame, *mirror, 1);
+        cropped = frame(cv::Rect(200,200, 100, 100));
+        cv::flip(cropped, *mirror, 1);
+
+        // cv::flip(frame, *mirror, 1);
         cv::cvtColor(*mirror, hsv, cv::COLOR_BGR2HSV);
-        pixel_ptr_hsv = reinterpret_cast<uint8_t*>(hsv.data);
+        // pixel_ptr_hsv = reinterpret_cast<uint8_t*>(hsv.data);
 
         pos_handler->update_circles(mirror);
         neg_handler->update_circles(mirror);
 
-        for (uint32_t i = 0; i < (*weighting_matrix).size(); ++i) {
-            for (uint32_t j = 0; j < (*weighting_matrix)[i].size(); ++j) {
-                good_area = (*weighting_matrix)[i][j].is_color(pixel_ptr_hsv);
+        found_pixel = evaluator->search_for_pixel_with_color(&hsv, step_width, true);
+        bad_pixel = evaluator->get_false_positives();
 
-                if (good_area) {
-                    color = GOOD_COLOR;
-                    cv::line(
-                        *mirror,
-                        cv::Point(
-                            j * max_distance + corner_2_center,
-                            i * max_distance + corner_2_center),
-                        cv::Point(
-                            j * max_distance + corner_2_center,
-                            i * max_distance + corner_2_center),
-                        color,
-                        10,
-                        10);
+        // for (uint32_t i = 0; i < (*weighting_matrix).size(); ++i) {
+        //     for (uint32_t j = 0; j < (*weighting_matrix)[i].size(); ++j) {
+        //         good_area = (*weighting_matrix)[i][j].is_color(pixel_ptr_hsv);
 
-                    hits += pos_handler->check_hit(
-                                j * max_distance + corner_2_center,
-                                i * max_distance + corner_2_center);
-                    hits -= 5 * neg_handler->check_hit(
-                                j * max_distance + corner_2_center,
-                                i * max_distance + corner_2_center);
-                }
-            }
+        for (auto &pixel : found_pixel) {
+            cv::circle(
+                *mirror,
+                cv::Point(
+                    pixel.at(0),
+                    pixel.at(1)),
+                5,
+                GOOD_COLOR,
+                -1);
+
+            hits += pos_handler->check_hit(
+                pixel.at(0),
+                pixel.at(1));
+            hits -= 5 * neg_handler->check_hit(
+                pixel.at(0),
+                pixel.at(1));
+        }
+
+        for (auto &pixel : bad_pixel) {
+            cv::circle(
+                *mirror,
+                cv::Point(
+                    pixel.at(0),
+                    pixel.at(1)),
+                5,
+                BAD_COLOR,
+                -1);
+
         }
 
         cv::putText(
@@ -428,6 +449,19 @@ uint8_t gameplay(
 
         if (cv::getWindowProperty(title, cv::WND_PROP_VISIBLE)) {
             cv::imshow(title, *mirror);
+
+            if (bad_pixel.size() != 0) {
+                std::cout << "bad pixel" << std::endl;
+                for (auto &pixel : bad_pixel) {
+                    std::cout << pixel.at(0) << " " << pixel.at(1) << std::endl;
+                }
+                std::cout << "good_pixel" << std::endl;
+                for (auto &pixel : found_pixel) {
+                    std::cout << pixel.at(0) << " " << pixel.at(1) << std::endl;
+                }
+                cv::waitKey(0);
+            }
+
             key = cv::waitKey(1);
 
             if (key == KEY_R) {
@@ -441,17 +475,30 @@ uint8_t gameplay(
                 std::ofstream save_file;
                 save_file.open("debug_hsv.txt");
 
-                save_file << (*weighting_matrix)[0][0].get_hsv()[0] << std::endl;
-                save_file << (*weighting_matrix)[0][0].get_hsv()[1] << std::endl;
-                save_file << (*weighting_matrix)[0][0].get_hsv()[2] << std::endl;
+                // save_file << (*weighting_matrix)[0][0].get_hsv()[0] << std::endl;
+                // save_file << (*weighting_matrix)[0][0].get_hsv()[1] << std::endl;
+                // save_file << (*weighting_matrix)[0][0].get_hsv()[2] << std::endl;
+                // save_file <<
+                //     (*weighting_matrix)[0][0].get_factors()[0]
+                //     << std::endl;
+                // save_file <<
+                //     (*weighting_matrix)[0][0].get_factors()[1]
+                //     << std::endl;
+                // save_file <<
+                //     (*weighting_matrix)[0][0].get_factors()[2]
+                //     << std::endl;
+
+                save_file << evaluator->get_optimal_values().at(0) << std::endl;
+                save_file << evaluator->get_optimal_values().at(1) << std::endl;
+                save_file << evaluator->get_optimal_values().at(2) << std::endl;
                 save_file <<
-                    (*weighting_matrix)[0][0].get_factors()[0]
+                    evaluator->get_factors().at(0)
                     << std::endl;
                 save_file <<
-                    (*weighting_matrix)[0][0].get_factors()[1]
+                    evaluator->get_factors().at(1)
                     << std::endl;
                 save_file <<
-                    (*weighting_matrix)[0][0].get_factors()[2]
+                    evaluator->get_factors().at(2)
                     << std::endl;
 
                 save_file.close();
