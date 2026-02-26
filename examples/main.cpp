@@ -441,9 +441,21 @@ uint8_t gameplay(
     const int16_t KEY_R = 114;
     const uint8_t game_time = 60;
     std::ostringstream time_message;
+    std::vector<uint16_t> found_median;
     std::vector<std::vector<uint16_t>> found_pixel;
     std::vector<std::vector<uint16_t>> bad_pixel;
     cv::Mat cropped;
+
+    const std::string USE_MEDIAN_FILE = "use_median.txt";
+    struct stat buffer;
+    bool use_median;
+
+    if (stat(USE_MEDIAN_FILE.c_str(), &buffer) == 0) {
+        use_median = true;
+    }
+    else {
+        use_median = false;
+    }
 
     if (!wait_and_show_seconds(cap, mirror, title, KEY_ESC, 5)) {
         return 1;
@@ -459,37 +471,58 @@ uint8_t gameplay(
         pos_handler->update_circles(mirror);
         neg_handler->update_circles(mirror);
 
-        found_pixel = evaluator->search_for_pixel_with_color(&hsv, step_width, 2, true);
-        bad_pixel = evaluator->get_false_positives();
+        if (use_median) {
+            found_median = evaluator->search_median(&hsv, step_width, 2, true);
 
-        for (auto &pixel : found_pixel) {
             cv::circle(
                 *mirror,
                 cv::Point(
-                    pixel.at(0),
-                    pixel.at(1)),
+                    found_median.at(0),
+                    found_median.at(1)),
                 5,
                 GOOD_COLOR,
                 -1);
 
             hits += pos_handler->check_hit(
-                pixel.at(0),
-                pixel.at(1));
+                found_median.at(0),
+                found_median.at(1));
             hits -= 5 * neg_handler->check_hit(
-                pixel.at(0),
-                pixel.at(1));
+                            found_median.at(0),
+                            found_median.at(1));
         }
+        else {
+            found_pixel = evaluator->search_for_pixel_with_color(&hsv, step_width, 2, true);
+            bad_pixel = evaluator->get_false_positives();
 
-        for (auto &pixel : bad_pixel) {
-            cv::circle(
-                *mirror,
-                cv::Point(
+            for (auto &pixel : found_pixel) {
+                cv::circle(
+                    *mirror,
+                    cv::Point(
+                        pixel.at(0),
+                        pixel.at(1)),
+                    5,
+                    GOOD_COLOR,
+                    -1);
+
+                hits += pos_handler->check_hit(
                     pixel.at(0),
-                    pixel.at(1)),
-                5,
-                BAD_COLOR,
-                -1);
+                    pixel.at(1));
+                hits -= 5 * neg_handler->check_hit(
+                                pixel.at(0),
+                                pixel.at(1));
+            }
 
+            for (auto &pixel : bad_pixel) {
+                cv::circle(
+                    *mirror,
+                    cv::Point(
+                        pixel.at(0),
+                        pixel.at(1)),
+                    5,
+                    BAD_COLOR,
+                    -1);
+
+            }
         }
 
         cv::putText(
