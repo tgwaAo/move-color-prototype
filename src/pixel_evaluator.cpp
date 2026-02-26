@@ -19,7 +19,7 @@ std::vector<std::vector<uint16_t>> PixelEvaluator::search_for_pixel_with_color(c
 
     if (aquire_false_positives) {
         false_positives.clear();
-    }    
+    }
 
     for (size_t x_idx = 1; x_idx < matrix.size()-1; ++x_idx) {  // ignore outer border
         for (size_t y_idx = 1; y_idx < matrix[0].size()-1; ++y_idx) {  // ignore outer border
@@ -61,10 +61,8 @@ std::vector<std::vector<uint16_t>> PixelEvaluator::search_for_pixel_with_color(c
                 if (min_neighbors <= neighbors) {
                     found_pixels.push_back(std::vector<uint16_t>{matrix.at(x_idx).at(y_idx).x, matrix.at(x_idx).at(y_idx).y});
                 }
-                else{
-                    if (aquire_false_positives) {
-                        false_positives.push_back(std::vector<uint16_t>{matrix.at(x_idx).at(y_idx).x, matrix.at(x_idx).at(y_idx).y});
-                    }
+                else if (aquire_false_positives) {
+                    false_positives.push_back(std::vector<uint16_t>{matrix.at(x_idx).at(y_idx).x, matrix.at(x_idx).at(y_idx).y});
                 }
             }
         }
@@ -74,51 +72,59 @@ std::vector<std::vector<uint16_t>> PixelEvaluator::search_for_pixel_with_color(c
 }
 
 
-std::vector<uint16_t> PixelEvaluator::search_median(const cv::Mat *img, const uint16_t &step) {
+std::vector<uint16_t> PixelEvaluator::search_median(const cv::Mat *img, const uint16_t &step, const uint8_t &min_neighbors, const bool aquire_false_positives) {
     std::vector<std::vector<Point>> matrix = create_prediction_matrix(img, step);
     std::vector<uint16_t> x_values;
     std::vector<uint16_t> y_values;
-    bool validation;
+    uint8_t neighbors;
+
+    if (aquire_false_positives) {
+        false_positives.clear();
+    }
 
     for (size_t x_idx = 1; x_idx < matrix.size()-1; ++x_idx) {  // ignore outer border
         for (size_t y_idx = 1; y_idx < matrix[0].size()-1; ++y_idx) {  // ignore outer border
             if (matrix.at(x_idx).at(y_idx).valid) {
+                neighbors = 0;  // TODO: max value it 2, but should be 8
+
                 if (matrix.at(x_idx-1).at(y_idx-1).valid) {
-                    validation = true;  // TODO: replace with number of neighbors
-                }
-                else if (matrix.at(x_idx).at(y_idx-1).valid) {
-                    validation = true;
-                }
-                else if (matrix.at(x_idx+1).at(y_idx-1).valid) {
-                    validation = true;
-                }
-                else if (matrix.at(x_idx-1).at(y_idx).valid) {
-                    validation = true;
-                }
-                else if (matrix.at(x_idx+1).at(y_idx).valid) {
-                    validation = true;
-                }
-                else if (matrix.at(x_idx-1).at(y_idx+1).valid) {
-                    validation = true;
-                }
-                else if (matrix.at(x_idx).at(y_idx+1).valid) {
-                    validation = true;
-                }
-                else if (matrix.at(x_idx+1).at(y_idx+1).valid) {
-                    validation = true;
-                }
-                else {
-                    validation = false;
+                    ++neighbors;
                 }
 
-                if (!validation) {
-                    matrix.at(x_idx).at(y_idx).valid = false;
-                    matrix.at(x_idx).at(y_idx).x = -1;
-                    matrix.at(x_idx).at(y_idx).y = -1;
+                if (matrix.at(x_idx).at(y_idx-1).valid) {
+                    ++neighbors;
                 }
-                else{
+
+                if (matrix.at(x_idx+1).at(y_idx-1).valid) {
+                    ++neighbors;
+                }
+
+                if (matrix.at(x_idx-1).at(y_idx).valid) {
+                    ++neighbors;
+                }
+
+                if (matrix.at(x_idx+1).at(y_idx).valid) {
+                    ++neighbors;
+                }
+
+                if (matrix.at(x_idx-1).at(y_idx+1).valid) {
+                    ++neighbors;
+                }
+
+                if (matrix.at(x_idx).at(y_idx+1).valid) {
+                    ++neighbors;
+                }
+
+                if (matrix.at(x_idx+1).at(y_idx+1).valid) {
+                    ++neighbors;
+                }
+
+                if (min_neighbors <= neighbors) {
                     x_values.push_back(matrix.at(x_idx).at(y_idx).x);
                     y_values.push_back(matrix.at(x_idx).at(y_idx).y);
+                }
+                else if (aquire_false_positives) {
+                    false_positives.push_back(std::vector<uint16_t>{matrix.at(x_idx).at(y_idx).x, matrix.at(x_idx).at(y_idx).y});
                 }
             }
         }
