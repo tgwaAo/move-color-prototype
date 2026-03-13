@@ -28,7 +28,7 @@
 // PLAYING.
 
 /**
-* CalibrationHandler.cpp
+* calibration_handler.cpp
 *
 * Take picture after a short time,
 * drag and drop over it and calibrate.

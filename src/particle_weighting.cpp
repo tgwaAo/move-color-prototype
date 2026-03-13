@@ -28,7 +28,7 @@
 // PLAYING.
 
 /**
- * ParticleWeighting.cpp
+ * particle_weighting.cpp
  *
  * Class to calculate decision of containing a color in hsv space or not.
  * This is done via unmoving particles, because the color

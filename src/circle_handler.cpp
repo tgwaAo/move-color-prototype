@@ -28,7 +28,7 @@
 // PLAYING.
 
 /**
- * CircleHandler.cpp
+ * circle_handler.cpp
  * 
  * Handles timers and visualization of circles.
  */
