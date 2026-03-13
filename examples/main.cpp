@@ -52,7 +52,7 @@
 #include "circle_handler.h"
 #include "particle_weighting.h"
 #include "pixel_evaluator.h"
-#include <cstdint>  // für uint16_t
+#include <cstdint>  // for uint16_t
 
 /**
  * @brief A single play.
@@ -441,7 +441,7 @@ uint8_t gameplay(
     const int16_t KEY_R = 114;
     const uint8_t game_time = 60;
     std::ostringstream time_message;
-    std::vector<uint16_t> found_median;
+    std::vector<int16_t> found_median;
     std::vector<std::vector<uint16_t>> found_pixel;
     std::vector<std::vector<uint16_t>> bad_pixel;
     cv::Mat cropped;
@@ -472,7 +472,7 @@ uint8_t gameplay(
         neg_handler->update_circles(mirror);
 
         if (use_median) {
-            found_median = evaluator->search_median(&hsv, step_width, 2, true);
+            found_median = evaluator->search_median(&hsv, step_width, 4, true);
 
             cv::circle(
                 *mirror,
@@ -491,7 +491,7 @@ uint8_t gameplay(
                             found_median.at(1));
         }
         else {
-            found_pixel = evaluator->search_for_pixel_with_color(&hsv, step_width, 2, true);
+            found_pixel = evaluator->search_for_pixel_with_color(&hsv, step_width, 4, true);
             bad_pixel = evaluator->get_false_positives();
 
             for (auto &pixel : found_pixel) {
