@@ -15,7 +15,7 @@ class PixelEvaluator {
                    const std::vector<double> &optimal_values);
 
     std::vector<std::vector<uint16_t>> search_for_pixel_with_color(const cv::Mat *img, const uint16_t &step, const uint8_t &min_neighbors, const bool aquire_false_positives = false);
-    std::vector<uint16_t> search_median(const cv::Mat *img, const uint16_t &step, const uint8_t &min_neighbors, const bool aquire_false_positives = false);
+    std::vector<int16_t> search_median(const cv::Mat *img, const uint16_t &step, const uint8_t &min_neighbors, const bool aquire_false_positives = false);
     void set_factors(const std::vector<double> &factors);
     std::vector<double> get_factors() const;
     void set_optimal_values(const std::vector<double> &optimal_values);

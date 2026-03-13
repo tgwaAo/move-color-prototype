@@ -1,6 +1,7 @@
 #include "pixel_evaluator.h"
 
 #include <algorithm>
+#include <fstream>
 
 using namespace mc;
 
@@ -72,7 +73,7 @@ std::vector<std::vector<uint16_t>> PixelEvaluator::search_for_pixel_with_color(c
 }
 
 
-std::vector<uint16_t> PixelEvaluator::search_median(const cv::Mat *img, const uint16_t &step, const uint8_t &min_neighbors, const bool aquire_false_positives) {
+std::vector<int16_t> PixelEvaluator::search_median(const cv::Mat *img, const uint16_t &step, const uint8_t &min_neighbors, const bool aquire_false_positives) {
     std::vector<std::vector<Point>> matrix = create_prediction_matrix(img, step);
     std::vector<uint16_t> x_values;
     std::vector<uint16_t> y_values;
@@ -130,7 +131,7 @@ std::vector<uint16_t> PixelEvaluator::search_median(const cv::Mat *img, const ui
         }
     }
 
-    std::vector<uint16_t> median;
+    std::vector<int16_t> median;
 
     if (x_values.empty()) {
         median.push_back(-1);
@@ -176,9 +177,9 @@ std::vector<std::vector<PixelEvaluator::Point>> PixelEvaluator::create_predictio
     double prediction;
 
     uint8_t *pixel_ptr = reinterpret_cast<uint8_t*>(img->data);
-    const uint16_t x_entries = img->rows / step;
-    const uint16_t y_entries = img->cols / step;
-    const size_t NBR_PARTICLES = x_entries * y_entries;
+    const uint16_t X_ENTRIES = img->cols / step;
+    const uint16_t Y_ENTRIES = img->rows / step;
+    const size_t NBR_PARTICLES = X_ENTRIES * Y_ENTRIES;
     std::vector<uint16_t> particles_x(NBR_PARTICLES);
     std::vector<uint16_t> particles_y(NBR_PARTICLES);
 
@@ -188,13 +189,13 @@ std::vector<std::vector<PixelEvaluator::Point>> PixelEvaluator::create_predictio
     }
 
     std::vector<std::vector<Point>> matrix(
-        img->rows / step,
+        X_ENTRIES,
         std::vector<Point>(
-            img->cols / step
+            Y_ENTRIES
             )
         );
 
-    for (uint32_t idx = 0; idx < particles_x.size(); ++idx) {
+    for (uint32_t idx = 0; idx < NBR_PARTICLES; ++idx) {
         err_hue =
             optimal_values[0] - pixel_ptr[
                                     particles_y.at(idx) * img->cols * img->channels()
@@ -217,10 +218,11 @@ std::vector<std::vector<PixelEvaluator::Point>> PixelEvaluator::create_predictio
                         + err_val * err_val * factors.at(2));
 
         if (0.5 <= prediction ) {
-            // found_pixels.push_back(std::vector<uint16_t>{particles_x.at(idx), particles_y.at(idx)});
-            matrix.at(idx % x_entries).at(idx / x_entries).valid = true;
-            matrix.at(idx % x_entries).at(idx / x_entries).x = particles_x.at(idx);
-            matrix.at(idx % x_entries).at(idx / x_entries).y = particles_y.at(idx);
+            uint16_t x_idx = idx % X_ENTRIES;
+            uint16_t y_idx = idx / X_ENTRIES;
+            matrix.at(x_idx).at(y_idx).valid = true;
+            matrix.at(x_idx).at(y_idx).x = particles_x.at(idx);
+            matrix.at(x_idx).at(y_idx).y = particles_y.at(idx);
         }
     }
 
