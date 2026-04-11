@@ -429,7 +429,7 @@ uint8_t gameplay(
     uint8_t *pixel_ptr_hsv;
     cv::Scalar color;
     const cv::Scalar BAD_COLOR(0, 0, 255);
-    const cv::Scalar GOOD_COLOR(255, 0, 0);
+    const cv::Scalar GOOD_COLOR(0, 200, 200);
     int16_t key;
     bool good_area;
     float left_seconds;
@@ -638,7 +638,7 @@ uint8_t gameplay(
     uint8_t *pixel_ptr_hsv;
     cv::Scalar color;
     const cv::Scalar BAD_COLOR(0, 0, 255);
-    const cv::Scalar GOOD_COLOR(255, 0, 0);
+    const cv::Scalar GOOD_COLOR(0, 200, 200);
     int16_t key;
     bool good_area;
     float left_seconds;
