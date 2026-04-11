@@ -436,7 +436,7 @@ bool CalibrationHandler::calculate_factors() {
         used_entries = 2;
 
     } else {
-        factor_hue = .001;
+        factor_hue = .005;
         used_entries = 3;
     }
 
