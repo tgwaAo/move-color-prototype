@@ -104,13 +104,13 @@ bool ParticleWeighting::is_color(const uint8_t *const pixel_ptr) {
          particles_y[idx] * cols * HSV_CHANNELS
          + particles_x[idx] * HSV_CHANNELS + 2];
 
-        prediction = 1
+        prediction = 2
                      / (1
                         + pow(err_hue, 2) * factor_h
                         + pow(err_sat, 2) * factor_s
                         + pow(err_val, 2) * factor_v);
 
-        if (prediction < 0.5)
+        if (prediction < 1.0)
             particles_w[idx] = 0;
         else
             particles_w[idx] = max_weight;

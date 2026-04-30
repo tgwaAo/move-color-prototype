@@ -211,13 +211,13 @@ std::vector<std::vector<PixelEvaluator::Point>> PixelEvaluator::create_predictio
                                     particles_y.at(idx) * img->cols * img->channels()
                                     + particles_x.at(idx) * img->channels() + 2];
 
-        prediction = 1
+        prediction = 2
                      / (1
                         + err_hue * err_hue * factors.at(0)
                         + err_sat * err_sat * factors.at(1)
                         + err_val * err_val * factors.at(2));
 
-        if (0.5 <= prediction ) {
+        if (1.0 <= prediction ) {
             uint16_t x_idx = idx % X_ENTRIES;
             uint16_t y_idx = idx / X_ENTRIES;
             matrix.at(x_idx).at(y_idx).valid = true;

@@ -234,7 +234,7 @@ bool CalibrationHandler::calibrate(
                                             + 2]
                         + normal_dist(eng);
 
-                results(counter) = .99;
+                results(counter) = 1.9;
                 ++counter;
             }
         }
@@ -436,12 +436,12 @@ bool CalibrationHandler::calculate_factors() {
         used_entries = 2;
 
     } else {
-        factor_hue = .005;
+        factor_hue = .0015;
         used_entries = 3;
     }
 
-    factor_sat = .001;
-    factor_val = .001;
+    factor_sat = .0012;
+    factor_val = .0012;
 
     error_factors_intern = {
         factor_hue,
@@ -464,8 +464,8 @@ bool CalibrationHandler::calculate_factors() {
     uint16_t iterations = 0;
 
     while (iterations < get_max_iteration_factors()) {
-        // derivative(1/(1+(u*(x-a)^2+v*(y-b)^2+w*(z-c)^2)), u)
-        // = -1 * (x-a)^2 / (u*(x-a)^2 + v*(y-b)^2 + w*(z-c)^2 + 1)^2
+        // derivative(2/(1+(u*(x-a)^2+v*(y-b)^2+w*(z-c)^2)), u)
+        // = -2 * (x-a)^2 / (u*(x-a)^2 + v*(y-b)^2 + w*(z-c)^2 + 1)^2
         if (without_hue) {
             for (int i = 0; i < hsv_values.rows(); ++i) {
                 err_sat = optimal_values_intern(1) - hsv_values(i, 1);  // y-b
@@ -476,8 +476,8 @@ bool CalibrationHandler::calculate_factors() {
                                  + pow(err_val, 2) * error_factors_intern(2);
                 squared_sum_denominator = pow(sum_denominator, 2);
 
-                A(i, 0) = -pow(err_sat, 2) / squared_sum_denominator;
-                A(i, 1) = -pow(err_val, 2) / squared_sum_denominator;
+                A(i, 0) = -2 * pow(err_sat, 2) / squared_sum_denominator;
+                A(i, 1) = -2 * pow(err_val, 2) / squared_sum_denominator;
                 calculated_result = get_probability(
                     0,
                     err_sat,
@@ -499,9 +499,9 @@ bool CalibrationHandler::calculate_factors() {
                                  + pow(err_val, 2) * error_factors_intern(2);
                 squared_sum_denominator = pow(sum_denominator, 2);
 
-                A(i, 0) = -pow(err_hue, 2) / squared_sum_denominator;
-                A(i, 1) = -pow(err_sat, 2) / squared_sum_denominator;
-                A(i, 2) = -pow(err_val, 2) / squared_sum_denominator;
+                A(i, 0) = -2 * pow(err_hue, 2) / squared_sum_denominator;
+                A(i, 1) = -2 * pow(err_sat, 2) / squared_sum_denominator;
+                A(i, 2) = -2 * pow(err_val, 2) / squared_sum_denominator;
                 calculated_result = get_probability(
                     err_hue,
                     err_sat,
@@ -609,7 +609,7 @@ bool CalibrationHandler::visualize_result(cv::Mat *const img) {
             row += pos_dist) {
             prediction = get_prediction(row, col);
 
-            if (prediction < 0.5)
+            if (prediction < 1.0)
                 line(
                     img_copy,
                     cv::Point(col, row),
@@ -670,7 +670,7 @@ uint64_t CalibrationHandler::get_false_positives(
                     error_factors_intern(0),
                     error_factors_intern(1),
                     error_factors_intern(2));
-        if (prediction >= 0.5) {
+        if (prediction >= 1.0) {
             ++false_positives;
         }
     }
@@ -698,7 +698,7 @@ uint64_t CalibrationHandler::get_false_negatives(
                     error_factors_intern(0),
                     error_factors_intern(1),
                     error_factors_intern(2));
-        if (prediction < 0.5) {
+        if (prediction < 1.0) {
             ++false_negatives;
         }
     }
@@ -733,7 +733,7 @@ void CalibrationHandler::fill_matrices_with_bad_values(
 void CalibrationHandler::add_point_in_img(const uint16_t row, const uint16_t col) {
     double prediction = get_prediction(row, col);
 
-    if (prediction < 0.5)
+    if (prediction < 1.0)
         line(img_copy, cv::Point(col, row), cv::Point(col, row), bad_color);
     else
         line(img_copy, cv::Point(col, row), cv::Point(col, row), good_color);
