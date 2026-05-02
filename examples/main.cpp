@@ -472,7 +472,7 @@ uint8_t gameplay(
         neg_handler->update_circles(mirror);
 
         if (use_median) {
-            found_median = evaluator->search_median(&hsv, step_width, 4, true);
+            found_median = evaluator->search_median(&hsv, step_width, 4, 5, true);
 
             cv::circle(
                 *mirror,
@@ -491,7 +491,7 @@ uint8_t gameplay(
                             found_median.at(1));
         }
         else {
-            found_pixel = evaluator->search_for_pixel_with_color(&hsv, step_width, 4, true);
+            found_pixel = evaluator->search_for_pixel_with_color(&hsv, step_width, 4, 5, true);
             bad_pixel = evaluator->get_false_positives();
 
             for (auto &pixel : found_pixel) {

@@ -1,7 +1,6 @@
 #include "pixel_evaluator.h"
 
 #include <algorithm>
-#include <fstream>
 
 using namespace mc;
 
@@ -11,53 +10,40 @@ PixelEvaluator::PixelEvaluator(const std::vector<double> &factors,
     this->optimal_values = optimal_values;
 }
 
+uint8_t PixelEvaluator::check_pixel_with_kernel(const std::vector<std::vector<Point>> &matrix, const size_t &x_idx, const size_t &y_idx, const uint8_t &kernel_size) {
+    uint8_t neighbors = 0;
 
-std::vector<std::vector<uint16_t>> PixelEvaluator::search_for_pixel_with_color(const cv::Mat *img, const uint16_t &step, const uint8_t &min_neighbors, const bool aquire_false_positives) {
+    for (uint8_t kernel_idx = 0; kernel_idx < kernel_size; ++kernel_idx){
+        uint16_t tmp_x = x_idx - offset + kernel_idx;
+        uint16_t tmp_y = y_idx - offset + kernel_idx;
+
+        if (tmp_x != x_idx || tmp_y != y_idx) {
+            if (tmp_x < matrix.size() && tmp_y < matrix.at(0).size()) {
+                if (matrix.at(tmp_x).at(tmp_y).valid) {
+                    ++neighbors;
+                }
+            }
+        }
+    }
+    return neighbors;
+}
+
+std::vector<std::vector<uint16_t>> PixelEvaluator::search_for_pixel_with_color(const cv::Mat *img, const uint16_t &step, const uint8_t &min_neighbors, uint8_t kernel_size, const bool aquire_false_positives) {
 
     std::vector<std::vector<Point>> matrix = create_prediction_matrix(img, step);
     std::vector<std::vector<uint16_t>> found_pixels;
-    uint8_t neighbors;
 
     if (aquire_false_positives) {
         false_positives.clear();
     }
 
+    offset = kernel_size / 2;
+    uint8_t neighbors;
+
     for (size_t x_idx = 1; x_idx < matrix.size()-1; ++x_idx) {  // ignore outer border
-        for (size_t y_idx = 1; y_idx < matrix[0].size()-1; ++y_idx) {  // ignore outer border
+        for (size_t y_idx = 1; y_idx < matrix.at(0).size()-1; ++y_idx) {  // ignore outer border
             if (matrix.at(x_idx).at(y_idx).valid) {
-                neighbors = 0;  // TODO: max value it 2, but should be 8
-
-                if (matrix.at(x_idx-1).at(y_idx-1).valid) {
-                    ++neighbors;
-                }
-
-                if (matrix.at(x_idx).at(y_idx-1).valid) {
-                    ++neighbors;
-                }
-
-                if (matrix.at(x_idx+1).at(y_idx-1).valid) {
-                    ++neighbors;
-                }
-
-                if (matrix.at(x_idx-1).at(y_idx).valid) {
-                    ++neighbors;
-                }
-
-                if (matrix.at(x_idx+1).at(y_idx).valid) {
-                    ++neighbors;
-                }
-
-                if (matrix.at(x_idx-1).at(y_idx+1).valid) {
-                    ++neighbors;
-                }
-
-                if (matrix.at(x_idx).at(y_idx+1).valid) {
-                    ++neighbors;
-                }
-
-                if (matrix.at(x_idx+1).at(y_idx+1).valid) {
-                    ++neighbors;
-                }
+                neighbors = check_pixel_with_kernel(matrix, x_idx, y_idx, kernel_size);
 
                 if (min_neighbors <= neighbors) {
                     found_pixels.push_back(std::vector<uint16_t>{matrix.at(x_idx).at(y_idx).x, matrix.at(x_idx).at(y_idx).y});
@@ -73,52 +59,22 @@ std::vector<std::vector<uint16_t>> PixelEvaluator::search_for_pixel_with_color(c
 }
 
 
-std::vector<int16_t> PixelEvaluator::search_median(const cv::Mat *img, const uint16_t &step, const uint8_t &min_neighbors, const bool aquire_false_positives) {
+std::vector<int16_t> PixelEvaluator::search_median(const cv::Mat *img, const uint16_t &step, const uint8_t &min_neighbors, uint8_t kernel_size, const bool aquire_false_positives) {
     std::vector<std::vector<Point>> matrix = create_prediction_matrix(img, step);
     std::vector<uint16_t> x_values;
     std::vector<uint16_t> y_values;
-    uint8_t neighbors;
 
     if (aquire_false_positives) {
         false_positives.clear();
     }
 
+    offset = kernel_size / 2;
+    uint8_t neighbors;
+
     for (size_t x_idx = 1; x_idx < matrix.size()-1; ++x_idx) {  // ignore outer border
         for (size_t y_idx = 1; y_idx < matrix[0].size()-1; ++y_idx) {  // ignore outer border
             if (matrix.at(x_idx).at(y_idx).valid) {
-                neighbors = 0;  // TODO: max value it 2, but should be 8
-
-                if (matrix.at(x_idx-1).at(y_idx-1).valid) {
-                    ++neighbors;
-                }
-
-                if (matrix.at(x_idx).at(y_idx-1).valid) {
-                    ++neighbors;
-                }
-
-                if (matrix.at(x_idx+1).at(y_idx-1).valid) {
-                    ++neighbors;
-                }
-
-                if (matrix.at(x_idx-1).at(y_idx).valid) {
-                    ++neighbors;
-                }
-
-                if (matrix.at(x_idx+1).at(y_idx).valid) {
-                    ++neighbors;
-                }
-
-                if (matrix.at(x_idx-1).at(y_idx+1).valid) {
-                    ++neighbors;
-                }
-
-                if (matrix.at(x_idx).at(y_idx+1).valid) {
-                    ++neighbors;
-                }
-
-                if (matrix.at(x_idx+1).at(y_idx+1).valid) {
-                    ++neighbors;
-                }
+                neighbors = check_pixel_with_kernel(matrix, x_idx, y_idx, kernel_size);
 
                 if (min_neighbors <= neighbors) {
                     x_values.push_back(matrix.at(x_idx).at(y_idx).x);
