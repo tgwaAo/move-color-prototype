@@ -135,10 +135,10 @@ class CalibrationHandler {
 
     /**
      * @brief Set minimum of false positives in factor calibration.
-     * @param min_error_factors Minimum of false positives in factor
+     * @param max_false_positives Minimum of false positives in factor
      * calibration.
      */
-    void set_min_error_factors(const double min_error_factors);
+    void set_max_false_positives(const double max_false_positives);
 
     /**
      * @brief Set minimum border to finish calibration of factors.
@@ -218,7 +218,7 @@ class CalibrationHandler {
      * @brief Get minimal false positives in calculation needed to stop.
      * @return Minimal false positives in calculation needed to stop.
      */
-    double get_min_error_factors() const;
+    double get_max_false_positives() const;
 
     /**
      * @brief Get minimal correction border needed to stop calculation of
@@ -412,7 +412,7 @@ class CalibrationHandler {
 
     uint64_t start_idx_positives;
 
-    double min_error_factors;
+    double max_false_positives;
     double min_correction_factors;
     uint16_t max_iteration_factors;
 

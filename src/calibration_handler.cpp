@@ -69,8 +69,8 @@ CalibrationHandler::CalibrationHandler(
 
     Eigen::IOFormat Short_format(4);
     set_max_iteration_factors(50);
-    set_min_error_factors(80);  // false positives
-    set_min_correction_factors(1e-4);
+    set_max_false_positives(40);  // false positives
+    set_min_correction_factors(1);
 }
 
 CalibrationHandler::~CalibrationHandler() {}
@@ -538,11 +538,11 @@ bool CalibrationHandler::calculate_factors() {
         ++iterations;
 
         if (check_correction_of_factors(dx, without_hue)) {
-            if (get_min_error_factors() != -1) {
+            if (get_max_false_positives() != -1) {
                 number_false_positives = get_false_positives(
                             get_start_idx_positives());
 
-                if (number_false_positives < get_min_error_factors()) {
+                if (number_false_positives < get_max_false_positives()) {
                     break;
                 }
             } else {
@@ -563,7 +563,7 @@ bool CalibrationHandler::check_correction_of_factors(
         const Eigen::VectorXd& dx, const bool& without_hue) {
     if (dx(0) < get_min_correction_factors() &&
             dx(1) < get_min_correction_factors()) {
-        if (without_hue || dx(2) < get_min_correction_factors()) {
+        if (without_hue || dx(2) < get_min_correction_factors()) {  // not hue, but third value
             return true;
         }
     }
@@ -748,8 +748,8 @@ void CalibrationHandler::set_max_iteration_factors(
     this->max_iteration_factors = max_iteration_factors;
 }
 
-void CalibrationHandler::set_min_error_factors(const double min_error_factors) {
-    this->min_error_factors = min_error_factors;
+void CalibrationHandler::set_max_false_positives(const double max_false_positives) {
+    this->max_false_positives = max_false_positives;
 }
 
 void CalibrationHandler::set_min_correction_factors(
@@ -794,8 +794,8 @@ uint16_t CalibrationHandler::get_max_iteration_factors() const {
     return max_iteration_factors;
 }
 
-double CalibrationHandler::get_min_error_factors() const {
-    return min_error_factors;
+double CalibrationHandler::get_max_false_positives() const {
+    return max_false_positives;
 }
 
 double CalibrationHandler::get_min_correction_factors() const {
